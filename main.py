@@ -24,8 +24,9 @@ Large: 210
 
 TODO:
 
+set python interpeter!
+
     imprtant:
-        ADD CHECK TO STOP PEOPPLE FROM PUTTIN IN ORDERS TO FAST? //MIGHT NOT BE A ISSUE, LONGEST DRINK IS GONNA BE LIKE 8 SECONDS
         LED's get middle to light up
         do LED code
         
