@@ -946,6 +946,7 @@ class mainlayout():
         im2b = im2.subsample(2,2)
         im3 = tk.PhotoImage(file = "img/create.png")
         im3b = im3.subsample(2,2)
+        img4 =tk.PhotoImage(file = "img/clean.png")
 
 
         self.menuButton = tk.Button(
@@ -987,10 +988,11 @@ class mainlayout():
             text="\tClean",
             command=self.cleanPumps,
             relief="flat",
-            image = im3b,
+            image = img4,
             compound = "left",
             highlightcolor=theme["button_highlight_color"],
             bg=theme["button_colors"])
+        self.cleanButton.image = img4
 
         self.menuButton.grid(row = 0, column = 0,padx =30, pady =30,  sticky="nsew")
         self.createButton.grid(row =0, column =1, padx =30, pady =30, sticky="nsew")
