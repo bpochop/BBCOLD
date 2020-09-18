@@ -58,11 +58,11 @@ CW = 1     # Clockwise Rotation
 CCW = 0    # Counterclockwise Rotation
 SPR = 48   # Steps per Revolution (360 / 7.5) ***will need to test the right amount later
 
-# GPIO.setmode(GPIO.BCM) #sets GPIO numbers instead of the board number
-# GPIO.setup(DIR, GPIO.OUT) #gpio pin assigned as an output
-# GPIO.setup(STEP, GPIO.OUT)
-#
-# GPIO.output(DIR, CW) #this sets the first rotation. clockwise = going down
+GPIO.setmode(GPIO.BCM) #sets GPIO numbers instead of the board number
+GPIO.setup(DIR, GPIO.OUT) #gpio pin assigned as an output
+GPIO.setup(STEP, GPIO.OUT)
+
+GPIO.output(DIR, CW) #this sets the first rotation. clockwise = going down
 
 step_count = SPR
 delay = .500 #this will control the speed of the motor *** will need to test later for right speed
@@ -94,52 +94,52 @@ read.close()
 
 #intializing arduino board/usb to a variable
 #board1 = pump station 1
-# board1 = pyfirm.Arduino('COM4') #this "COM4" address will change on the pi
-#                                    #will check new address later
+board1 = pyfirm.Arduino('COM4') #this "COM4" address will change on the pi
+                                   #will check new address later
+
+board2 = pyfirm.Arduino('COM5')
+
+# # Intializing arduino pin to a variable. ex. pump1_3 = pump station #1 pump#3
 #
-# board2 = pyfirm.Arduino('COM5')
-#
-# # # Intializing arduino pin to a variable. ex. pump1_3 = pump station #1 pump#3
-# #
-# # #pump station 1
-# pump1_1 = board1.get_pin('d:2:o')
-# pump1_2 = board1.get_pin('d:3:o')
-# pump1_3 = board1.get_pin('d:4:o')
-# pump1_4 = board1.get_pin('d:5:o')
-# pump1_5 = board1.get_pin('d:6:o')
-# pump1_6 = board1.get_pin('d:7:o')
-# pump1_7 = board1.get_pin('d:8:o')
-# pump1_8 = board1.get_pin('d:9:o')
-#
-# #pump station 2
-# pump2_1 = board2.get_pin('d:2:o')
-# pump2_2 = board2.get_pin('d:3:o')
-# pump2_3 = board2.get_pin('d:4:o')
-# pump2_4 = board2.get_pin('d:5:o')
-# pump2_5 = board2.get_pin('d:6:o')
-# pump2_6 = board2.get_pin('d:7:o')
-# pump2_7 = board2.get_pin('d:8:o')
-# pump2_8 = board2.get_pin('d:9:o')
-#
-# #makes sure pumps are off
-# pump1_1.write(0)
-# pump1_2.write(0)
-# pump1_3.write(0)
-# pump1_4.write(0)
-# pump1_5.write(0)
-# pump1_6.write(0)
-# pump1_7.write(0)
-# pump1_8.write(0)
-# pump2_1.write(0)
-# pump2_2.write(0)
-# pump2_3.write(0)
-# pump2_4.write(0)
-# pump2_5.write(0)
-# pump2_6.write(0)
-# pump2_7.write(0)
-# pump2_8.write(0)
-#
-#
+# #pump station 1
+pump1_1 = board1.get_pin('d:2:o')
+pump1_2 = board1.get_pin('d:3:o')
+pump1_3 = board1.get_pin('d:4:o')
+pump1_4 = board1.get_pin('d:5:o')
+pump1_5 = board1.get_pin('d:6:o')
+pump1_6 = board1.get_pin('d:7:o')
+pump1_7 = board1.get_pin('d:8:o')
+pump1_8 = board1.get_pin('d:9:o')
+
+#pump station 2
+pump2_1 = board2.get_pin('d:2:o')
+pump2_2 = board2.get_pin('d:3:o')
+pump2_3 = board2.get_pin('d:4:o')
+pump2_4 = board2.get_pin('d:5:o')
+pump2_5 = board2.get_pin('d:6:o')
+pump2_6 = board2.get_pin('d:7:o')
+pump2_7 = board2.get_pin('d:8:o')
+pump2_8 = board2.get_pin('d:9:o')
+
+#makes sure pumps are off
+pump1_1.write(0)
+pump1_2.write(0)
+pump1_3.write(0)
+pump1_4.write(0)
+pump1_5.write(0)
+pump1_6.write(0)
+pump1_7.write(0)
+pump1_8.write(0)
+pump2_1.write(0)
+pump2_2.write(0)
+pump2_3.write(0)
+pump2_4.write(0)
+pump2_5.write(0)
+pump2_6.write(0)
+pump2_7.write(0)
+pump2_8.write(0)
+
+
 
 
 
@@ -293,12 +293,12 @@ class dispenseLayout():
 
     def spinMotor(self):
         pass
-        # motorMix = 16
-        # GPIO.setup(motorMix, GPIO.OUT)
-        #
-        # GPIO.output(motorMix, GPIO.HIGH)  # runs motor
-        # t.sleep(3)  # runs for 3 seconds
-        # GPIO.output(motorMix, GPIO.LOW)  # turns off motor
+        motorMix = 16
+        GPIO.setup(motorMix, GPIO.OUT)
+
+        GPIO.output(motorMix, GPIO.HIGH)  # runs motor
+        t.sleep(3)  # runs for 3 seconds
+        GPIO.output(motorMix, GPIO.LOW)  # turns off motor
 
     async def findPump(self,pumpdata, i, content, ratio, size):
 
@@ -311,165 +311,102 @@ class dispenseLayout():
                 z = x
 
                 if z == "pump1_1":
-                    # name.write(1)
 
-                    s = t.perf_counter()
-                    print(time)
+                    pump1_1.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp1_1 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump1_1.write(0)
                     break
+
                 if z == "pump1_2":
-                    # name.write(1)
 
-                    s = t.perf_counter()
-                    print(time)
+                    pump1_2.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp1_2 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump1_2.write(0)
                     break
+
                 if z == "pump1_3":
-                    # name.write(1)
 
-                    s = t.perf_counter()
-                    print(time)
+                    pump1_3.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp1_3 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump1_3.write(0)
                     break
+
                 if z == "pump1_4":
-                    # name.write(1)
 
-                    s = t.perf_counter()
-                    print(time)
+                    pump1_4.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp1_4 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump1_4.write(0)
                     break
+
                 if z == "pump1_5":
-                    # name.write(1)
-
-                    s = t.perf_counter()
-                    print(time)
+                    pump1_5.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp1_5 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump1_5.write(0)
                     break
+
                 if z == "pump1_6":
-                    # name.write(1)
-
-                    s = t.perf_counter()
-                    print(time)
+                    pump1_6.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp1_6 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump1_6.write(0)
                     break
+
                 if z == "pump1_7":
-                    # name.write(1)
-
-                    s = t.perf_counter()
-                    print(time)
+                    pump1_7.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp1_7 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump1_7.write(0)
                     break
-                if z == "pump1_8":
-                    # name.write(1)
 
-                    s = t.perf_counter()
-                    print(time)
+                if z == "pump1_8":
+                    pump1_8.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp1_8 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump1_8.write(0)
                     break
                 if z == "pump2_1":
-                    # name.write(1)
-
-                    s = t.perf_counter()
-                    print(time)
+                    pump2_1.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp2_1 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump2_1.write(0)
                     break
+
                 if z == "pump2_2":
-                    # name.write(1)
-
-                    s = t.perf_counter()
-                    print(time)
+                    pump2_2.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp2_2 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
-                    # name.write(0)
+                    pump2_2.write(0)
                     break
+
                 if z == "pump2_3":
-                    # name.write(1)
-
-                    s = t.perf_counter()
-                    print(time)
+                    pump2_3.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp2_3 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump2_3.write(0)
                     break
+
                 if z == "pump2_4":
-                    # name.write(1)
-
-                    s = t.perf_counter()
-                    print(time)
+                    pump2_4.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp2_4 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump2_4.write(0)
                     break
+
                 if z == "pump2_5":
-                    # name.write(1)
-
-                    s = t.perf_counter()
-                    print(time)
+                    pump2_5.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp2_5 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump2_5.write(0)
                     break
+
                 if z == "pump2_6":
-                    # name.write(1)
-
-                    s = t.perf_counter()
-                    print(time)
+                    pump2_6.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp2_6 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump2_6.write(0)
                     break
+
                 if z == "pump2_7":
-                    # name.write(1)
-
-                    s = t.perf_counter()
-                    print(time)
+                    pump2_7.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp2_7 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump2_7.write(0)
                     break
-                if z == "pump2_8":
-                    # name.write(1)
 
-                    s = t.perf_counter()
-                    print(time)
+                if z == "pump2_8":
+                    pump2_8.write(1)
                     await asyncio.sleep(time)
-                    elapsed = t.perf_counter() - s
-                    print(f"PUmp2_8 executed in {elapsed:0.2f} seconds.")
-                    # name.write(0)
+                    pump2_8.write(0)
                     break
 
 
@@ -492,26 +429,26 @@ class dispenseLayout():
         # self.setlayout()
         self.async_loop.run_until_complete(self.mainLoop(content,ratio, size))
         print("test")
-        # for x in range(step_count):  # this will run down for # length depending on SPR
-        #     GPIO.output(STEP, GPIO.HIGH)
-        #     t.sleep(delay)
-        #     GPIO.output(STEP, GPIO.LOW)
-        #     t.sleep(delay)
-        #
-        # # im not sure how to simultanousely call the motor that mixes
-        # self.spinMotor()
-        #
-        # t.sleep(3)  # time delay before it goes up, while motor mixes
-        #
-        # GPIO.output(DIR, CCW)  # now it will be counterclockwise/will go up
-        # for x in range(step_count):
-        #     GPIO.output(STEP, GPIO.HIGH)
-        #     t.sleep(delay)
-        #     GPIO.output(STEP, GPIO.LOW)
-        #     t.sleep(delay)
-        #
-        # GPIO.cleanup()  # cleans up gpio pin back to input to prevent damage for next time use
-        #
+        for x in range(step_count):  # this will run down for # length depending on SPR
+            GPIO.output(STEP, GPIO.HIGH)
+            t.sleep(delay)
+            GPIO.output(STEP, GPIO.LOW)
+            t.sleep(delay)
+
+        # im not sure how to simultanousely call the motor that mixes
+        self.spinMotor()
+
+        t.sleep(3)  # time delay before it goes up, while motor mixes
+
+        GPIO.output(DIR, CCW)  # now it will be counterclockwise/will go up
+        for x in range(step_count):
+            GPIO.output(STEP, GPIO.HIGH)
+            t.sleep(delay)
+            GPIO.output(STEP, GPIO.LOW)
+            t.sleep(delay)
+
+        GPIO.cleanup()  # cleans up gpio pin back to input to prevent damage for next time use
+
 
         self.done_dispensing = True
 
@@ -596,9 +533,6 @@ class menuLayout():
         self.tablayout.add(self.drinkTab, text = "Drinks")
         self.tablayout.add(self.shotTab, text = "Shots")
         self.tablayout.add(self.backTab, text="Back")
-
-        # self.frame2 = tk.Frame(self.canvas)
-        # self.frame2.configure(bg = "black")
 
         self.canvas.create_window((0,0), window=self.tablayout, anchor="nw")
 
@@ -1051,7 +985,7 @@ class mainlayout():
 
         self.cleanButton = tk.Button(self.window,
             text="\tClean",
-            # command=self.displayCreateDrink,
+            command=self.cleanPumps,
             relief="flat",
             image = im3b,
             compound = "left",
@@ -1091,6 +1025,77 @@ class mainlayout():
 
     def displayCreateDrink(self):
         pass
+
+
+    def cleanPumps(self):
+
+        time  =3
+
+        pump1_1.write(1)
+        t.sleep(time)
+        pump1_1.write(0)
+
+        pump1_2.write(1)
+        t.sleep(time)
+        pump1_2.write(0)
+
+        pump1_3.write(1)
+        t.sleep(time)
+        pump1_3.write(0)
+
+        pump1_4.write(1)
+        t.sleep(time)
+        pump1_4.write(0)
+
+        pump1_5.write(1)
+        t.sleep(time)
+        pump1_5.write(0)
+
+        pump1_6.write(1)
+        t.sleep(time)
+        pump1_6.write(0)
+
+        pump1_7.write(1)
+        t.sleep(time)
+        pump1_7.write(0)
+
+        pump1_8.write(1)
+        t.sleep(time)
+        pump1_8.write(0)
+
+        pump2_1.write(1)
+        t.sleep(time)
+        pump2_1.write(0)
+
+        pump2_2.write(1)
+        t.sleep(time)
+        pump2_2.write(0)
+
+        pump2_3.write(1)
+        t.sleep(time)
+        pump2_3.write(0)
+
+        pump2_4.write(1)
+        t.sleep(time)
+        pump2_4.write(0)
+
+        pump2_5.write(1)
+        t.sleep(time)
+        pump2_5.write(0)
+
+        pump2_6.write(1)
+        t.sleep(time)
+        pump2_6.write(0)
+
+        pump2_7.write(1)
+        t.sleep(time)
+        pump2_7.write(0)
+
+        pump2_8.write(1)
+        t.sleep(time)
+        pump2_8.write(0)
+
+
 
 
 
