@@ -1,0 +1,13 @@
+{
+  "button_colors": "white",
+  "size_button_color": "grey",
+  "button_highlight_color": "#0000ff",
+  "background_color": "#000000",
+  "tab_color1":  "#d3d3d3",
+  "tab_color2": "#800000",
+  "tab_background_color": "#000000",
+  "slider_color": "",
+  "slider_width": "",
+  "slider_height": "",
+  "rate_of_flow": 10
+}
