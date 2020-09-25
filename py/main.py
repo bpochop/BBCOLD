@@ -245,13 +245,34 @@ class mainlayout():
     '''
     def initPumps(self):
         # intializing arduino board/usb to a variable
+        # 
         
-        # board0 = arduino inside main station
-        board0 = pyfirmata.Arduino('/dev/ttyUSB0')
-        # board1 = pump station 1
-        board1 = pyfirmata.Arduino('/dev/ttyUSB1')
-        # board2 = pump station 2
-        board2 = pyfirmata.Arduino('/dev/ttyUSB2')
+        #AUTO CHECKING IF PUMP IS PLUGGED IN (TEST)
+        # flag = True
+        # x =0
+        # board = []
+        # while flag: 
+        #     usb = "/dev/ttyUSB" + str(x)
+        #     try:
+        #         board[x] = pyfirmata.Arduino(usb)
+        #     except:
+        #         flag = False
+        # 
+        # y =0
+        # z =2
+        # pumplayout = []
+        # for x in board[x]:
+        #     pin = "d:" + str(z) + ":o"
+        #     z+=1
+        #     for r in range(7)
+        #     pumplayout[r] = x.get_pin(pin)
+            
+            # board0 = arduino inside main station
+            board0 = pyfirmata.Arduino('/dev/ttyUSB0')
+            # board1 = pump station 1
+            board1 = pyfirmata.Arduino('/dev/ttyUSB1')
+            # board2 = pump station 2
+            board2 = pyfirmata.Arduino('/dev/ttyUSB2')
         
         ####Intializing arduino pin to a variable. ex. pump1_3 = pump station #1 pump#3
         
@@ -307,8 +328,6 @@ class mainlayout():
         step_count = 1950  # length of up and down
         delay = .0005  # speed of up and down
     '''
-
-
 
 if __name__ == '__main__':
 
