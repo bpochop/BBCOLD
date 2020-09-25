@@ -10,7 +10,7 @@
         "l1r": 0.25,
         "l2r":0.75
       },
-      "img": "img/rumandcoke.png"
+      "img": "rumandcoke.png"
     },
     {
       "name": "Yellow Hammer",
@@ -28,7 +28,7 @@
         "l4r": 0.24,
         "l5r": 0.41
       },
-      "img": "img/yellowhammer.png"
+      "img": "yellowhammer.png"
     },{
       "name": "Alaska Duck Fart",
       "content": {
@@ -55,7 +55,7 @@
         "l2r": 0.71,
         "l3r": 0.02
       },
-      "img": "img/tequilasunrise.png"
+      "img": "tequilasunrise.png"
     },
     {
       "name": "Arkansas RazorBack",
@@ -71,7 +71,7 @@
         "l3r": 0.25,
         "l4r": 0.25
       },
-      "img": "img/arkansas.png"
+      "img": "arkansas.png"
     },
     {
       "name": "Box Wine",
@@ -103,7 +103,7 @@
         "l6r": "1 Orange Slice",
         "l7r": "Cherries"
       },
-      "img": "img/blackeyesusan.png"
+      "img": "blackeyesusan.png"
     },
     {
       "name": "The BootLeg [UNDER REIVIEW]",
@@ -141,7 +141,7 @@
         "l4r": 0.10,
         "l5r": 0.07
       },
-      "img": "img/missisipipunch.png"
+      "img": "missisipipunch.png"
     },
     {
       "name": "Whiskey Ditch",
@@ -215,7 +215,7 @@
         "l4r": 0.18,
         "l5r": 0.18
       },
-      "img": "img/mohito.png"
+      "img": "mohito.png"
     },
     {
       "name": "Scarlett O'Hara",
@@ -363,7 +363,7 @@
         "l1r": 0.50,
         "l2r": 0.50
       },
-      "img": "img/fuzzynaval.png"
+      "img": "fuzzynaval.png"
     },
 	{
       "name": "Blueberry Mule",
@@ -435,7 +435,7 @@
         "l3r": 0.15,
         "l4r": 0.15
       },
-      "img": "img/cosmopolitian.png"
+      "img": "cosmopolitian.png"
     },
 	{
       "name": "Whiskey Sour",
@@ -473,7 +473,7 @@
         "l7r": 0.15,
         "l8r": 0.20
       },
-      "img": "img/longislandicetea.png"
+      "img": "longislandicetea.png"
     },
 	{
       "name": "Adios Motherfucker (AMF)",
@@ -513,7 +513,7 @@
         "l3r": 0.15,
         "l4r": 0.15
       },
-      "img": "img/mai tai.png"
+      "img": "mai tai.png"
     },
 	{
       "name": "Gimlet",
@@ -527,7 +527,7 @@
         "l2r": 0.15,
 		    "l3r": 0.15
       },
-      "img": "img/gimlet.png"
+      "img": "gimlet.png"
     },
 	{
       "name": "Paloma",
@@ -657,7 +657,7 @@
         "l4r": 0.10,
         "l5r": 0.30
       },
-      "img": "img/midorisour.png"
+      "img": "midorisour.png"
     },
 	{
       "name": "Silver Breeze",

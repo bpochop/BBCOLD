@@ -1,11 +1,14 @@
 import tkinter as tk
 import json as json
 from tkinter import ttk, messagebox
-# import RPi.GPIO as GPIO
-import pyfirmata as pyfirm
+import pyfirmata
 import asyncio
 import time as t
 import threading
+# import RPi.GPIO as GPIO
+# from rpi_ws281x import *
+import argparse
+
 
 width = 125
 height = 80
@@ -47,61 +50,61 @@ set python interpeter!
 small_mili = 90
 medium_mili = 150
 large_mili = 210
-shot_mili = 45
+shot_mili = 40
 
 
 
-
-DIR = 20   # Direction GPIO Pin#
-STEP = 21  # Step GPIO Pin#
-CW = 1     # Clockwise Rotation
-CCW = 0    # Counterclockwise Rotation
-SPR = 48   # Steps per Revolution (360 / 7.5) ***will need to test the right amount later
-
-GPIO.setmode(GPIO.BCM) #sets GPIO numbers instead of the board number
-GPIO.setup(DIR, GPIO.OUT) #gpio pin assigned as an output
-GPIO.setup(STEP, GPIO.OUT)
-
-GPIO.output(DIR, CW) #this sets the first rotation. clockwise = going down
-
-step_count = SPR
-delay = .500 #this will control the speed of the motor *** will need to test later for right speed
-
-
-
-
-nread = open("pumps.json", "r")
+nread = open("../data/pumps.json", "r")
 d = json.load(nread)
 pumps = []
 for x in d:
     pumps.append(d[x])
 nread.close()
 
-nread = open("recipes.json", "r")
+nread = open("../data/recipes.json", "r")
 d = json.load(nread)
 recipes = d["drinks"]
 shotrecipies = d["shot"]
 nread.close()
 
-read = open("display.json", "r")
+read = open("../data/display.json", "r")
 linedata = json.load(read)
 read.close()
 
 
-read = open("theme.json", "r")
+read = open("../data/theme.json", "r")
 theme = json.load(read)
 read.close()
 
+# LED strip configuration:
+LED_COUNT      = 93      # Number of LED pixels.
+LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
+#LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
+LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
+LED_DMA        = 10      # DMA channel to use for generating signal (try 10)
+LED_BRIGHTNESS = 5     # Set to 0 for darkest and 255 for brightest
+LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
+LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
+
+
+'''
 #intializing arduino board/usb to a variable
+
+#board0 = arduino inside main station
+board0 = pyfirmata.Arduino('/dev/ttyUSB0')
 #board1 = pump station 1
-board1 = pyfirm.Arduino('COM4') #this "COM4" address will change on the pi
-                                   #will check new address later
+board1 = pyfirmata.Arduino('/dev/ttyUSB1')
+#board2 = pump station 2
+board2 = pyfirmata.Arduino('/dev/ttyUSB2')
 
-board2 = pyfirm.Arduino('COM5')
 
-# # Intializing arduino pin to a variable. ex. pump1_3 = pump station #1 pump#3
-#
-# #pump station 1
+
+
+
+
+####Intializing arduino pin to a variable. ex. pump1_3 = pump station #1 pump#3
+
+#pump station 1
 pump1_1 = board1.get_pin('d:2:o')
 pump1_2 = board1.get_pin('d:3:o')
 pump1_3 = board1.get_pin('d:4:o')
@@ -121,27 +124,180 @@ pump2_6 = board2.get_pin('d:7:o')
 pump2_7 = board2.get_pin('d:8:o')
 pump2_8 = board2.get_pin('d:9:o')
 
-#makes sure pumps are off
-pump1_1.write(0)
-pump1_2.write(0)
-pump1_3.write(0)
-pump1_4.write(0)
-pump1_5.write(0)
-pump1_6.write(0)
-pump1_7.write(0)
-pump1_8.write(0)
-pump2_1.write(0)
-pump2_2.write(0)
-pump2_3.write(0)
-pump2_4.write(0)
-pump2_5.write(0)
-pump2_6.write(0)
-pump2_7.write(0)
-pump2_8.write(0)
+####Initializing arduino pin for the steppper motor inside main station
+stepper_motor_dir = board0.get_pin('d:2:o')
+stepper_motor_step = board0.get_pin('d:3:o')
+stepper_motor_enable = board0.get_pin('d:7:o')
+mixer_motor = board0.get_pin('d:4:o')
+
+#makes sure pumps are off (1 = "OFF" specifically for the pumps)
+pump1_1.write(1)
+pump1_2.write(1)
+pump1_3.write(1)
+pump1_4.write(1)
+pump1_5.write(1)
+pump1_6.write(1)
+pump1_7.write(1)
+pump1_8.write(1)
+pump2_1.write(1)
+pump2_2.write(1)
+pump2_3.write(1)
+pump2_4.write(1)
+pump2_5.write(1)
+pump2_6.write(1)
+pump2_7.write(1)
+pump2_8.write(1)
+
+#makes sure mixer motor is off
+mixer_motor.write(1)
+stepper_motor_enable.write(0)
+
+#Values to control stepper motor
+step_count = 1950 #length of up and down
+delay = .0005     #speed of up and down
 
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--clear', action='store_true', help='clear the display on exit')
+args = parser.parse_args()
+
+# Create NeoPixel object with appropriate configuration.
+strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+# Intialize the library (must be called once before other functions).
+strip.begin()
 
 
+class LED():
+    def __init__(self):
+        self.LEDdone = True
+
+    def mainLoop(self, strip):
+        pass
+        done = True
+        while done:
+            self.colorWipe(strip, Color(0, 0, 0), 10)  # This will slowsly turn off all LED...
+            # i.e. the crosshair, before it starts animation
+            self.colorWipe(strip, Color(127, 0, 0))  # Red wipe
+            self.checkIfDone()
+            self.colorWipe(strip, Color(127, 127, 127))  # White wipe
+            self.checkIfDone()
+            self.colorWipe(strip, Color(000, 000, 127))  # Blue wipe
+            self.checkIfDone()
+            self.theaterChase(strip, Color(0, 0, 127))  # Blue theater chase
+            self.checkIfDone()
+            self.theaterChase(strip, Color(127, 127, 127))  # White theater chase
+            self.checkIfDone()
+            self.theaterChase(strip, Color(127, 0, 0))  # Red theater chase
+            self.checkIfDone()
+            self.rainbow(strip)
+            self.checkIfDone()
+            self.rainbowCycle(strip)
+            self.checkIfDone()
+            self.theaterChaseRainbow(strip)
+            self.checkIfDone()
+            done = False
+#             if LEDdone = False:
+#                 break
+
+    def checkIfDone(self):
+        return done, self.LEDdone
+    
+    def LEDISDONE(self):
+        done = False
+        self.LEDdone = False
+        return done, self.LEDdone
+
+
+    def colorCupPlacement(self, strip):
+        for i in range(72, 84):
+            strip.setPixelColor(i, Color(255, 0, 0))
+            strip.show()
+        for i in range(84, 93):
+            strip.setPixelColor(i, Color(255, 255, 255))
+            strip.show()
+
+        strip.setPixelColor(24, Color(255, 0, 0))
+        strip.setPixelColor(50, Color(255, 0, 0))
+        strip.setPixelColor(68, Color(255, 0, 0))
+        strip.setPixelColor(8, Color(255, 0, 0))
+        strip.setPixelColor(38, Color(255, 0, 0))
+        strip.setPixelColor(60, Color(255, 0, 0))
+        strip.setPixelColor(0, Color(255, 0, 0))
+        strip.setPixelColor(32, Color(255, 0, 0))
+        strip.setPixelColor(56, Color(255, 0, 0))
+        strip.setPixelColor(16, Color(255, 0, 0))
+        strip.setPixelColor(44, Color(255, 0, 0))
+        strip.setPixelColor(64, Color(255, 0, 0))
+        strip.show()
+
+
+    def colorWipe(self, strip, color, wait_ms=50):
+        """Wipe color across display a pixel at a time."""
+        for i in range(int(LED_COUNT)):
+            strip.setPixelColor(i, color)
+            strip.show()
+            t.sleep(wait_ms / 2000.0)
+
+
+    def theaterChase(self, strip, color, wait_ms=50, iterations=10):
+        """Movie theater light style chaser animation."""
+        for j in range(iterations):
+            for q in range(3):
+                for i in range(0, int(LED_COUNT), 3):
+                    strip.setPixelColor(i + q, color)
+                strip.show()
+                t.sleep(wait_ms / 1000.0)
+                for i in range(0, int(LED_COUNT), 3):
+                    strip.setPixelColor(i + q, 0)
+
+
+    def wheel(self, pos):
+        """Generate rainbow colors across 0-255 positions."""
+        if pos < 85:
+            return Color(pos * 3, 255 - pos * 3, 0)
+        elif pos < 170:
+            pos -= 85
+            return Color(255 - pos * 3, 0, pos * 3)
+        else:
+            pos -= 170
+            return Color(0, pos * 3, 255 - pos * 3)
+
+
+    def rainbow(self, strip, wait_ms=20, iterations=1):
+        """Draw rainbow that fades across all pixels at once."""
+        for j in range(256 * iterations):
+            for i in range(int(LED_COUNT)):
+                strip.setPixelColor(i, self.wheel((i + j) & 255))
+            strip.show()
+            t.sleep(wait_ms / 1000.0)
+
+
+    def rainbowCycle(self, strip, wait_ms=20, iterations=5):
+        """Draw rainbow that uniformly distributes itself across all pixels."""
+        for j in range(256 * iterations):
+            for i in range(int(LED_COUNT)):
+                strip.setPixelColor(i, self.wheel((int(i * 256 / int(LED_COUNT)) + j) & 255))
+            strip.show()
+            t.sleep(wait_ms / 1000.0)
+
+
+    def theaterChaseRainbow(self, strip, wait_ms=50):
+        """Rainbow movie theater light style chaser animation."""
+        for j in range(256):
+            for q in range(3):
+                for i in range(0, int(LED_COUNT), 3):
+                    strip.setPixelColor(i + q, self.wheel((i + j) % 255))
+                strip.show()
+                t.sleep(wait_ms / 2000.0)
+                for i in range(0, int(LED_COUNT), 3):
+                    strip.setPixelColor(i + q, 0)
+
+    def checkIfDone(self):
+        return 
+
+
+led = LED()
+'''
 
 class dispenseLayout():
     def __init__(self, master, content, obj, ratio, dtype):
@@ -281,140 +437,138 @@ class dispenseLayout():
         # t.sleep(5)
         s = t.perf_counter()
 
-        # self.loop = asyncio.get_event_loop()
-        threading.Thread(target=self.buffer_function, args=(content, ratio, dtype)).start()
-        # self.loop.close()
-        elapsed = t.perf_counter() - s
-        print(f"{__file__} executed in {elapsed:0.2f} seconds.")
+        thread1 = threading.Thread(target=self.buffer_function, args=(content, ratio, dtype))
+        # thread2 = threading.Thread(target= self.setLED)
 
+        thread1.start()
+        # thread2.start()
 
+        # led.LEDISDONE()
+        # led.colorWipe(strip, Color(0, 0, 0))
+
+        thread1.join()
+        # thread2.join()
         self.master.destroy()
 
-
-    def spinMotor(self):
+    def setLED(self):
         pass
-        motorMix = 16
-        GPIO.setup(motorMix, GPIO.OUT)
-
-        GPIO.output(motorMix, GPIO.HIGH)  # runs motor
-        t.sleep(3)  # runs for 3 seconds
-        GPIO.output(motorMix, GPIO.LOW)  # turns off motor
+        # led.mainLoop(strip)
 
     async def findPump(self,pumpdata, i, content, ratio, size):
 
 
-        time = (ratio[i + "r"] * size) / 10
+        time = (ratio[i + "r"] * size) / 3
         z = ""
         for x in pumpdata:
             if content[i].title() in pumpdata[x]:
 
                 z = x
-
+                '''
                 if z == "pump1_1":
 
-                    pump1_1.write(1)
-                    await asyncio.sleep(time)
                     pump1_1.write(0)
+                    await asyncio.sleep(time)
+                    pump1_1.write(1)
                     break
 
                 if z == "pump1_2":
 
-                    pump1_2.write(1)
-                    await asyncio.sleep(time)
                     pump1_2.write(0)
+                    await asyncio.sleep(time)
+                    pump1_2.write(1)
                     break
 
                 if z == "pump1_3":
 
-                    pump1_3.write(1)
-                    await asyncio.sleep(time)
                     pump1_3.write(0)
+                    await asyncio.sleep(time)
+                    pump1_3.write(1)
                     break
 
                 if z == "pump1_4":
 
-                    pump1_4.write(1)
-                    await asyncio.sleep(time)
                     pump1_4.write(0)
+                    await asyncio.sleep(time)
+                    pump1_4.write(1)
                     break
 
                 if z == "pump1_5":
-                    pump1_5.write(1)
-                    await asyncio.sleep(time)
                     pump1_5.write(0)
+                    await asyncio.sleep(time)
+                    pump1_5.write(1)
                     break
 
                 if z == "pump1_6":
-                    pump1_6.write(1)
-                    await asyncio.sleep(time)
                     pump1_6.write(0)
+                    await asyncio.sleep(time)
+                    pump1_6.write(1)
                     break
 
                 if z == "pump1_7":
-                    pump1_7.write(1)
-                    await asyncio.sleep(time)
                     pump1_7.write(0)
+                    await asyncio.sleep(time)
+                    pump1_7.write(1)
                     break
 
                 if z == "pump1_8":
-                    pump1_8.write(1)
-                    await asyncio.sleep(time)
                     pump1_8.write(0)
+                    await asyncio.sleep(time)
+                    pump1_8.write(1)
                     break
                 if z == "pump2_1":
-                    pump2_1.write(1)
-                    await asyncio.sleep(time)
                     pump2_1.write(0)
+                    await asyncio.sleep(time)
+                    pump2_1.write(1)
                     break
 
                 if z == "pump2_2":
-                    pump2_2.write(1)
-                    await asyncio.sleep(time)
                     pump2_2.write(0)
+                    await asyncio.sleep(time)
+                    pump2_2.write(1)
                     break
 
                 if z == "pump2_3":
-                    pump2_3.write(1)
-                    await asyncio.sleep(time)
                     pump2_3.write(0)
+                    await asyncio.sleep(time)
+                    pump2_3.write(1)
                     break
 
                 if z == "pump2_4":
-                    pump2_4.write(1)
-                    await asyncio.sleep(time)
                     pump2_4.write(0)
+                    await asyncio.sleep(time)
+                    pump2_4.write(1)
                     break
 
                 if z == "pump2_5":
-                    pump2_5.write(1)
-                    await asyncio.sleep(time)
                     pump2_5.write(0)
+                    await asyncio.sleep(time)
+                    pump2_5.write(1)
                     break
 
                 if z == "pump2_6":
-                    pump2_6.write(1)
-                    await asyncio.sleep(time)
                     pump2_6.write(0)
+                    await asyncio.sleep(time)
+                    pump2_6.write(1)
                     break
 
                 if z == "pump2_7":
-                    pump2_7.write(1)
-                    await asyncio.sleep(time)
                     pump2_7.write(0)
+                    await asyncio.sleep(time)
+                    pump2_7.write(1)
                     break
 
                 if z == "pump2_8":
-                    pump2_8.write(1)
-                    await asyncio.sleep(time)
                     pump2_8.write(0)
+                    await asyncio.sleep(time)
+                    pump2_8.write(1)
                     break
-
+'''
 
 
 
     async def mainLoop(self,content, ratio,size):
 
-        read = open("pumps.json", "r")
+        read = open("../data/pumps.json", "r")
         pumpdata = json.load(read)
         read.close()
 
@@ -429,32 +583,45 @@ class dispenseLayout():
         # self.setlayout()
         self.async_loop.run_until_complete(self.mainLoop(content,ratio, size))
         print("test")
-        for x in range(step_count):  # this will run down for # length depending on SPR
-            GPIO.output(STEP, GPIO.HIGH)
-            t.sleep(delay)
-            GPIO.output(STEP, GPIO.LOW)
-            t.sleep(delay)
+        # stepper_motor_enable.write(0)
+        # t.sleep(1)
+        # self.down()
+        # t.sleep(1)
+        # self.spinMotor()
+        # t.sleep(1)
+        # self.up()
 
-        # im not sure how to simultanousely call the motor that mixes
-        self.spinMotor()
+        self.done_dispensing = False
+     
+   
+    def up(self):
+        pass
+    #     stepper_motor_dir.write(1)
+    #     for x in range(step_count):
+    # #         GPIO.output(STEP, GPIO.HIGH)
+    #         stepper_motor_step.write(1)
+    #         t.sleep(delay)
+    #         stepper_motor_step.write(0)
+    #         t.sleep(delay)
+    #     stepper_motor_enable.write(1)
 
-        t.sleep(3)  # time delay before it goes up, while motor mixes
-
-        GPIO.output(DIR, CCW)  # now it will be counterclockwise/will go up
-        for x in range(step_count):
-            GPIO.output(STEP, GPIO.HIGH)
-            t.sleep(delay)
-            GPIO.output(STEP, GPIO.LOW)
-            t.sleep(delay)
-
-        GPIO.cleanup()  # cleans up gpio pin back to input to prevent damage for next time use
-
-
-        self.done_dispensing = True
+    def down(self):
+        pass
+        # stepper_motor_dir.write(0)
+        #
+        # for x in range(step_count):
+        #     stepper_motor_step.write(1)
+        #     t.sleep(delay)
+        #     stepper_motor_step.write(0)
+        #     t.sleep(delay)
 
 
-
-
+    def spinMotor(self):
+        pass
+            #CHECK HERE FOR BUGS, ON 3RD DRINK IT KEPT SPINNING FOREVER!
+            # mixer_motor.write(0)# turns on motor
+            # t.sleep(5) #BUG HERE MAYBE? DIDNT WAKE UP
+            # mixer_motor.write(1)
 
 class menuLayout():
     def __init__(self, master):
@@ -467,10 +634,13 @@ class menuLayout():
             color1 = theme["tab_color1"]
             color2 = theme["tab_color2"]
 
+            #TO CHANGE TAB WIDTH MESS WITH THE CONSTANT DIVIDING THE ENTIRE VALUE!
+            self.swidth = (self.master.winfo_screenwidth() - self.master.winfo_reqwidth()) /5
+
             self.style.theme_create("yummy", parent="alt", settings={
-                "TNotebook": {"configure": {"tabmargins": [25, 5, 2, 0], "background": "black"}, "orient": "vertical"},
+                "TNotebook": {"configure": {"tabmargins": [0, 0, 10, 0], "background": theme["tab_background_color"]}, "orient": "vertical"},
                 "TNotebook.Tab": {
-                    "configure": {"padding": [250, 25], "background": color1},
+                    "configure": {"padding": [self.swidth, 25], "background": color1},
                     "map": {"background": [("selected", color2)],
                             "expand": [("selected", [1, 1, 1, 0])]}}})
 
@@ -480,7 +650,10 @@ class menuLayout():
 
         master.title = "DRINK MENU"
 
-        self.canvas = tk.Canvas(self.master)
+        self.canvas = tk.Canvas(self.master, width = 10)#self.master.winfo_reqwidth())
+
+        print(self.canvas.winfo_screenheight())
+        print(self.canvas.winfo_screenwidth())
         self.canvas.pack(side="left", fill="both", expand=1)
 
         self.scrollbar = tk.Scrollbar(self.master, orient="vertical", command=self.canvas.yview)
@@ -489,19 +662,17 @@ class menuLayout():
         self.canvas.xview_moveto(0)
         self.canvas.yview_moveto(0)
 
-        self.canvasheight = 2000
+        self.canvasheight = 9000
 
         # create a frame inside the canvas which will be scrolled with it
         self.interior = interior = tk.Frame(self.canvas, height=self.canvasheight, bg="black")
         self.interior_id = self.canvas.create_window(0, 0, window=interior, anchor="nw")
 
         self.interior.bind('<Configure>', self._configure_interior)
-
         self.canvas.bind('<Configure>', self._configure_canvas)
 
 
-
-        self.canvas.configure(yscrollcommand =self.scrollbar.set,bg = "black")
+        self.canvas.configure(yscrollcommand =self.scrollbar.set,bg = theme["background_color"], highlightthickness = 0)
         try:
             self.canvas.bind('<Configure>', lambda e:self.canvas.configure(scrollregion=self.canvas.bbox("all")))
             self.canvas.bind_all('<MouseWheel>', lambda e: self.canvas.yview_scroll(int(-1*(e.delta/120)), "units"))
@@ -523,10 +694,9 @@ class menuLayout():
         self.canvas.bind("<Leave>", lambda _: self.canvas.unbind_all('<B1-Motion>'), '+')
 
         self.tablayout = ttk.Notebook(self.canvas)
-        # self.tablayout.config(orient = "vetical")
 
-        self.drinkTab = tk.Frame(self.tablayout, bg = "black")
-        self.shotTab = tk.Frame(self.tablayout, bg = "black")
+        self.drinkTab = tk.Frame(self.tablayout, bg = theme["tab_background_color"])
+        self.shotTab = tk.Frame(self.tablayout, bg = theme["tab_background_color"])
         self.backTab = tk.Frame(self.tablayout)
 
         self.backTab.bind("<Visibility>",lambda e: self.killitall())
@@ -596,11 +766,11 @@ class menuLayout():
 
         row = 0
         column = 0
-        read = open("display.json", "r")
+        read = open("../data/display.json", "r")
         linedata = json.load(read)
         read.close()
 
-        read = open("pumps.json", "r")
+        read = open("../data/pumps.json", "r")
         pumpdata = json.load(read)
         read.close()
 
@@ -638,10 +808,10 @@ class menuLayout():
 
 
                     if not recipes[y + x]["img"] or recipes[y + x]["img"] == " ":
-                        img = tk.PhotoImage(file="img/default.png")
+                        img = tk.PhotoImage(file="../img/default.png")
                     else:
                         # img = tk.PhotoImage(file="img/default.png")
-                        img = tk.PhotoImage(file=str(recipes[y + x]["img"]))
+                        img = tk.PhotoImage(file="../img/"+ str(recipes[y + x]["img"]))
 
                     content = recipes[y+x]["content"]
                     ratio = recipes[y+x]["ratio"]
@@ -683,10 +853,10 @@ class menuLayout():
                         continue
 
                     if not shotrecipies[y + x]["img"] or shotrecipies[y + x]["img"] == " ":
-                        img = tk.PhotoImage(file="img/default.png")
+                        img = tk.PhotoImage(file="../img/default.png")
                     else:
                         # img = tk.PhotoImage(file="img/default.png")
-                        img = tk.PhotoImage(file=str(recipes[y + x]["img"]))
+                        img = tk.PhotoImage(file="../img/"+str(recipes[y + x]["img"]))
 
                     content = shotrecipies[y + x]["content"]
                     ratio = shotrecipies[y + x]["ratio"]
@@ -706,6 +876,27 @@ class menuLayout():
 
     def setButton(self,content, obj, ratio, tab, wildcard):
 
+        read = open("../data/display.json", "r")
+        linedata = json.load(read)
+        read.close()
+
+        # im2b = obj["img"]
+        print(linedata["display"])
+        if linedata["display"] == 1:
+            x =0
+            im2b = obj["img"]
+        elif linedata["display"] >=3 and linedata["display"] <=5:
+            x = linedata["display"] - 2
+            im2b = obj["img"].subsample(x, x)
+        elif linedata["display"] >=6:
+            x = linedata["display"] +1
+            im2b = obj["img"].subsample(x, x)
+        else:
+            x = linedata["display"] - 1
+            im2b = obj["img"].subsample(x, x)
+
+
+
 
         description = obj['name'] + "\n"
 
@@ -718,15 +909,15 @@ class menuLayout():
             tab,
             text=description,
             relief="flat",
-            image = obj["img"],
+            image = im2b,
             compound="left",
             highlightcolor=theme["button_highlight_color"],
             bg=theme["button_colors"],
             padx = 20,
             command = lambda :self.createDispenseMenu(content, obj,ratio, wildcard),
             )
-        self.button1.image = obj["img"]
-        self.button1.grid(row=obj["count"], column=obj["column"], padx=width, pady=(20,height), sticky="nsew")
+        self.button1.image = im2b
+        self.button1.grid(row=obj["count"], column=obj["column"], padx=5, pady=(20,5), sticky="nsew")
 
     def createDispenseMenu(self,content,obj,ratio,wildcard):
 
@@ -735,7 +926,7 @@ class menuLayout():
         self.dispenseMenu.configure(bg='#f0f0f0')
         ##40E0D0
 
-        file = open("display.json", "r")
+        file = open("../data/display.json", "r")
         data = json.load(file)
         file.close()
 
@@ -752,7 +943,7 @@ class menuLayout():
 class alcLayout():
     def __init__(self, master):
         self.master = master
-        nread = open("pumps.json", "r")
+        nread = open("../data/pumps.json", "r")
         d = json.load(nread)
         self.pumps = []
         for x in d:
@@ -767,7 +958,7 @@ class alcLayout():
 
     def getLayout(self):
 
-        read = open("drinks.json", "r")
+        read = open("../data/drinks.json", "r")
         drinkdata = json.load(read)
         read.close()
 
@@ -827,6 +1018,7 @@ class alcLayout():
 
 
         button = tk.Button(self.frame, text = "Save", command = self.saveList, padx = 40, pady=10).grid(row =17, column =0)
+        button2 = tk.Button(self.frame, text = "Clear", command = self.clearList, padx = 40, pady =10). grid(row =17, column = 1)
         descriptionLabel = tk.Label(self.frame,text = "Drinks per Line",justify = "left")
 
         self.displaychoices = tk.StringVar(self.frame)
@@ -836,6 +1028,12 @@ class alcLayout():
         descriptionLabel.grid(row=18, column =0)
 
         self.frame.pack()
+
+    def clearList(self):
+        for x in range(16):
+            self.juicechoices[x].set(" ")
+            self.choices[x].set(" ")
+
 
 
     def saveList(self):
@@ -853,7 +1051,7 @@ class alcLayout():
             else:
                 self.pumps.append(self.choices[x].get())
 
-        read = open("pumps.json", "r")
+        read = open("../data/pumps.json", "r")
         drinkdata = json.load(read)
         read.close()
 
@@ -870,11 +1068,11 @@ class alcLayout():
 
             z+=1
 
-        write = open("pumps.json", "w")
+        write = open("../data/pumps.json", "w")
         json.dump(drinkdata, write, indent=2)
         write.close()
 
-        write = open("display.json", "w")
+        write = open("../data/display.json", "w")
         json.dump(linedata, write, indent=2)
         write.close()
 
@@ -882,6 +1080,161 @@ class alcLayout():
 
 
 
+class settingsLayout():
+    def __init__(self, master):
+        super(settingsLayout,self).__init__()
+
+        self.master = master
+
+        self.frame = tk.Frame(master)
+        self.setLayout()
+        self.frame.pack()
+
+    def setLayout(self):
+        # img4 = tk.PhotoImage(file="img/clean.png")
+        self.cleanLabel = tk.Button(self.frame, text = "\tClean/Prime",
+                                    command=self.clean,
+                                    relief="flat",
+                                    # image=img4,
+                                   compound="left",
+                                   highlightcolor=theme["button_highlight_color"],
+                                   bg=theme["button_colors"])
+        self.options = {}
+        self.time = tk.StringVar(self.frame)
+        self.time.set(" ")
+        self.display = [1,2,3,4,5,6,7,8,9,10]
+
+        self.timeMenu = tk.OptionMenu(self.frame, self.time, *self.display)
+
+
+
+        self.MotorUpButton = tk.Button(self.frame,
+                                       text = "\tMotor Up",
+                                       command=self.motorUp,
+                                       relief="flat",
+                                       # image=img4,
+                                       compound="left",
+                                       highlightcolor=theme["button_highlight_color"],
+                                       bg=theme["button_colors"]
+                                       )
+
+        self.motorDownButton = tk.Button(self.frame,
+                                         text = "\tMotor Down",
+                                         command = self.motorDown,
+                                         relief="flat",
+                                         # image=img4,
+                                         compound="left",
+                                         highlightcolor=theme["button_highlight_color"],
+                                         bg=theme["button_colors"])
+
+        self.turnOffMixer = tk.Button(self.frame,
+                                      text = "\tTurn OFF Mixer",
+                                      command=self.mixerOff,
+                                      relief="flat",
+                                      # image=img4,
+                                      compound="left",
+                                      highlightcolor=theme["button_highlight_color"],
+                                      bg=theme["button_colors"]
+                                      )
+
+        self.turnOnMixer = tk.Button(self.frame,
+                                     text = "\tTurn ON Mixer",
+                                     command = self.mixerOn,
+                                     relief="flat",
+                                     # image=img4,
+                                     compound="left",
+                                     highlightcolor=theme["button_highlight_color"],
+                                     bg=theme["button_colors"]
+                                     )
+
+        self.cleanLabel.grid(row= 0,column =1, padx = 10, pady = 10)
+        self.timeMenu.grid(row =0, column =0, padx =10, pady =10)
+
+        self.MotorUpButton.grid(row =1, column = 0, padx =10, pady =10)
+        self.motorDownButton.grid(row =1, column = 1, padx = 10, pady =10)
+
+        self.turnOffMixer.grid(row = 2, column = 0, padx = 10, pady = 10)
+        self.turnOnMixer.grid(row = 2, column = 1, padx = 10, pady =10)
+
+
+    def mixerOn(self):
+        pass
+        # CHECK HERE FOR BUGS, ON 3RD DRINK IT KEPT SPINNING FOREVER!
+        # mixer_motor.write(0)  # turns on motor
+
+    def mixerOff(self):
+        pass
+        # mixer_motor.write(1)
+
+    def motorUp(self):
+        pass
+        '''
+        stepper_motor_dir.write(1)
+        for x in range(step_count):
+            #         GPIO.output(STEP, GPIO.HIGH)
+            stepper_motor_step.write(1)
+            t.sleep(delay)
+            stepper_motor_step.write(0)
+            t.sleep(delay)
+        stepper_motor_enable.write(1)
+        '''
+
+
+    def motorDown(self):
+        pass
+        '''
+        stepper_motor_enable.write(0)
+        t.sleep(1)
+        stepper_motor_dir.write(0)
+
+        for x in range(step_count):
+            stepper_motor_step.write(1)
+            t.sleep(delay)
+            stepper_motor_step.write(0)
+            t.sleep(delay)
+        '''
+
+
+    def clean(self):
+        pass
+'''
+            pump1_1.write(0)
+            pump1_2.write(0)
+            pump1_3.write(0)
+            pump1_4.write(0)
+            pump1_5.write(0)
+            pump1_6.write(0)
+            pump1_7.write(0)
+            pump1_8.write(0)
+#             pump2_1.write(0)
+#             pump2_2.write(0)
+#             pump2_3.write(0)
+#             pump2_4.write(0)
+#             pump2_5.write(0)
+#             pump2_6.write(0)
+#             pump2_7.write(0)
+#             pump2_8.write(0
+           
+
+            t.sleep(int(self.time.get()))
+
+            pump1_1.write(1)
+            pump1_2.write(1)
+            pump1_3.write(1)
+            pump1_4.write(1)
+            pump1_5.write(1)
+            pump1_6.write(1)
+            pump1_7.write(1)
+            pump1_8.write(1)
+#             pump2_1.write(1)
+#             pump2_2.write(1)
+#             pump2_3.write(1)
+#             pump2_4.write(1)
+#             pump2_5.write(1)
+#             pump2_6.write(1)
+#             pump2_7.write(1)
+#             pump2_8.write(1)
+          '''
 
 
 class mainlayout():
@@ -889,13 +1242,15 @@ class mainlayout():
         super(mainlayout, self).__init__()
         # USE THIS CODE FOR LINUX DISTRO
         # self.window.attributes('-zoomed', True)
-
         self.window = tk.Tk()
+        # self.window.geometry('3200x1800')
+
+        # led.colorCupPlacement(strip)
 
         self.getWindowSize(self.window)
 
         self.window.title("BBC (Best Bartending Companion")
-        self.window.configure(bg = "black")
+        self.window.configure(bg = theme["background_color"])
         #USE THIS CODE For Windows distro
         #-zoomed
         self.window.attributes('-fullscreen', True)
@@ -920,9 +1275,10 @@ class mainlayout():
 
     def getWindowSize(self, window):
 
-        file = open("display.json", "r")
+        file = open("../data/display.json", "r")
         data = json.load(file)
         file.close()
+
 
         x = (window.winfo_screenwidth() - window.winfo_reqwidth()) / data["confirm_scale_x"]
         y = (window.winfo_screenheight() - window.winfo_reqheight()) / data["confirm_scale_y"]
@@ -931,24 +1287,23 @@ class mainlayout():
         data["w"] = y
         # data["total_width"] = window.winfo_screenwidth() -100
 
-        file = open("display.json", "w")
+        file = open("../data/display.json", "w")
         json.dump(data,file,indent=2)
         file.close()
-
-
 
     def addlayout(self):
 
 
 
-        img = tk.PhotoImage(file = "img/menu2.png")
-        im2 = tk.PhotoImage(file = "img/layout.png")
+        img = tk.PhotoImage(file = "../img/menu2.png")
+        im2 = tk.PhotoImage(file = "../img/layout.png")
         im2b = im2.subsample(2,2)
-        im3 = tk.PhotoImage(file = "img/create.png")
+        im3 = tk.PhotoImage(file = "../img/create.png")
         im3b = im3.subsample(2,2)
-        img4 =tk.PhotoImage(file = "img/clean.png")
+        img4 =tk.PhotoImage(file = "../img/clean.png")
 
 
+        # PRODUCTION VALUES
         self.menuButton = tk.Button(
             self.window,
             text= "\tMenu",
@@ -962,6 +1317,21 @@ class mainlayout():
         self.menuButton.image = img
 
 
+        # DEVELOPMENT VALUES
+        # self.menuButton = tk.Button(
+        #     self.window,
+        #     text="\tMenu",
+        #     command=self.displayMenu,
+        #     relief="flat",
+        #     image=img,
+        #     compound="left",
+        #     highlightcolor=theme["button_highlight_color"],
+        #     bg=theme["button_colors"],
+        #     height=300)
+        # self.menuButton.image = img
+
+
+        # PRODUCTION VALUES
         self.layoutbutton = tk.Button(
             self.window,
             text="Layout",
@@ -974,6 +1344,20 @@ class mainlayout():
             height = 400)
         self.layoutbutton.image = im2b
 
+        # DEVELOPMENT VALUES
+        # self.layoutbutton = tk.Button(
+        #     self.window,
+        #     text="Layout",
+        #     command=self.newAlcoholWindow,
+        #     image=im2b,
+        #     compound="left",
+        #     relief="flat",
+        #     highlightcolor=theme["button_highlight_color"],
+        #     bg=theme["button_colors"],
+        #     height=300)
+        # self.layoutbutton.image = im2b
+
+        # PRODUCTION VALUES
         self.createButton = tk.Button(self.window,
             text="\tCreate",
             command=self.displayCreateDrink,
@@ -985,7 +1369,7 @@ class mainlayout():
         self.createButton.image = im3b
 
         self.cleanButton = tk.Button(self.window,
-            text="\tClean",
+            text="\tSettings",
             command=self.cleanPumps,
             relief="flat",
             image = img4,
@@ -994,10 +1378,18 @@ class mainlayout():
             bg=theme["button_colors"])
         self.cleanButton.image = img4
 
+        # PRODUCTION VALUES
         self.menuButton.grid(row = 0, column = 0,padx =30, pady =30,  sticky="nsew")
         self.createButton.grid(row =0, column =1, padx =30, pady =30, sticky="nsew")
         self.layoutbutton.grid(row =2, column = 0, padx =30, pady =30,sticky="nsew")
         self.cleanButton.grid(row=2, column =1, padx = 30, pady =30, sticky="nsew")
+
+
+        # DEVELOPMENT VALUES
+        # self.menuButton.grid(row=0, column=0, padx=30, pady=10, sticky="nsew")
+        # self.createButton.grid(row=0, column=1, padx=30, pady=10, sticky="nsew")
+        # self.layoutbutton.grid(row=2, column=0, padx=30, pady=10, sticky="nsew")
+        # self.cleanButton.grid(row=2, column=1, padx=30, pady=10, sticky="nsew")
 
         self.window.grid_columnconfigure(0, weight = 1)
         self.window.grid_columnconfigure(1, weight = 1)
@@ -1015,7 +1407,7 @@ class mainlayout():
         self.menuWindow.configure(bg = "black")
         #USE THIS CODE For Windows distro
         self.menuWindow.attributes('-fullscreen', True)
-        self.fullScreenState = False
+        self.fullScreenState = True
         self.menuWindow.bind("<F11>",
                          lambda event: self.menuWindow.attributes("-fullscreen",
                                                               not self.menuWindow.attributes("-fullscreen")))
@@ -1028,78 +1420,12 @@ class mainlayout():
     def displayCreateDrink(self):
         pass
 
-
     def cleanPumps(self):
-
+        # led.colorWipe(strip, Color(0, 0, 0), 10)
+        self.settingsMenu = tk.Toplevel(self.window)
+        self.settingsMenu.attributes('-topmost', 'true')
+        self.newlayer = settingsLayout(self.settingsMenu)
         time  =3
-
-        pump1_1.write(1)
-        t.sleep(time)
-        pump1_1.write(0)
-
-        pump1_2.write(1)
-        t.sleep(time)
-        pump1_2.write(0)
-
-        pump1_3.write(1)
-        t.sleep(time)
-        pump1_3.write(0)
-
-        pump1_4.write(1)
-        t.sleep(time)
-        pump1_4.write(0)
-
-        pump1_5.write(1)
-        t.sleep(time)
-        pump1_5.write(0)
-
-        pump1_6.write(1)
-        t.sleep(time)
-        pump1_6.write(0)
-
-        pump1_7.write(1)
-        t.sleep(time)
-        pump1_7.write(0)
-
-        pump1_8.write(1)
-        t.sleep(time)
-        pump1_8.write(0)
-
-        pump2_1.write(1)
-        t.sleep(time)
-        pump2_1.write(0)
-
-        pump2_2.write(1)
-        t.sleep(time)
-        pump2_2.write(0)
-
-        pump2_3.write(1)
-        t.sleep(time)
-        pump2_3.write(0)
-
-        pump2_4.write(1)
-        t.sleep(time)
-        pump2_4.write(0)
-
-        pump2_5.write(1)
-        t.sleep(time)
-        pump2_5.write(0)
-
-        pump2_6.write(1)
-        t.sleep(time)
-        pump2_6.write(0)
-
-        pump2_7.write(1)
-        t.sleep(time)
-        pump2_7.write(0)
-
-        pump2_8.write(1)
-        t.sleep(time)
-        pump2_8.write(0)
-
-
-
-
 
 
 
