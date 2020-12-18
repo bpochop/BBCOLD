@@ -48,7 +48,7 @@ set python interpeter!
 
 
 
-read = open("../data/theme.json", "r")
+read = open("./data/theme.json", "r")
 theme = json.load(read)
 read.close()
 
@@ -90,7 +90,7 @@ class mainlayout():
 
     def getWindowSize(self, window):
 
-        file = open("../data/display.json", "r")
+        file = open("./data/display.json", "r")
         data = json.load(file)
         file.close()
 
@@ -102,7 +102,7 @@ class mainlayout():
         data["w"] = y
         # data["total_width"] = window.winfo_screenwidth() -100
 
-        file = open("../data/display.json", "w")
+        file = open("./data/display.json", "w")
         json.dump(data,file,indent=2)
         file.close()
 
@@ -110,12 +110,12 @@ class mainlayout():
 
 
 
-        img = tk.PhotoImage(file = "../img/menu2.png")
-        im2 = tk.PhotoImage(file = "../img/layout.png")
+        img = tk.PhotoImage(file = "./img/menu2.png")
+        im2 = tk.PhotoImage(file = "./img/layout.png")
         im2b = im2.subsample(2,2)
-        im3 = tk.PhotoImage(file = "../img/create.png")
+        im3 = tk.PhotoImage(file = "./img/create.png")
         im3b = im3.subsample(2,2)
-        img4 =tk.PhotoImage(file = "../img/clean.png")
+        img4 =tk.PhotoImage(file = "./img/clean.png")
 
 
         # PRODUCTION VALUES

@@ -12,13 +12,12 @@ shot_mili = 40
 
 
 
-
-read = open("../data/theme.json", "r")
+read = open("./data/theme.json", "r")
 theme = json.load(read)
 read.close()
 
 
-nread = open("../data/recipes.json", "r")
+nread = open("./data/recipes.json", "r")
 d = json.load(nread)
 recipes = d["drinks"]
 shotrecipies = d["shot"]
@@ -403,10 +402,10 @@ class menuLayout():
 
 
 
-        self.canvas.bind("<Enter>", lambda _: self.canvas.bind_all('<Button-1>', self.on_press), '+')
-        self.canvas.bind("<Leave>", lambda _: self.canvas.unbind_all('<Button-1>'), '+')
-        self.canvas.bind("<Enter>", lambda _: self.canvas.bind_all('<B1-Motion>', self.on_touch_scroll), '+')
-        self.canvas.bind("<Leave>", lambda _: self.canvas.unbind_all('<B1-Motion>'), '+')
+        # self.canvas.bind("<Enter>", lambda _: self.canvas.bind_all('<Button-1>', self.on_press), '+')
+        # self.canvas.bind("<Leave>", lambda _: self.canvas.unbind_all('<Button-1>'), '+')
+        # self.canvas.bind("<Enter>", lambda _: self.canvas.bind_all('<B1-Motion>', self.on_touch_scroll), '+')
+        # self.canvas.bind("<Leave>", lambda _: self.canvas.unbind_all('<B1-Motion>'), '+')
 
         self.tablayout = ttk.Notebook(self.canvas)
 
@@ -448,44 +447,44 @@ class menuLayout():
             self.canvas.itemconfigure(self.interior_id, width=self.canvas.winfo_width())
 
 
-    def on_press(self,event):
-        try:
-            self.offset_y = event.y_root
-            if self.scrollposition < 1:
-                self.scrollposition = 1
-            elif self.scrollposition > self.canvasheight:
-                self.scrollposition = self.canvasheight
-            self.canvas.yview_moveto(self.scrollposition / self.canvasheight)
-        except:
-            pass
+    # def on_press(self,event):
+    #     try:
+    #         self.offset_y = event.y_root
+    #         if self.scrollposition < 1:
+    #             self.scrollposition = 1
+    #         elif self.scrollposition > self.canvasheight:
+    #             self.scrollposition = self.canvasheight
+    #         self.canvas.yview_moveto(self.scrollposition / self.canvasheight)
+    #     except:
+    #         pass
 
-    def on_touch_scroll(self,event):
-        try:
-            nowy = event.y_root
+    # def on_touch_scroll(self,event):
+    #     try:
+    #         nowy = event.y_root
 
-            sectionmoved = 40
-            if nowy > self.prevy:
-                event.delta = -sectionmoved
-            elif nowy < self.prevy:
-                event.delta = sectionmoved
-            else:
-                event.delta = 0
-            self.prevy = nowy
+    #         sectionmoved = 40
+    #         if nowy > self.prevy:
+    #             event.delta = -sectionmoved
+    #         elif nowy < self.prevy:
+    #             event.delta = sectionmoved
+    #         else:
+    #             event.delta = 0
+    #         self.prevy = nowy
 
-            self.scrollposition += event.delta
-            self.canvas.yview_moveto(self.scrollposition / self.canvasheight)
-        except:
-            pass
+    #         self.scrollposition += event.delta
+    #         self.canvas.yview_moveto(self.scrollposition / self.canvasheight)
+    #     except:
+    #         pass
 
     def getLayout(self):
 
         row = 0
         column = 0
-        read = open("../data/display.json", "r")
+        read = open("./data/display.json", "r")
         linedata = json.load(read)
         read.close()
 
-        read = open("../data/pumps.json", "r")
+        read = open("./data/pumps.json", "r")
         pumpdata = json.load(read)
         read.close()
 
@@ -523,10 +522,10 @@ class menuLayout():
 
 
                     if not recipes[y + x]["img"] or recipes[y + x]["img"] == " ":
-                        img = tk.PhotoImage(file="../img/default.png")
+                        img = tk.PhotoImage(file="./img/default.png")
                     else:
                         # img = tk.PhotoImage(file="img/default.png")
-                        img = tk.PhotoImage(file="../img/"+ str(recipes[y + x]["img"]))
+                        img = tk.PhotoImage(file="./img/"+ str(recipes[y + x]["img"]))
 
                     content = recipes[y+x]["content"]
                     ratio = recipes[y+x]["ratio"]
@@ -562,16 +561,16 @@ class menuLayout():
                             if isinstance(shotrecipies[y + x]["ratio"][z + "r"], str):
                                 continue
                             flag = False
-                            break;
+                            break
 
                     if flag is False:
                         continue
 
                     if not shotrecipies[y + x]["img"] or shotrecipies[y + x]["img"] == " ":
-                        img = tk.PhotoImage(file="../img/default.png")
+                        img = tk.PhotoImage(file="./img/default.png")
                     else:
                         # img = tk.PhotoImage(file="img/default.png")
-                        img = tk.PhotoImage(file="../img/"+str(recipes[y + x]["img"]))
+                        img = tk.PhotoImage(file="./img/"+str(recipes[y + x]["img"]))
 
                     content = shotrecipies[y + x]["content"]
                     ratio = shotrecipies[y + x]["ratio"]
@@ -591,7 +590,7 @@ class menuLayout():
 
     def setButton(self,content, obj, ratio, tab, wildcard):
 
-        read = open("../data/display.json", "r")
+        read = open("./data/display.json", "r")
         linedata = json.load(read)
         read.close()
 
@@ -641,7 +640,7 @@ class menuLayout():
         self.dispenseMenu.configure(bg='#f0f0f0')
         ##40E0D0
 
-        file = open("../data/display.json", "r")
+        file = open("./data/display.json", "r")
         data = json.load(file)
         file.close()
 

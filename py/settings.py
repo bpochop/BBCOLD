@@ -2,7 +2,7 @@ import tkinter as tk
 import json
 
 
-read = open("../data/theme.json", "r")
+read = open("./data/theme.json", "r")
 theme = json.load(read)
 read.close()
 

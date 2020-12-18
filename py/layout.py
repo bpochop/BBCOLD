@@ -2,7 +2,7 @@ import tkinter as tk
 import json
 
 
-read = open("../data/display.json", "r")
+read = open("./data/display.json", "r")
 linedata = json.load(read)
 read.close()
 
@@ -11,7 +11,7 @@ read.close()
 class alcLayout():
     def __init__(self, master):
         self.master = master
-        nread = open("../data/pumps.json", "r")
+        nread = open("./data/pumps.json", "r")
         d = json.load(nread)
         self.pumps = []
         for x in d:
@@ -26,7 +26,7 @@ class alcLayout():
 
     def getLayout(self):
 
-        read = open("../data/drinks.json", "r")
+        read = open("./data/drinks.json", "r")
         drinkdata = json.load(read)
         read.close()
 
@@ -119,7 +119,7 @@ class alcLayout():
             else:
                 self.pumps.append(self.choices[x].get())
 
-        read = open("../data/pumps.json", "r")
+        read = open("./data/pumps.json", "r")
         drinkdata = json.load(read)
         read.close()
 
@@ -136,11 +136,11 @@ class alcLayout():
 
             z+=1
 
-        write = open("../data/pumps.json", "w")
+        write = open("./data/pumps.json", "w")
         json.dump(drinkdata, write, indent=2)
         write.close()
 
-        write = open("../data/display.json", "w")
+        write = open("./data/display.json", "w")
         json.dump(linedata, write, indent=2)
         write.close()
 
