@@ -6,3 +6,8 @@ This poject uses Tkinter as the GUI
 
 
 
+
+SIKE FUCK YOU NERD TKINTER IS FOR PUSSIES. 
+We are using a Django web-server with a react front end.
+
+
