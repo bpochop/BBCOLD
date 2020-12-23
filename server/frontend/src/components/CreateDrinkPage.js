@@ -15,7 +15,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel"
 import Button from '@material-ui/core/button';
 
 export default class CreateDrinkPage extends Component {
-    defaultVotes=2; //take this out
+    defaultVotes=2; //take this out cause fuck this shit pwussi
     constructor(props) {
         super(props);
         this.state = {
