@@ -18,6 +18,27 @@ class RoomView(generics.ListAPIView):
     serializer_class = RoomSerializer
 
 
+#lookups what settings we by checking the room number
+#I dont think well need this. 
+class GetRoom(APIView):
+    serializer_class = RoomSerializer
+    lookup_url_kwarg = 'code'
+
+    #gets room number from the post request and grabs the arguement code so it can look it up
+    #might be useful for grabbing post request for drink ingrediants
+    def get(self,request, format = None):
+        code = request.GET.get(self.lookup_url_kwarg)
+        if code != None:
+            room = Room.objects.filter(code=code)
+            if len(room) > 0:
+                #serializing the room and taking the data from the serializer
+                data = RoomSerializer(room[0]).data
+                data['is_host'] = self.request.session.session_key == room[0].host
+                return Response(data, status=status.HTTP_200_OK)
+            return Response({'Room Not FOund': "Invalid Room Code. "},status= status.HTTP_404)
+        return Response({'Bad Request': 'Code Parameter not found in request'}, status=status.HTTP_400_BAD_request)
+
+
 class CreateRoomView(APIView):
     serializer_class = CreateRoomSeriealizer
 

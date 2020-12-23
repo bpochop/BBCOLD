@@ -10,7 +10,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 #this class takes the post request and puts it into a python format
-class CreateRoomSeriealizer(serializers.ModelSerializer):
+class CreateRoomSerialize(serializers.ModelSerializer):
     class Meta: 
         model = Room
         fields = ('guest_can_pause', 'votes_to_skip')

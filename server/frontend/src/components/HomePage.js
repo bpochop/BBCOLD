@@ -25,7 +25,7 @@ export default class HomePage extends Component {
                     <Route path='/Menu' component={MenuPage}/>
                     <Route path='/create' component= {CreateDrinkPage}/>
                     <Route path = '/settings' component = {SettingsPage}/>
-
+                    
                 </Switch>
 
             </Router>
