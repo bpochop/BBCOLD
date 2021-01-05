@@ -10,7 +10,6 @@ import {
     Link, 
     Redirect 
 } from "react-router-dom";
-import { Grid, Typography } from '@material-ui/core';
 
 
 
