@@ -3,8 +3,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.utils import serializer_helpers
-from .serializers import RoomSerializer, CreateRoomSeriealizer #remove this
+from .serializers import RoomSerializer, CreateRoomSerializer #remove this
 from .models import Room #Remove this
+import json
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -21,29 +22,47 @@ class RoomView(generics.ListAPIView):
 
 #lookups what settings we by checking the room number
 #I dont think well need this. 
-class GetRoom(APIView):
+class LoadDrinks(APIView):
     serializer_class = RoomSerializer
-    lookup_url_kwarg = 'code'
+    
 
     #gets room number from the post request and grabs the arguement code so it can look it up
     #might be useful for grabbing post request for drink ingrediants
-    def get(self,request, format = None):
-        code = request.GET.get(self.lookup_url_kwarg)
-        if code != None:
-            room = Room.objects.filter(code=code)
-            if len(room) > 0:
-                #serializing the room and taking the data from the serializer
-                data = RoomSerializer(room[0]).data
-                data['is_host'] = self.request.session.session_key == room[0].host
-                return Response(data, status=status.HTTP_200_OK)
-            return Response({'Room Not FOund': "Invalid Room Code. "},status= status.HTTP_404)
-        return Response({'Bad Request': 'Code Parameter not found in request'}, status=status.HTTP_400_BAD_REQUEST)
+    def getDrinks(self,request, format = None):
+
+        nread = open("./data/recipes.json", "r")
+        d = json.load(nread)
+        cocktails = d["drinks"]
+        shots = d["shot"]
+        nread.close()
+
+        read = open("./data/pumps.json", "r")
+        pumpdata = json.load(read)
+        read.close()
+
+        p  = []
+
+        for x in pumpdata:
+            p.append(pumpdata[x])
+
+        for x in range(0,len(cocktails)):
+            print(x)
+
+
+
+          
+
+        #         return Response(data, status=status.HTTP_200_OK)
+        #     return Response({'Room Not FOund': "Invalid Room Code. "},status= status.HTTP_404)
+        # return Response({'Bad Request': 'Code Parameter not found in request'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 #Checking if room exists or maybe drink exists and shit
 class JoinRoom(APIView):
     lookup_url_kwarg = 'code'
     def post(self, request, format=None):
-        if not self.request.session.exits(self.request.session.session_key):
+        if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
         
         code = request.data.get(self.lookup_url_kwarg)
@@ -55,17 +74,17 @@ class JoinRoom(APIView):
                 return Response({'message': 'Room Joined!'}, status= status.HTTP_200_OK)
             
             return Response({'Bad Request': 'Invalid Room Code'}, status= status.HTTP_400_BAD_REQUEST)
-    return Response({'Bad Request': 'Invalid post data, did not find a code key'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'Bad Request': 'Invalid post data, did not find a code key'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CreateRoomView(APIView):
-    serializer_class = CreateRoomSeriealizer
+    serializer_class = CreateRoomSerializer
 
 
 
     def post(self, request, format=None):
         #if current user has an active session with our website, I dont think well need this for our program 
-        if not self.request.session.exits(self.request.session.session_key):
+        if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
 
         #take our data and give us a python version, WE WILL NEED THIS BABY
@@ -91,7 +110,7 @@ class CreateRoomView(APIView):
 
 class UserInRoom(APIView):
     def get(self, request, format=None):
-        if not self.request.session.exits(self.request.session.session_key):
+        if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
 
         data = {

@@ -494,22 +494,17 @@ class menuLayout():
             p.append(pumpdata[x])
 
         for x in range(0,len(recipes),linedata["display"]):
-
             for y in range(linedata["display"]):
                 flag = True
 
                 if column == linedata["display"]:
                     column = 0
 
-
                 if y+x < len(recipes):
-
                     # check if each item of recipes[content] is in
                     # p(list of alcohol in pumps) is in
                     for z in recipes[y + x]["content"]:
-
                         if not recipes[y + x]["content"][z].title() in p:
-
                             if isinstance(recipes[y+x]["ratio"][z+"r"],str):
                                 continue
                             flag = False
@@ -518,22 +513,12 @@ class menuLayout():
                     if flag is False:
                         continue
 
-
-
-
-                    if not recipes[y + x]["img"] or recipes[y + x]["img"] == " ":
-                        img = tk.PhotoImage(file="./img/default.png")
-                    else:
-                        # img = tk.PhotoImage(file="img/default.png")
-                        img = tk.PhotoImage(file="./img/"+ str(recipes[y + x]["img"]))
-
                     content = recipes[y+x]["content"]
                     ratio = recipes[y+x]["ratio"]
                     values = {
                         "name":recipes[y+x]["name"],
                         "count":row,
-                        "column": column,
-                        "img": img
+                        "column": column
                     }
                     self.setButton(content,values,ratio, self.drinkTab,"cock")
                     column += 1
