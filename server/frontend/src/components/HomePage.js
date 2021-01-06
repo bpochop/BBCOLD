@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CreateDrinkPage from "./CreateDrinkPage";
 import Maintenance from "./Maintenance";
 import settings from "./SettingsPage";
-import menu from "./MenuPage";
+import menupage from "./MenuPage";
 import survey from "./Survey"
 
 import {
@@ -61,19 +61,19 @@ export default class HomePage extends Component {
         </Grid>
 
         <Grid item xs={12} align="center">
-          <Button color="secondary" variant="contained" to="/MenuPage" component={Link}>
+          <Button color="secondary" variant="contained" to="/menu" component={Link}>
             Menu
           </Button>
         </Grid>
 
         <Grid item xs={12} align="center">
-          <Button color="secondary" variant="contained" to="/Maintance" component={Link}>
+          <Button color="secondary" variant="contained" to="/survey" component={Link}>
             Survey
           </Button>
         </Grid>
 
         <Grid item xs={12} align="center">
-          <Button color="secondary" variant="contained" to="/Maintenance" component={Link}>
+          <Button color="secondary" variant="contained" to="/maintenance" component={Link}>
             Maintenance
           </Button>
         </Grid>
@@ -91,7 +91,11 @@ export default class HomePage extends Component {
             path="/"
             render={() => { return this.renderHomePage() }}
           />
-      
+          <Route path="/menu" component = {menupage} />
+          <Route path="/create" component = {CreateDrinkPage} />
+          <Route path="/maintenance" component = {Maintenance} />
+          <Route path="/settings" component = {settings} />
+          <Route path="/survey" component = {survey} />
         </Switch>
       </Router>
     );

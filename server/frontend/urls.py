@@ -6,5 +6,8 @@ urlpatterns = [
     path('SettingsPage',index),
     path('create', index),
     path('menu/confirm', index),
+    path('setings', index),
+    path('survey', index),
+    path('maintenance', index),
     
 ]

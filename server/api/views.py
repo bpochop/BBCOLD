@@ -17,18 +17,16 @@ class RoomView(generics.ListAPIView):
     queryset = Room.objects.all()
 
 
-    serializer_class = RoomSerializer
-
 
 #lookups what settings we by checking the room number
 #I dont think well need this. 
 class LoadDrinks(APIView):
     serializer_class = RoomSerializer
-    
+   
 
     #gets room number from the post request and grabs the arguement code so it can look it up
     #might be useful for grabbing post request for drink ingrediants
-    def getDrinks(self,request, format = None):
+    def get(self,request, format = None):
 
         nread = open("./data/recipes.json", "r")
         d = json.load(nread)
@@ -36,19 +34,50 @@ class LoadDrinks(APIView):
         shots = d["shot"]
         nread.close()
 
+
         read = open("./data/pumps.json", "r")
         pumpdata = json.load(read)
         read.close()
+        
 
-        p  = []
+        menu = []
+        count =0
+      
+        w = 1
+        y =1
+        p = []
 
-        for x in pumpdata:
-            p.append(pumpdata[x])
 
-        for x in range(0,len(cocktails)):
-            print(x)
+    
+        #here we are cleaning up the pumps list so we only get the alcohol, reason why we dont change this list in the json
+        #is because I think itll be easier to keep track of pins. Either way we have to remove the pumpx_y or add them
+        for x in pumpdata.values():
+            # print(x)
+            p.append(x)
+        
+
+        flag = False
 
 
+        #CHECKING IF THE CONENTS OF A DRINK ARE IN THE PUMPS LIST
+        for x in cocktails:
+            #indicie of liquour list
+            count = count +1
+            for y in x['content']:
+                if x['content'][y] in p:
+                    flag = True
+                elif isinstance(x['ratio'][y + "r"], str):
+                    flag = True
+                else:
+                    flag = False
+                    break
+            
+            if flag is True:
+                menu.append(x)
+
+
+
+        return Response(menu, status=status.HTTP_200_OK)
 
           
 

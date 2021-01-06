@@ -15,5 +15,11 @@ class CreateRoomSerializer(serializers.ModelSerializer):
         fields = ('guest_can_pause', 'votes_to_skip')
 
 
+class MenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('id', 'code', 'host', 'guest_can_pause',
+                  'votes_to_skip', 'created_at'
+
 #when your handling good idea to use a serializer, incoming or outgoing
 
