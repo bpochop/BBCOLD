@@ -2,694 +2,433 @@
   "drinks": [
     {
       "name": "Rum and Coke",
-      "content": {
-        "l1": "Rum",
-        "l2": "Coke"
-      },
-      "ratio": {
-        "l1r": 0.25,
-        "l2r":0.75
+      "ingredients": {
+        "Rum":0.25,
+        "Coke":0.75
       },
       "img": "rumandcoke.png"
     },
     {
       "name": "Yellow Hammer",
-      "content": {
-        "l1": "Vodka",
-        "l2": "Rum",
-        "l3": "Amaretto",
-        "l4": "Orange Juice",
-        "l5": "Pineapple Juice"
-      },
-      "ratio": {
-        "l1r": 0.11,
-        "l2r": 0.11,
-        "l3r": 0.11,
-        "l4r": 0.24,
-        "l5r": 0.41
+      "ingredients": {
+        "Vodka": 0.11,
+        "Rum": 0.11,
+        "Amaretto": 0.11,
+        "Orange Juice": 0.24,
+        "Pineapple Juice": 0.41
       },
       "img": "yellowhammer.png"
-    },{
+    },
+    {
       "name": "Alaska Duck Fart",
-      "content": {
-        "l1": "Kahlua",
-        "l2": "Baileys",
-        "l3": "Whisky"
-      },
-      "ratio": {
-        "l1r": 0.4,
-        "l2r": 0.4,
-        "l3r": 0.2
+      "ingredients": {
+        "Kahlua": 0.4,
+        "Baileys": 0.4,
+        "Whisky": 0.2
       },
       "img": ""
     },
     {
       "name": "Tequila Sunrise",
-      "content": {
-        "l1": "Tequila",
-        "l2": "Orange Juice",
-        "l3": "Grenadine"
-      },
-      "ratio": {
-        "l1r": 0.27,
-        "l2r": 0.71,
-        "l3r": 0.02
+      "ingredients": {
+        "Tequila": 0.27,
+        "Orange Juice": 0.71,
+        "Grenadine": 0.02
       },
       "img": "tequilasunrise.png"
     },
     {
       "name": "Arkansas RazorBack",
-      "content": {
-        "l1": "Rum",
-        "l2": "Vodka",
-        "l3": "Amaretto",
-        "l4": "Kahlua"
-      },
-      "ratio": {
-        "l1r": 0.25,
-        "l2r": 0.25,
-        "l3r": 0.25,
-        "l4r": 0.25
+      "ingredients": {
+        "Rum": 0.25,
+        "Vodka": 0.25,
+        "Amaretto": 0.25,
+        "Kahlua": 0.25
       },
       "img": "arkansas.png"
     },
     {
       "name": "Box Wine",
-      "content": {
-        "l1": "Wine"
-      },
-      "ratio": {
-        "l1r": 1
+      "ingredients": {
+        "Wine": 1
       },
       "img": ""
     },
     {
       "name": "Black-Eyed Susan",
-      "content": {
-        "l1": "Bourbon",
-        "l2": "Vodka",
-        "l3": "Orange Juice",
-        "l4": "Peach Schnapps",
-        "l5": "Sour Mix",
-        "l6": "Orange Slice",
-        "l7": "Cherries"
-      },
-      "ratio": {
-        "l1r": 0.14,
-        "l2r": 0.14,
-        "l3r": 0.29,
-        "l4r": 0.14,
-        "l5r": 0.29,
-        "l6r": "1 Orange Slice",
-        "l7r": "Cherries"
+      "ingredients": {
+        "Bourbon": 0.14,
+        "Vodka": 0.14,
+        "Orange Juice": 0.29,
+        "Peach Schnapps":  0.14,
+        "Sour Mix": 0.29,
+        "Orange Slice": "Orange Slice",
+        "Cherries": "Cherries"
       },
       "img": "blackeyesusan.png"
     },
     {
       "name": "The BootLeg [UNDER REIVIEW]",
-      "content": {
-        "l1": "Simple Syrup",
-        "l2": "Rum",
-        "l3": "Limeade",
-        "l4": "lemonade",
-        "l5": "water",
-        "l6": "mint"
-      },
-      "ratio": {
-        "l1r": 0.14,
-        "l2r": 0.14,
-        "l3r": 0.29,
-        "l4r": 0.14,
-        "l5r": 0.29,
-        "l6r": "2 Bunches"
+      "ingredients": {
+        "Simple Syrup": 0.14,
+        "Rum": 0.14,
+        "Limeade": 0.29,
+        "lemonade": 0.14,
+        "water": 0.29,
+        "mint": "mint"
       },
       "img": ""
     },
     {
       "name": "Mississippi Punch",
-      "content": {
-        "l1": "Cognac",
-        "l2": "Bourbon",
-        "l3": "Rum",
-        "l4": "Lemon Juice",
-        "l5": "Simple Syrup"
-      },
-      "ratio": {
-        "l1r": 0.41,
-        "l2r": 0.21,
-        "l3r": 0.21,
-        "l4r": 0.10,
-        "l5r": 0.07
+      "ingredients": {
+        "Cognac": 0.41,
+        "Bourbon": 0.21,
+        "Rum": 0.21,
+        "Lemon Juice": 0.10,
+        "Simple Syrup": 0.07
       },
       "img": "missisipipunch.png"
     },
     {
       "name": "Whiskey Ditch",
-      "content": {
-        "l1": "Whiskey",
-        "l2": "water"
-      },
-      "ratio": {
-        "l1r": 0.5,
-        "l2r": 0.5
+      "ingredients": {
+        "Whiskey": 0.5,
+        "water": "0.5"
       },
       "img": ""
     },
     {
       "name": "Kool-Aid Caddy",
-      "content": {
-        "l1": "Vodka",
-        "l2": "Orange Juice",
-        "l3": "Kool-aid"
-      },
-      "ratio": {
-        "l1r": 0.25,
-        "l2r": 0.5,
-        "l3r": 0.25
+      "ingredients": {
+        "Vodka": 0.25,
+        "Orange Juice":  0.5,
+        "Kool-aid": 0.25
       },
       "img": ""
     },  
     {
       "name": "Chimayo Cocktail",
-      "content": {
-        "l1": "Tequila",
-        "l2": "Apple Cider",
-        "l3": "Chambord",
-        "l4": "Lemon Juice"
-      },
-      "ratio": {
-        "l1r": 0.24,
-        "l2r": 0.48,
-        "l3r": 0.12,
-        "l4r": 0.16
+      "ingredients": {
+        "Tequila": 0.24,
+        "Apple Cider": 0.48,
+        "Chambord": 0.12,
+        "Lemon Juice": 0.16
       },
       "img": ""
     },
     {
       "name": "Bad Manhattan",
-      "content": {
-        "l1": "Whisky",
-        "l2": "Sweet Vermouth",
-        "l3": "Angostura Bitters"
-      },
-      "ratio": {
-        "l1r": 0.24,
-        "l2r": 0.48,
-        "l3r": "1 Dashes"
+      "ingredients": {
+        "Whisky": 0.24,
+        "Sweet Vermouth": 0.48,
+        "Angostura Bitters": "1 Dashes"
       },
       "img": ""
     },
     {
       "name": "Mojito [UNDER REVIEW]",
-      "content": {
-        "l1": "Lime Juice",
-        "l2": "Mint",
-        "l3": "Rum",
-        "l4": "water",
-        "l5": "Simple Syrup"
-      },
-      "ratio": {
-        "l1r": 0.18,
-        "l2r": 0.1,
-        "l3r": 0.36,
-        "l4r": 0.18,
-        "l5r": 0.18
+      "ingredients": {
+        "Lime Juice": 0.18,
+        "Mint": 0.1,
+        "Rum": 0.36,
+        "water": 0.18,
+        "Simple Syrup": 0.18
       },
       "img": "mohito.png"
     },
     {
       "name": "Scarlett O'Hara",
-      "content": {
-        "l1": "Whiskey",
-        "l2": "Lime Juice",
-        "l3": "Cranberry Juice",
-        "l4": "Lime Slice"
-      },
-      "ratio": {
-        "l1r": 0.23,
-        "l2r": 0.06,
-        "l3r": 0.71,
-        "l4r": "One Lime Slice"
+      "ingredients": {
+        "Whiskey": 0.23,
+        "Lime Juice": 0.06,
+        "Cranberry Juice": 0.71,
+        "Lime Slice": "1"
       },
       "img": ""
     },
     {
       "name": "Mint Julep",
-      "content": {
-        "l1": "Mint Leaves",
-        "l2": "Sugar",
-        "l3": "Water",
-        "l4": "Whiskey"
-      },
-      "ratio": {
-        "l1r": "10 Leaves",
-        "l2r": 0.07,
-        "l3r": 0.26,
-        "l4r": 0.67
+      "ingredients": {
+        "Mint Leaves": "10 Leaves",
+        "Sugar": 0.07,
+        "Water": 0.26,
+        "Whiskey":0.67
       },
       "img": ""
     },
     {
       "name": "Cherry Bounce",
-      "content": {
-        "l1": "Grenadine",
-        "l2": "Vodka",
-        "l3": "Cranberry Juice",
-        "l4": "Fresh Lime",
-        "l5": "Water",
-        "l6": "Cherry"
-      },
-      "ratio": {
-        "l1r": 0.05,
-        "l2r": 0.25,
-        "l3r": 0.4,
-        "l4r": 0.1,
-        "l5r": 0.2,
-        "l6r": "Cherry"
+      "ingredients": {
+        "Grenadine": 0.05,
+        "Vodka": 0.25,
+        "Cranberry Juice": 0.4,
+        "Fresh Lime": 0.1,
+        "Water": 0.2,
+        "Cherry": "Cherry"
       },
       "img": ""
     },
     {
       "name": "BuckEye Martini",
-      "content": {
-        "l1": "Gin",
-        "l2": "Vermouth"
-      },
-      "ratio": {
-        "l1r": 0.86,
-        "l2r": 0.14
+      "ingredients": {
+        "Gin": 0.86,
+        "Vermouth": 0.14
       },
       "img": ""
     },
     {
       "name": "Rhode Island Red",
-      "content": {
-        "l1": "Raspberries",
-        "l2": "Tequila",
-        "l3": "Chambord",
-        "l4": "Lemon Juice",
-        "l5": "Simple Syrup",
-        "l6": "Orange Bitters",
-        "l7": "Giner Beer",
-        "l8": "Mint Leaves",
-        "l9": "Ice"
-      },
-      "ratio": {
-        "l1r": "Raspberries",
-        "l2r": 0.24,
-        "l3r": 0.13,
-        "l4r": 0.09,
-        "l5r": 0.04,
-        "l6r": "Orange Bitters",
-        "l7r": 0.5,
-        "l8r": "Mint Leaves",
-        "l9r": "Ice"
+      "ingredients": {
+        "Raspberries": "Raspberries",
+        "Tequila": 0.24,
+        "Chambord": 0.13,
+        "Lemon Juice": 0.09,
+        "Simple Syrup": 0.04,
+        "Orange Bitters": "Orange Bitters",
+        "Giner Beer": 0.5,
+        "Mint Leaves": "Mint Leaves"
       },
       "img": ""
     },
     {
       "name": "Sweet Tea & Bourbon",
-      "content": {
-        "l1": "Bourbon",
-        "l2": "Sweet Tea",
-        "l3": "Mint",
-        "l4": "Lemon Juice"
-      },
-      "ratio": {
-        "l1r": 0.25,
-        "l2r": 0.75,
-        "l3r": "Mint Leaves",
-        "l4r": "Lemon Juice"
+      "ingredients": {
+        "Bourbon":  0.25,
+        "Sweet Tea": 0.75,
+        "Mint": "Mint",
+        "Lemon Juice": "Lemon Juice"
       },
       "img": ""
     },
     {
       "name": "Jack & Coke",
-      "content": {
-        "l1": "Whisky",
-        "l2": "Coke",
-        "l3": "Mint Leaves",
-        "l4": "Lemon Juice"
-      },
-      "ratio": {
-        "l1r": 0.25,
-        "l2r": 0.75,
-        "l3r": "Mint Leaves",
-        "l4r": "Lemon Juice"
+      "ingredients": {
+        "Whisky": 0.25,
+        "Coke": 0.75,
+        "Mint Leaves": "Mint Leaves",
+        "Lemon Juice": "Lemon Juice"
       },
       "img": ""
     },
     {
       "name": "Yellow Submarine",
-      "content": {
-        "l1": "Vodka",
-        "l2": "Rum",
-        "l3": "Banana Liqueur"
-      },
-      "ratio": {
-        "l1r": 0.6,
-        "l2r": 0.2,
-        "l3r": 0.2
+      "ingredients": {
+        "Vodka": 0.6,
+        "Rum": 0.2,
+        "l3": 0.2
       },
       "img": ""
     },
     {
       "name": "Fuzzy Navel",
-      "content": {
-        "l1": "peach schnapps",
-        "l2": "orange juice"
-      },
-      "ratio": {
-        "l1r": 0.50,
-        "l2r": 0.50
+      "ingredients": {
+        "peach schnapps": 0.50,
+        "orange juice": 0.50
       },
       "img": "fuzzynaval.png"
     },
 	{
       "name": "Blueberry Mule",
-      "content": {
-        "l1": "vodka",
-        "l2": "ginger beer",
-		    "l3": "blueberry lemonade"
-      },
-      "ratio": {
-        "l1r": 0.30,
-        "l2r": 0.40,
-		    "l3r": 0.30
+      "ingredients": {
+        "vodka": 0.30,
+        "ginger beer": 0.40,
+		    "blueberry lemonade": 0.30
       },
       "img": ""
     },
 	{
       "name": "Margarita",
-      "content": {
-        "l1": "tequila",
-        "l2": "triple sec",
-		    "l3": "lime juice"
-      },
-      "ratio": {
-        "l1r": 0.50,
-        "l2r": 0.25,
-		    "l3r": 0.25
+      "ingredients": {
+        "tequila": 0.50,
+        "triple sec": 0.25,
+		    "lime juice": 0.25
       },
       "img": ""
     },
-	{
+	  {
       "name": "Negroni",
-      "content": {
-        "l1": "gin",
-        "l2": "campari",
-		    "l3": "sweet vermouth"
-      },
-      "ratio": {
-        "l1r": 0.34,
-        "l2r": 0.33,
-		    "l3r": 0.33
+      "ingredients": {
+        "gin": 0.34,
+        "campari": 0.33,
+		    "sweet vermouth": 0.33
       },
       "img": ""
-    },
-	{
+      },
+	  {
       "name": "Daiquiri",
-      "content": {
-        "l1": "white rum",
-        "l2": "lime juice",
-		    "l3": "simple syrup"
-      },
-      "ratio": {
-        "l1r": 0.50,
-        "l2r": 0.33,
-		    "l3r": 0.17
+      "ingredients": {
+        "white rum": 0.50,
+        "lime juice":0.33,
+		    "simple syrup": 0.17
       },
       "img": ""
     },
-	{
+	  {
       "name": "Cosmopolitan",
-      "content": {
-        "l1": "Vodka Citron",
-        "l2": "Cranberry Juice",
-        "l3": "Triple Sec",
-        "l4": "Lime Juice"
-      },
-      "ratio": {
-        "l1r": 0.40,
-        "l2r": 0.30,
-        "l3r": 0.15,
-        "l4r": 0.15
+      "ingredients": {
+        "Vodka Citron": 0.40,
+        "Cranberry Juice": 0.30,
+        "Triple Sec": 0.15,
+        "Lime Juice": 0.15
       },
       "img": "cosmopolitian.png"
     },
 	{
       "name": "Whiskey Sour",
-      "content": {
-        "l1": "whiskey",
-        "l2": "lemon juice",
-		    "l3": "simple syrup"
-      },
-      "ratio": {
-        "l1r": 0.60,
-        "l2r": 0.20,
-		    "l3r": 0.20
+      "ingredients": {
+        "whiskey": 0.60,
+        "lemon juice": 0.20,
+		    "simple syrup": 0.20
       },
       "img": ""
     },
 	{
       "name": "Long Island Iced Tea",
-      "content": {
-        "l1": "vodka",
-        "l2": "rum",
-        "l3": "gin",
-        "l4": "tequila",
-        "l5": "triple sec",
-        "l6": "lemon juice",
-        "l7": "simple syrup",
-        "l8": "Coke"
-      },
-      "ratio": {
-        "l1r": 0.10,
-        "l2r": 0.10,
-        "l3r": 0.10,
-        "l4r": 0.10,
-        "l5r": 0.10,
-        "l6r": 0.15,
-        "l7r": 0.15,
-        "l8r": 0.20
+      "ingredients": {
+        "vodka": 0.10,
+        "rum": 0.10,
+        "gin": 0.10,
+        "tequila": 0.10,
+        "triple sec": 0.10,
+        "lemon juice": 0.15,
+        "simple syrup": 0.15,
+        "Coke": 0.20
       },
       "img": "longislandicetea.png"
     },
 	{
       "name": "Adios Motherfucker (AMF)",
       "content": {
-        "l1": "vodka",
-        "l2": "rum",
-        "l3": "gin",
-        "l4": "tequila",
-        "l5": "blue curacao",
-        "l6": "lemon juice",
-        "l7": "simple syrup",
-		    "l8": "sprite"
+        "vodka": 0.10,
+        "rum": 0.10,
+        "gin": 0.10,
+        "tequila": 0.10,
+        "blue curacao": 0.10,
+        "lemon juice": 0.15,
+        "simple syrup": 0.15,
+		    "sprite":  0.20
       },
-      "ratio": {
-        "l1r": 0.10,
-        "l2r": 0.10,
-        "l3r": 0.10,
-        "l4r": 0.10,
-        "l5r": 0.10,
-        "l6r": 0.15,
-        "l7r": 0.15,
-        "l8r": 0.20
-          },
       "img": ""
     },
 	{
       "name": "Mai Tai",
       "content": {
-        "l1": "rum",
-        "l2": "lime juice",
-        "l3": "triple sec",
-        "l4": "orgeat syrup"
-      },
-      "ratio": {
-        "l1r": 0.55,
-        "l2r": 0.15,
-        "l3r": 0.15,
-        "l4r": 0.15
+        "rum":0.55,
+        "lime juice": 0.15,
+        "triple sec": 0.15,
+        "orgeat syrup": 0.15
       },
       "img": "mai tai.png"
     },
 	{
-      "name": "Gimlet",
-      "content": {
-        "l1": "gin",
-        "l2": "lime juice",
-		    "l3": "simple syrup"
-      },
-      "ratio": {
-        "l1r": 0.60,
-        "l2r": 0.15,
-		    "l3r": 0.15
+    "name": "Gimlet",
+    "content": {
+      "gin": 0.60,
+      "lime juice": 0.15,
+      "simple syrup": 0.15
       },
       "img": "gimlet.png"
     },
-	{
+  {
       "name": "Paloma",
       "content": {
-        "l1": "tequila",
-        "l2": "squirt",
-		    "l3": "lime juice"
-      },
-      "ratio": {
-        "l1r": 0.30,
-        "l2r": 0.60,
-		    "l3r": 0.10
+        "tequila":0.30,
+        "squirt":0.60,
+        "lime juice": 0.10
       },
       "img": ""
     },
 	{
       "name": "White Lady",
       "content": {
-        "l1": "gin",
-        "l2": "triple sec",
-        "l3": "lemon juice",
-        "l4": "simple syrup"
-      },
-      "ratio": {
-        "l1r": 0.45,
-        "l2r": 0.25,
-        "l3r": 0.20,
-        "l4r": 0.10
+        "gin": 0.45,
+        "triple sec": 0.25,
+        "lemon juice": 0.20,
+        "simple syrup": 0.10
       },
       "img": ""
     },
-	{
+  	{
       "name": "Lemon Drop",
       "content": {
-        "l1": "vodka",
-        "l2": "triple sec",
-        "l3": "lemon juice",
-        "l4": "simple syrup"
-      },
-      "ratio": {
-        "l1r": 0.40,
-        "l2r": 0.20,
-        "l3r": 0.20,
-        "l4r": 0.20
+        "vodka":0.40,
+        "triple sec": 0.20,
+        "lemon juice": 0.20,
+        "simple syrup": 0.20
       },
       "img": ""
     },
-	{
+	  {
       "name": "Sex On The Beach",
       "content": {
-        "l1": "vodka",
-        "l2": "peach schnapps",
-        "l3": "orange juice",
-        "l4": "cranberry juice",
-        "l5": "chambord"
-      },
-      "ratio": {
-        "l1r": 0.25,
-        "l2r": 0.10,
-        "l3r": 0.30,
-        "l4r": 0.25,
-        "l5r": 0.10
+        "vodka": 0.25,
+        "peach schnapps": 0.10,
+        "orange juice": 0.30,
+        "cranberry juice":0.25,
+        "chambord": 0.10
       },
       "img": ""
     },
-	{
+	  {
       "name": "Malibu Bay Breeze",
       "content": {
-        "l1": "malibu",
-        "l2": "pineapple juice",
-		    "l3": "cranberry juice"
-      },
-      "ratio": {
-        "l1r": 0.20,
-        "l2r": 0.65,
-		    "l3r": 0.15
+        "malibu": 0.20,
+        "pineapple juice": 0.65,
+		    "cranberry juice": 0.15
       },
       "img": ""
     },
-	{
+	  {
       "name": "Malibu Summer Rose",
       "content": {
-        "l1": "malibu",
-        "l2": "pineapple juice",
-        "l3": "orange juice",
-        "l4": "peach schnapps",
-        "l5": "grenadine"
-      },
-      "ratio": {
-        "l1r": 0.25,
-        "l2r": 0.25,
-        "l3r": 0.20,
-        "l4r": 0.25,
-        "l5r": 0.05
+        "malibu": 0.25,
+        "pineapple juice": 0.25,
+        "orange juice": 0.20,
+        "peach schnapps": 0.25,
+        "grenadine": 0.05
       },
       "img": ""
     },
 	{
       "name": "Blue Hawaiian",
       "content": {
-        "l1": "malibu",
-        "l2": "blue curacao",
-        "l3": "pineapple juice",
-        "l4": "lime juice"
-      },
-      "ratio": {
-        "l1r": 0.25,
-        "l2r": 0.15,
-        "l3r": 0.50,
-        "l4r": 0.10
+        "malibu": 0.25,
+        "blue curacao": 0.15,
+        "pineapple juice": 0.50,
+        "lime juice": 0.10
       },
       "img": ""
     },
 	{
       "name": "Midori Sour",
       "content": {
-        "l1": "midori",
-        "l2": "vodka",
-        "l3": "lemon juice",
-        "l4": "lime juice",
-        "l5": "sprite"
-      },
-      "ratio": {
-        "l1r": 0.25,
-        "l2r": 0.25,
-        "l3r": 0.10,
-        "l4r": 0.10,
-        "l5r": 0.30
+        "midori": 0.25,
+        "vodka": 0.25,
+        "lemon juice":  0.10,
+        "lime juice": 0.10,
+        "sprite": 0.30
       },
       "img": "midorisour.png"
     },
 	{
       "name": "Silver Breeze",
       "content": {
-        "l1": "tequila",
-        "l2": "squirt",
-        "l3": "cranberry juice",
-        "l4": "lemonade"
-      },
-      "ratio": {
-        "l1r": 0.35,
-        "l2r": 0.25,
-        "l3r": 0.20,
-        "l4r": 0.20
+        "tequila": 0.35,
+        "squirt": 0.25,
+        "cranberry juice": 0.20,
+        "lemonade": 0.20
       },
       "img": ""
     },
 	{
       "name": "Mexican Sunset",
       "content": {
-        "l1": "amaretto",
-        "l2": "peach schnapps",
-        "l3": "tequila",
-        "l4": "pineapple juice",
-        "l5": "grenadine"
-      },
-      "ratio": {
-        "l1r": 0.10,
-        "l2r": 0.10,
-        "l3r": 0.25,
-        "l4r": 0.50,
-        "l5r": 0.05
+        "amaretto": 0.10,
+        "peach schnapps": 0.10,
+        "tequila":  0.25,
+        "pineapple juice":  0.50,
+        "grenadine": 0.05
       },
       "img": ""
     }
@@ -698,10 +437,7 @@
     {
       "name": "Vodka",
       "content": {
-        "l1": "Vodka"
-      },
-      "ratio": {
-        "l1r": 1
+        "Vodka": 1
       },
       "img": ""
     },{

@@ -90,6 +90,19 @@ class Room(models.Model):
     votes_to_skip = models.IntegerField(null=False, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
 
+class drinks(models.Model):
+    alcohol = models.CharField(max_length=50, unique=True)
+    garnish = models.CharField(max_length=50, unique=True)
+    other = models.CharField(max_length=50, unique=True)
+
+class pumps(models.Model):
+    pump = models.CharField(max_length=50, unique=True)
+
+class display(models.Model):
+    color = models.CharField(max_length=50, unique=True)
+    drinks_per_row = models.IntegerField(max_length=50, unique=True)
+  
+
 class menu(models.Model):
     name = models.CharField(max_length=50, unique=True)
     i1 = models.CharField(max_length=50, null = True, blank=True, unique=True)
@@ -114,4 +127,4 @@ class menu(models.Model):
     i9r = models.CharField(max_length=50, null = True, blank=True, unique=True)
     i10r = models.CharField(max_length=50, null = True, blank=True, unique=True)
 
-    img = models.ImageField()
+    img = models.ImageField()              
