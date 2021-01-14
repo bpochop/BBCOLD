@@ -443,302 +443,203 @@
     },{
       "name": "Bourbon",
       "content": {
-        "l1": "Bourbon"
-      },
-      "ratio": {
-        "l1r": 1
+        "Bourbon": 1
       },
       "img": ""
     },
     {
       "name": "Whiskey",
       "content": {
-        "l1": "Whiskey"
-      },
-      "ratio": {
-        "l1r": 1
+        "Whiskey": 1
       },
       "img": ""
     },
     {
       "name": "Crown-Royal Apple",
       "content": {
-        "l1": "Crown-Royal Apple"
-      },
-      "ratio": {
-        "l1r": 1
+        "Crown-Royal Apple": 1
       },
       "img": ""
     },
     {
       "name": "Crown-Royal Vanilla",
       "content": {
-        "l1": "Crown-Royal Vanilla"
-      },
-      "ratio": {
-        "l1r": 1
+        "Crown-Royal Vanilla": 1
       },
       "img": ""
     },
     {
       "name": "Rum",
       "content": {
-        "l1": "Rum"
-      },
-      "ratio": {
-        "l1r": 1
+        "Rum": 1
       },
       "img": ""
     },
     {
       "name": "Tequila",
       "content": {
-        "l1": "Tequila"
-      },
-      "ratio": {
-        "l1r": 1
+        "Tequila": 1
       },
       "img": ""
     },
     {
       "name": "Jagermeister",
       "content": {
-        "l1": "Jagermeister"
-      },
-      "ratio": {
-        "l1r": 1
+        "Jagermeister": 1
       },
       "img": ""
     },
     {
       "name": "Hennessy",
       "content": {
-        "l1": "Hennessy"
-      },
-      "ratio": {
-        "l1r": 1
+        "Hennessy": 1
       },
       "img": ""
     },
     {
       "name": "Gin",
       "content": {
-        "l1": "Gin"
-      },
-      "ratio": {
-        "l1r": 1
+        "Gin": 1
       },
       "img": ""
     },
     {
       "name": "Brandy",
       "content": {
-        "l1": "Brandy"
-      },
-      "ratio": {
-        "l1r": 1
+        "Brandy": 1
       },
       "img": ""
     },
     {
       "name": "Absinthe",
       "content": {
-        "l1": "Absinthe"
-      },
-      "ratio": {
-        "l1r": 1
+        "Absinthe": 1
       },
       "img": ""
     },
     {
       "name": "Moonshine",
       "content": {
-        "l1": "Moonshine"
-      },
-      "ratio": {
-        "l1r": 1
+        "Moonshine": 1
       },
       "img": ""
     },
     {
       "name": "Everclear",
       "content": {
-        "l1": "Everclear"
-      },
-      "ratio": {
-        "l1r": 1
+        "Everclear": 1
       },
       "img": ""
     },
     {
       "name": "Sake",
       "content": {
-        "l1": "Sake"
-      },
-      "ratio": {
-        "l1r": 1
+        "Sake": 1
       },
       "img": ""
     },
     {
       "name": "Soju",
       "content": {
-        "l1": "Soju"
-      },
-      "ratio": {
-        "l1r": 1
+        "Soju": 1
       },
       "img": ""
     },
     {
       "name": "Bazooka Joe",
       "content": {
-        "l1": "baileys",
-        "l2": "banana liqueur",
-		    "l3": "blue curacao"
-      },
-      "ratio": {
-        "l1r": 0.34,
-        "l2r": 0.33,
-		    "l3r": 0.33
+        "baileys": 0.34,
+        "banana liqueur": 0.33,
+		    "blue curacao": 0.33
       },
       "img": ""
     },
 	{
       "name": "Beam Me Up Scotty",
       "content": {
-        "l1": "baileys",
-        "l2": "banana liqueur",
-		    "l3": "kahlua"
-      },
-      "ratio": {
-        "l1r": 0.34,
-        "l2r": 0.33,
-		    "l3r": 0.33
+        "baileys": 0.34,
+        "banana liqueur": 0.33,
+		    "kahlua": 0.33
       },
       "img": ""
     },
 	{
       "name": "Crouching Tiger",
       "content": {
-        "l1": "tequila",
-        "l2": "lychee liqueur"
-      },
-      "ratio": {
-        "l1r": 0.50,
-        "l2r": 0.50
+        "tequila": 0.50,
+        "lychee liqueur": 0.50
       },
       "img": ""
     },
 	{
       "name": "Kamikaze",
       "content": {
-        "l1": "vodka",
-        "l2": "triple sec",
-		    "l3": "lime juice"
-      },
-      "ratio": {
-        "l1r": 0.60,
-        "l2r": 0.20,
-		    "l3r": 0.20
+        "vodka": 0.60,
+        "triple sec": 0.20,
+		    "lime juice": 0.20
       },
       "img": ""
     },
 	{
       "name": "Kool Aid",
       "content": {
-        "l1": "vodka",
-        "l2": "midori",
-        "l3": "amaretto",
-        "l4": "cranberry juice"
-      },
-      "ratio": {
-        "l1r": 0.25,
-        "l2r": 0.25,
-        "l3r": 0.25,
-        "l4r": 0.25
+        "vodka": 0.25,
+        "midori": 0.25,
+        "amaretto": 0.25,
+        "cranberry juice": 0.25
       },
       "img": ""
     },
 	{
       "name": "Lemon Drop",
       "content": {
-        "l1": "vodka",
-        "l2": "lemon",
-		    "l3": "simple syrup"
-      },
-      "ratio": {
-        "l1r": 0.70,
-        "l2r": 0.15,
-		    "l3r": 0.15
+        "vodka": 0.70,
+        "lemon": 0.15,
+		    "simple syrup": 0.15
       },
       "img": ""
     },
 	{
       "name": "Melon Ball",
       "content": {
-        "l1": "vodka",
-        "l2": "pineapple juice",
-		    "l3": "midori"
-      },
-      "ratio": {
-        "l1r": 0.50,
-        "l2r": 0.25,
-		    "l3r": 0.25
+        "vodka": 0.50,
+        "pineapple juice": 0.25,
+		    "midori": 0.25
       },
       "img": ""
     },
 	{
       "name": "Purple Hooter",
       "content": {
-        "l1": "vodka",
-        "l2": "lime juice",
-		    "l3": "chambord"
-      },
-      "ratio": {
-        "l1r": 0.70,
-        "l2r": 0.20,
-		    "l3r": 0.10
+        "vodka": 0.70,
+        "lime juice":0.20,
+		    "chambord": 0.10
       },
       "img": ""
     },
 	{
       "name": "Red Headed Slut",
       "content": {
-        "l1": "jagermeister",
-        "l2": "peach schnapps",
-		    "l3": "cranberry juice"
-      },
-      "ratio": {
-        "l1r": 0.25,
-        "l2r": 0.25,
-		    "l3r": 0.50
+        "jagermeister": 0.25,
+        "peach schnapps": 0.25,
+		    "cranberry juice": 0.50
       },
       "img": ""
     },
 	{
       "name": "Tequila Slammer",
       "content": {
-        "l1": "tequila",
-        "l2": "ginger ale"
-      },
-      "ratio": {
-        "l1r": 0.50,
-        "l2r": 0.50
+        "tequila": 0.50,
+        "ginger ale": 0.50
       },
       "img": ""
     },
 	{
       "name": "Orgasm",
       "content": {
-        "l1": "kahlua",
-        "l2": "amaretto",
-		    "l3": "baileys"
-      },
-      "ratio": {
-        "l1r": 0.33,
-        "l2r": 0.33,
-		    "l3r": 0.34
+        "kahlua": 0.33,
+        "amaretto": 0.33,
+		    "baileys": 0.34
       },
       "img": ""
     }

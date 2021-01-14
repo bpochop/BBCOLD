@@ -8,15 +8,13 @@ import json
 #FATMODELS THIN VIEWS
 
 
-# nread = open("../../data/recipes.json", "r")
-# d = json.load(nread)
-# recipes = d["drinks"]
-# shotrecipies = d["shot"]
-# nread.close()
+nread = open("../../data/recipes.json", "r")
+d = json.load(nread)
+recipes = d["drinks"]
+shotrecipies = d["shot"]
+nread.close()
 
-# nread = open("../../data/pumps.json", "r")
-# pumps = json.load(nread)
-# nread.close()
+
 
 
 # def clean_pumps_list():
@@ -38,37 +36,52 @@ import json
 
 
 
-# def generate_drink_Menu():
+def generate_drink_Menu():
 
-#     menu = []
-#     count =0
-#     p = clean_pumps_list()
-#     flag = False
-#     # print(recipes)
+    menu = []
+    count =0
+    nread = open("../../data/pumps.json", "r")
+    pumps = json.load(nread)
+    nread.close()
+    flag = False
+    # print(recipes)
 
-#     #CHECKING IF THE CONENTS OF A DRINK ARE IN THE PUMPS LIST
-#     for x in recipes:
+    #CHECKING IF THE COntents(fucking clown misspelled it) OF A DRINK ARE IN THE PUMPS LIST
+    for x in recipes:
 
-#         #indicie of liquour list
-#         count = count +1
-    
-#         for y in x['content']:
+    """
+    Recipes is built like this, its built DIFFERENT
 
-#             if x['content'][y] in p:
-#                 flag = True
-#             elif isinstance(x['ratio'][y + "r"], str):
-#                 flag = True
-#             else:
-#                 flag = False
-#                 break
-        
-#         if flag is True:
-#             menu.append(x)
+    {
+      "name": "Rum and Coke",
+      "ingredients": {
+        "Rum":0.25,
+        "Coke":0.75
+      },
+      "img": "rumandcoke.png"
+    },
+
+    X should equal name, ingredients, img
+    """
+
+        #indicie of liquour list
+      
+        for y in x['ingredients']:
+
+            """
+                y should = ingrediants
+                y = "Rum", Coke
+                y.value() = .25, .75
+
+            """
+            if y in pumps.values():
+                menu.append(y)
 
 
-#     for x in menu:
-#         print(x["name"])
+            print("DRINK NAME: " + y)
+            print("DRINK RATIO: " + y.values())
 
+            
 
 def generate_unique_code():
     length = 6
@@ -90,41 +103,23 @@ class Room(models.Model):
     votes_to_skip = models.IntegerField(null=False, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
 
-class drinks(models.Model):
+class pumps(models.Model):
+    #JUST PULL DATA FROM DATABASE ON WHATS IN THE PUMPS, WE NEED TO BE ABLE TO INSERT THEM INTO THE DATABASE, SO BUILD OUT ROUTING TO FRONT END.
+    pump = models.CharField(max_length=50, unique=True)
     alcohol = models.CharField(max_length=50, unique=True)
     garnish = models.CharField(max_length=50, unique=True)
     other = models.CharField(max_length=50, unique=True)
 
-class pumps(models.Model):
-    pump = models.CharField(max_length=50, unique=True)
-
 class display(models.Model):
+    #THIS IS FOR LATER FOR STYLING IF WE NEED THIS
     color = models.CharField(max_length=50, unique=True)
-    drinks_per_row = models.IntegerField(max_length=50, unique=True)
+    drinks_per_row = models.IntegerField(max_length=50)
   
 
 class menu(models.Model):
+    #CLEAN THIS UP SOME, SEEMS MESSY. GOTTA COME UP WITH A DIFFERENT SCHEMA
     name = models.CharField(max_length=50, unique=True)
-    i1 = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i2 = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i3= models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i4 = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i5 = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i6 = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i7 = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i8 = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i9 = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i10 = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    
-    i1r = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i2r = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i3r = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i4r = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i5r = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i6r = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i7r = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i8r = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i9r = models.CharField(max_length=50, null = True, blank=True, unique=True)
-    i10r = models.CharField(max_length=50, null = True, blank=True, unique=True)
-
-    img = models.ImageField()              
+    alcohol = models.CharField(max_length=50)
+    ratio = models.IntegerField()
+   
+        
