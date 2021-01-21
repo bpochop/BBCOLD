@@ -1,4 +1,4 @@
-from os import name
+from os import name, truncate
 from django.db import models
 import string
 import random
@@ -7,81 +7,6 @@ import json
 #PUT MOST OF YOUR LOGIC IN THE MODEL
 #FATMODELS THIN VIEWS
 
-
-nread = open("../../data/recipes.json", "r")
-d = json.load(nread)
-recipes = d["drinks"]
-shotrecipies = d["shot"]
-nread.close()
-
-
-
-
-# def clean_pumps_list():
-
-#     w = 1
-#     y =1
-#     temp = []
-
-
- 
-#     #here we are cleaning up the pumps list so we only get the alcohol, reason why we dont change this list in the json
-#     #is because I think itll be easier to keep track of pins. Either way we have to remove the pumpx_y or add them
-#     for x in pumps.values():
-#         # print(x)
-#         temp.append(x)
-    
-
-#     return temp
-
-
-
-def generate_drink_Menu():
-
-    menu = []
-    count =0
-    nread = open("../../data/pumps.json", "r")
-    pumps = json.load(nread)
-    nread.close()
-    flag = False
-    # print(recipes)
-
-    #CHECKING IF THE COntents(fucking clown misspelled it) OF A DRINK ARE IN THE PUMPS LIST
-    for x in recipes:
-
-    """
-    Recipes is built like this, its built DIFFERENT
-
-    {
-      "name": "Rum and Coke",
-      "ingredients": {
-        "Rum":0.25,
-        "Coke":0.75
-      },
-      "img": "rumandcoke.png"
-    },
-
-    X should equal name, ingredients, img
-    """
-
-        #indicie of liquour list
-      
-        for y in x['ingredients']:
-
-            """
-                y should = ingrediants
-                y = "Rum", Coke
-                y.value() = .25, .75
-
-            """
-            if y in pumps.values():
-                menu.append(y)
-
-
-            print("DRINK NAME: " + y)
-            print("DRINK RATIO: " + y.values())
-
-            
 
 def generate_unique_code():
     length = 6
@@ -103,23 +28,116 @@ class Room(models.Model):
     votes_to_skip = models.IntegerField(null=False, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
 
+class Ingredient_id(models.Model):
+
+    # fill = [
+    #     (" ", " "),
+    #     ("Vodka", 'Vokda'),
+    #     ("Citrus Vodka", "Citrus Vodka"),
+    #     ("Whiskey", "Whiskey"),
+    #     ("Crown-Royal Apple", "Crown-Royal Apple"),
+    #     ("Crown-Royal Vanilla", "Crown-Royal Vanilla"),
+    #     ("Rum", "Rum"),
+    #     ("Bourbon","Bourbon"),
+    #     ("Tequila", "Tequila"),
+    #     ("Jagermeister", "Jagermeister"),
+    #     ("Hennessy","Hennessy"),
+    #     ("Midori", "Midori"),
+    #     ("Gin", "Gin"),
+    #     ("Brandy", "Brandy"),
+    #     ("Absinthe","Absinthe"),
+    #     ("Moonshine","Moonshine"),
+    #     ("Everclear", "Everclear"),
+    #     ("Sake","Sake"),
+    #     ("Soju", "Soju"),
+    #     ("Kahlua", "Kahlua"),
+    #     ("Baileys", "Baileys"),
+    #     ("Sweet Vermouth","Sweet Vermouth"),
+    #     ("Campari", "Campari"),
+    #     ("White Rum", "White Rum"),
+    #     ("Vodka Citron",
+    #     "Blue Curacao",
+    #     "Amaretto",
+    #     "Wine",
+    #     "Triple Sec",
+    #     "Rye",
+    #     "Schnapps",
+    #     "Peach Schnapps",
+    #     "Cognac",
+    #     "Brandy",
+    #     "Chambord",
+    #     "Creme de Violette",
+    #     "Vermouth",
+    #     "Banana Liquer",
+    #     "Lychee Liqueur",
+    #     "Grenadine",
+    #     "Orange Juice",
+    #     "Simple Syrup",
+    #     "Pineapple Juice",
+    #     "Apple Juice",
+    #     "Lime Juice",
+    #     "Lemon Juice",
+    #     "Blueberry Lemonade",
+    #     "Lemonade",
+    #     "Sprite",
+    #     "Coke",
+    #     "Orange Soda",
+    #     "Squirt",
+    #     "Ginger Beer",
+    #     "Cranberry Juice",
+    #     "Sour Mix",
+    #     "Limeade",
+    #     "Water",
+    #     "Mint",
+    #     "Kool-aid",
+    #     "Apple Cider",
+    #     "Sweet Tea",
+    #     "Ginger Ale",
+    #     "Orgeat Syrup",
+    #     "Limeade",
+    #     "Angostura bitters",
+    #     "Orange bitters",
+    #     "Peychauds Bitters",
+    #     "Cherry",
+    #     "Lime Slice",
+    #     "Orange Slice",
+    #     "Lemon Slice",
+    #     "Mint leaves",
+    #     "Sugar Cube",
+    #     "Raspberries",
+    #     "Ice"
+    # ]
+    ingredient_id = models.IntegerField(primary_key=True, unique= True)
+    ingredient= models.CharField(max_length=50, unique=True)
+
 class pumps(models.Model):
+    
     #JUST PULL DATA FROM DATABASE ON WHATS IN THE PUMPS, WE NEED TO BE ABLE TO INSERT THEM INTO THE DATABASE, SO BUILD OUT ROUTING TO FRONT END.
-    pump = models.CharField(max_length=50, unique=True)
-    alcohol = models.CharField(max_length=50, unique=True)
-    garnish = models.CharField(max_length=50, unique=True)
-    other = models.CharField(max_length=50, unique=True)
+    pump = models.IntegerField(primary_key = True, unique=True)
+    ingredient_id = models.IntegerField(unique=True)
+
+
 
 class display(models.Model):
     #THIS IS FOR LATER FOR STYLING IF WE NEED THIS
     color = models.CharField(max_length=50, unique=True)
-    drinks_per_row = models.IntegerField(max_length=50)
+    drinks_per_row = models.IntegerField()
   
 
 class menu(models.Model):
-    #CLEAN THIS UP SOME, SEEMS MESSY. GOTTA COME UP WITH A DIFFERENT SCHEMA
+    
+    # nread = open("../../data/recipes.json", "r")
+    # d = json.load(nread)
+    # recipes = d["drinks"]
+    # shotrecipies = d["shot"]
+    # nread.close()
+
+    id = models.IntegerField(primary_key =True, unique=True)
     name = models.CharField(max_length=50, unique=True)
-    alcohol = models.CharField(max_length=50)
-    ratio = models.IntegerField()
+    creator_id = models.CharField(max_length=20, default="BBC")
    
-        
+  
+class ratio(models.Model):
+    id = models.IntegerField(primary_key=True)
+    ingredient_id = models.IntegerField(unique=True)
+    amount = models.IntegerField()
