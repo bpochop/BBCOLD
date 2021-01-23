@@ -115,6 +115,7 @@ class pumps(models.Model):
     #JUST PULL DATA FROM DATABASE ON WHATS IN THE PUMPS, WE NEED TO BE ABLE TO INSERT THEM INTO THE DATABASE, SO BUILD OUT ROUTING TO FRONT END.
     pump = models.IntegerField(primary_key = True, unique=True)
     ingredient_id = models.IntegerField(unique=True)
+    volume_left = models.IntegerField()
 
 
 
@@ -135,9 +136,10 @@ class menu(models.Model):
     id = models.IntegerField(primary_key =True, unique=True)
     name = models.CharField(max_length=50, unique=True)
     creator_id = models.CharField(max_length=20, default="BBC")
+    type_id = models.CharField(max_length=2)
    
   
 class ratio(models.Model):
-    id = models.IntegerField(primary_key=True)
-    ingredient_id = models.IntegerField(unique=True)
+    menu_id= models.IntegerField()
+    ingredient = models.CharField(max_length=50)
     amount = models.IntegerField()

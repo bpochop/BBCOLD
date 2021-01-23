@@ -33,7 +33,6 @@
     "Schnapps",
     "Peach Schnapps",
     "Cognac",
-    "Brandy",
     "Chambord",
     "Creme de Violette",
     "Vermouth",
@@ -65,8 +64,7 @@
     "Apple Cider",
     "Sweet Tea",
     "Ginger Ale",
-    "Orgeat Syrup",
-    "Limeade"
+    "Orgeat Syrup"
   ],
   "garnish":[
     " ",
