@@ -3,8 +3,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.utils import serializer_helpers
-from .serializers import RoomSerializer, CreateRoomSerializer #remove this
-from .models import Room #Remove this
+from .serializers import RoomSerializer, CreateRoomSerializer, PumpSerializer, getIngredientsSerializer #remove this
+from .models import Room, pumps
 import json
 
 from rest_framework.response import Response
@@ -16,8 +16,41 @@ class RoomView(generics.ListAPIView):
     #query set is what we want to return to the front end
     queryset = Room.objects.all()
 
+class getDataHelper():
+    def getPumps(self, filter_by):
+        if filter_by is "No":
+            pump_components = pumps.objects.all()
+            pump_data = PumpSerializer(pump_components, many=True)
+            return pump_data
+        else: 
+            pump_components = pumps.objects.values_list(filter_by)
+            pump_data = getIngredientsSerializer(pump_components, many=True)
+            return pump_data
 
-class pumpsView()
+class pumpsView(APIView):
+  
+    def get(set, request, format = None):
+          
+        data = getDataHelper()
+        pumpdata = data.getPumps("No")
+        testObject = {
+            'message': 'getfucked pussy'
+        }
+        print(testObject)
+        return Response(pumpdata.data, status= status.HTTP_200_OK, content_type="application/json")
+
+
+class menuView(APIView):
+    
+    def get(set, request, fromat = None):
+        data = getDataHelper()
+        pumpdata = data.getPumps('ingredient_id')
+        # filterdata = pumpdata['ingredient_id']
+        print(pumpdata)
+
+        return Response("test", status= status.HTTP_200_OK, content_type="application/json")
+
+
 
 
 #Checking if room exists or maybe drink exists and shit

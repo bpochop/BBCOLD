@@ -114,7 +114,7 @@ class pumps(models.Model):
     
     #JUST PULL DATA FROM DATABASE ON WHATS IN THE PUMPS, WE NEED TO BE ABLE TO INSERT THEM INTO THE DATABASE, SO BUILD OUT ROUTING TO FRONT END.
     pump = models.IntegerField(primary_key = True, unique=True)
-    ingredient_id = models.IntegerField(unique=True)
+    ingredient_id = models.CharField(unique=True, max_length = 100)
     volume_left = models.IntegerField()
 
 

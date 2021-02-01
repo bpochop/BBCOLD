@@ -21,11 +21,14 @@ class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient_id
         fields = ('ingredient_id', 'ingredient')
+    
+
 
 class PumpSerializer(serializers.ModelSerializer):
+   
     class Meta:
         model = pumps
-        fields = ('pump', 'ingredient_id')
+        fields = ('pump', 'ingredient_id', 'volume_left')
 
 class DisplaySerializer(serializers.ModelSerializer):
     class Meta:

@@ -20,46 +20,55 @@ import { Menu } from "@material-ui/core";
   
 
 export default class MenuPage extends Component {
-    constructor(props) {
-        super(props);
-    }
-    
-    async componentDidMount() {
-        fetch("/api/LoadDrinks").then((response) => console.log(response.json()))
-    }
+  constructor(props) {
+      super(props);
+  }
+  
+  componentDidMount(){
+    this.getCurrentSong();
+  }
 
-    renderMenuPage() {
-        return (
-          <Grid container spacing={1}>
-            <Grid item xs={12} align="center">
-              <Typography component="h4" variant="h4">
-                BBC
-              </Typography>
-            </Grid>
-    
-            <Grid item xs={12} align="center">
-              <Button color="secondary" variant="contained" to="/" component={Link}>
-                Back
-              </Button>
-            </Grid>
-    
-          </Grid>
-        );
-    }
-
-    render() {
-        return (
-          <Router>
-            <Switch>
-              <Route
-                exact
-                path="/menu"
-                render={() => { return this.renderMenuPage() }}
-              />
-              <Route path="/confirm" component = {ConfirmOrder} />
-            </Switch>
-          </Router>
-        );
+  getCurrentSong() {
+      fetch("/api/get-menu")
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          console.log("end of data")
+        });
       }
+
+  renderMenuPage() {
+      return (
+        <Grid container spacing={1}>
+          <Grid item xs={12} align="center">
+            <Typography component="h4" variant="h4">
+              BBC
+            </Typography>
+          </Grid>
+  
+          <Grid item xs={12} align="center">
+            <Button color="secondary" variant="contained" to="/" component={Link}>
+              Back
+            </Button>
+          </Grid>
+  
+        </Grid>
+      );
+  }
+
+  render() {
+      return (
+        <Router>
+          <Switch>
+            <Route
+              exact
+              path="/menu"
+              render={() => { return this.renderMenuPage() }}
+            />
+            <Route path="/confirm" component = {ConfirmOrder} />
+          </Switch>
+        </Router>
+      );
     }
+}
       
