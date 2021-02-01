@@ -17,6 +17,9 @@ class RoomView(generics.ListAPIView):
     queryset = Room.objects.all()
 
 
+class pumpsView()
+
+
 #Checking if room exists or maybe drink exists and shit
 class JoinRoom(APIView):
     lookup_url_kwarg = 'code'
