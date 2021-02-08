@@ -19,11 +19,9 @@ class CreateRoomSerializer(serializers.ModelSerializer):
 
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Ingredient_id
-        fields = ('ingredient_id', 'ingredient')
+        model = pumps
+        fields = ('ingredient_id')
     
-
-
 class PumpSerializer(serializers.ModelSerializer):
    
     class Meta:
@@ -43,6 +41,6 @@ class MenuSerializer(serializers.ModelSerializer):
 class RatioSerializer(serializers.ModelSerializer):
     class Meta:
         model = ratio
-        fields = ('id', 'ingredient_id', 'amount')
+        fields = ('id', 'ingredient', 'amount')
 #when your handling good idea to use a serializer, incoming or outgoing
 
