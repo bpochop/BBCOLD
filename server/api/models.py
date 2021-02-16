@@ -143,3 +143,4 @@ class ratio(models.Model):
     menu_id= models.IntegerField()
     ingredient = models.CharField(max_length=50)
     amount = models.IntegerField()
+    total_ingredients = models.IntegerField()
