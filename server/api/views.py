@@ -21,18 +21,47 @@ class RoomView(generics.ListAPIView):
 
 class pumpsView(APIView):
   
-    def get(self, request, format = None):
+    # def get(self, request, format = None):
+
+    #     print("were in get")
+
+    #     if request.method == "POST":
+    #         set_pumps(request)
+    #     else:
+    #         get_pumps(request)
           
+
+    def fetch(self, request, format = None):
+        print("were in get_pumps")
         pump_components = pumps.objects.all()
         #print(pump_components)
         pump_data = PumpSerializer(pump_components, many=True)
 
+        y=0
+        for x in pump_data.data:
+            y = y+1
+
+        print(y)
         testObject = {
             'message': 'getfucked pussy'
         }
-        #print(pump_data.data[0])
+
+
+        return_obj = {
+            "total": y,
+            "pumps":pump_data.data
+        }
+      
         
-        return Response(pump_data.data, status= status.HTTP_200_OK, content_type="application/json")
+        return Response(return_obj, status= status.HTTP_200_OK, content_type="application/json")
+
+    def post(self, request):
+        # pump_components = pumps.objects.get()
+        # #change pump_obj to whatever edrian sends to the backend. 
+        # change = request.GET.get('pump_obj')
+
+        print(request.GET.get('pump_obj'))
+
 
 
 class menuView(APIView):
