@@ -179,6 +179,9 @@ class menuView(APIView):
         return Response(menu_data, status= status.HTTP_200_OK, content_type="application/json")
 
     
+
+class Confirm(self, request, format = None):
+
     def confirm(self, request, format = None ):
         '''
             HERE IS WHERE WE WILL EXECUTE THE PUMP CODE.
@@ -192,9 +195,14 @@ class menuView(APIView):
                     1) GET THEM LED'S FOOKIN WORKING AMRIGHT
         '''
 
+        #1. BAEFY SECURED, MOVING OUT
+
+        #2. GRAB ALL THE PUMP INGREDIENTS
+        pump_components = pumps.objects.values('ingredient_id','pump','volume_left')
+
+        print(pum)
+
         return Response("WHATS COOKIN, GOOD LOOKIN ;)", status= status.HTTP_200_OK, content_type="application/json")
-
-
 
 
 
