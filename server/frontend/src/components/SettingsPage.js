@@ -61,9 +61,9 @@ export default class SettingsPage extends Component {
         console.log(event)
     }
 
-    // componentDidMount(){
-    //     this.getCurrentSong();
-    // }
+    componentDidMount(){
+        this.getCurrentSong();
+    }
 
     getCurrentSong() {
         console.log("fetch")
@@ -137,15 +137,15 @@ export default class SettingsPage extends Component {
         console.log("render")
         return (
             <Router>
-            <Switch>
-                <Route
-                exact
-                path="/"
-                render={() => { return this.renderHomePage() }}
-                />
+                <Switch>
+                    <Route
+                        exact
+                        path="/settings"
+                        render={() => { return this.renderHomePage() }}
+                    />
                 {/* <Route path="/settings" component = {settings} /> */}
                 
-            </Switch>
+                </Switch>
             </Router>
         );
     }
