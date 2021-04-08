@@ -70,9 +70,12 @@ class Room(models.Model):
 
 class Ingredient_id(models.Model):
 
+    width = 400
+    height=500
    
     ingredient_id = models.IntegerField(primary_key=True, unique= True)
     ingredient= models.CharField(max_length=50, unique=True)
+    pump_picture = models.ImageField(upload_to = "../../img", default = "../../img/default.png", width_field= width, height_field=height)
 
 class pumps(models.Model):
     
@@ -90,11 +93,15 @@ class pumps(models.Model):
 
         pump_data = PumpSerializer(pump_components, many=True)
 
-        y=0
-        for x in pump_data.data:
-            y = y+1
-
         return pump_data
+    
+    def update_pumps(self, request, format = None): 
+
+        #we may have to format the request object holding the pump data, it depends how the front end sends it. 
+        pump_components = pumps.objects.all()
+        pump_components = request
+        pump_components.save()
+        
     
 
 
@@ -111,11 +118,14 @@ class menu(models.Model):
     # recipes = d["drinks"]
     # shotrecipies = d["shot"]
     # nread.close()
+    width = 400 
+    height =400
 
     id = models.IntegerField(primary_key =True, unique=True)
     name = models.CharField(max_length=50, unique=True)
     creator_id = models.CharField(max_length=20, default="BBC")
     type_id = models.CharField(max_length=2)
+    picture = models.ImageField(upload_to = "../../img/", default= "../../img/cocktail_PNG173.png", width_field = width, height_field=height)
 
     def buildObject(self,data):
         #3)Graab name of all recipies that make it through the filter
@@ -215,8 +225,124 @@ class menu(models.Model):
 
         return menu_data
 
-            
-   
+class board_object:
+    def __init__(self, station, pin):
+        self.station = station
+        self.pin = pin
+
+class settings():
+    '''
+    # Values to control stepper motor
+    step_count = 1950  # length of up and down
+    delay = .0005  # speed of up and down
+          
+    board_list = []
+    pump_list = [
+        station[]
+    ]
+    for x in range(10):
+        try:
+            file_path = '/dev/ttyUSB' + str(x)
+            board_list[x] = pyfirmata.Arduino(file_path)
+        except:
+            break
+
+    # board0 = arduino inside main station
+    #board0 = pyfirmata.Arduino('/dev/ttyUSB0')
+    # board1 = pump station 1
+    #board1 = pyfirmata.Arduino('/dev/ttyUSB1')
+    # board2 = pump station 2
+    #board2 = pyfirmata.Arduino('/dev/ttyUSB2')
+        
+    ####Intializing arduino pin to a variable. ex. pump1_3 = pump station #1 pump#3
+    for x in board_list:
+        pump_list.append(board_object())
+
+    # pump station 1
+    pump1_1 = board1.get_pin('d:2:o')
+    pump1_2 = board1.get_pin('d:3:o')
+    pump1_3 = board1.get_pin('d:4:o')
+    pump1_4 = board1.get_pin('d:5:o')
+    pump1_5 = board1.get_pin('d:6:o')
+    pump1_6 = board1.get_pin('d:7:o')
+    pump1_7 = board1.get_pin('d:8:o')
+    pump1_8 = board1.get_pin('d:9:o')
+    
+    # pump station 2
+    pump2_1 = board2.get_pin('d:2:o')
+    pump2_2 = board2.get_pin('d:3:o')
+    pump2_3 = board2.get_pin('d:4:o')
+    pump2_4 = board2.get_pin('d:5:o')
+    pump2_5 = board2.get_pin('d:6:o')
+    pump2_6 = board2.get_pin('d:7:o')
+    pump2_7 = board2.get_pin('d:8:o')
+    pump2_8 = board2.get_pin('d:9:o')
+    
+    ####Initializing arduino pin for the steppper motor inside main station
+    stepper_motor_dir = board0.get_pin('d:2:o')
+    stepper_motor_step = board0.get_pin('d:3:o')
+    stepper_motor_enable = board0.get_pin('d:7:o')
+    mixer_motor = board0.get_pin('d:4:o')
+    
+    # makes sure pumps are off (1 = "OFF" specifically for the pumps)
+    pump1_1.write(1)
+    pump1_2.write(1)
+    pump1_3.write(1)
+    pump1_4.write(1)
+    pump1_5.write(1)
+    pump1_6.write(1)
+    pump1_7.write(1)
+    pump1_8.write(1)
+    pump2_1.write(1)
+    pump2_2.write(1)
+    pump2_3.write(1)
+    pump2_4.write(1)
+    pump2_5.write(1)
+    pump2_6.write(1)
+    pump2_7.write(1)
+    pump2_8.write(1)
+    
+    # makes sure mixer motor is off
+    mixer_motor.write(1)
+    stepper_motor_enable.write(0)
+    
+    # Values to control stepper motor
+    step_count = 1950  # length of up and down
+    delay = .0005  # speed of up and down
+
+    '''
+
+    def get_stations():
+
+
+    def mixer_up():
+        pass
+    #     stepper_motor_dir.write(1)
+    #     for x in range(step_count):
+    # #         GPIO.output(STEP, GPIO.HIGH)
+    #         stepper_motor_step.write(1)
+    #         t.sleep(delay)
+    #         stepper_motor_step.write(0)
+    #         t.sleep(delay)
+    #     stepper_motor_enable.write(1)
+
+    def mixer_down(self):
+        pass
+        # stepper_motor_dir.write(0)
+        #
+        # for x in range(step_count):
+        #     stepper_motor_step.write(1)
+        #     t.sleep(delay)
+        #     stepper_motor_step.write(0)
+        #     t.sleep(delay)
+
+    def led_off():
+        pass
+    def led_on():
+        pass
+
+    def clean_pump():
+
   
 class ratio(models.Model):
     menu_id= models.IntegerField()
@@ -314,13 +440,14 @@ class confirm():
         #5) CALCULATE HOW LONG THE PUMPS NEED TO RUN BASED ON SIZE OF CUP
         '''
             DATA WE ARE WORKING WITH:
-                small_mili = 90
-                medium_mili = 150
-                large_mili = 210
-                shot_mili = 40
-
+             size =    small_mili = 90
+             size =    medium_mili = 150
+             size =    large_mili = 210
+              size =   shot_mili = 40
+                
+                ratio = .3 out of 1 or 1/3
             
-            formula: time = (ratio[i + "r"] * size) / 3
+            formula: time = (ratio * size) / 3
 
             I cant remember why we are diving by 3 but well figure it out when we test LOL
         '''

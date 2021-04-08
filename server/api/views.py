@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.utils import serializer_helpers
 from .serializers import RoomSerializer, CreateRoomSerializer, PumpSerializer, IngredientSerializer, RatioSerializer 
-from .models import Room, pumps, ratio, menu, confirm
+from .models import Room, pumps, ratio, menu, confirm, settings
 import json, collections
 
 from rest_framework.response import Response
@@ -13,26 +13,35 @@ from django.http import JsonResponse
 # Create your views here.
 
 
-
-
-
-
-class RoomView(generics.ListAPIView):
-    #query set is what we want to return to the front end
-    queryset = Room.objects.all()
-
-
-
-
 class pumpsView(APIView):
 
-    def fetch(self, request, format = None):
+    def get(self, request, format = None):
         return_obj = []
         newpumps = pumps()
         return_obj = newpumps.get_pumps()
-        
         return Response(return_obj, status= status.HTTP_200_OK, content_type="application/json")
 
+class UpdatePumps(APIView):
+
+    def post(self, request, format= None):
+        pumpclass = pumps()
+        pumpclass.update_pumps(request)
+        return_obj = pumpclass.get_pumps()
+        return Response({'message': 'Pumps Updated Papi Chulo'}, status = status.HTTP_200_OK, content_type = "application/json")
+
+
+class SettingsView(APIView):
+
+    def get(self, request,format=None):
+        settings_mode = settings()
+
+        if (request == "Motor_up"):
+            settings_mode.mixer_up()
+        else if(request == "Motor_down"):
+            settings_mode.mixer_down()
+        else if(request == "clean_pump"):
+            settings_mode.clean_pump()
+        
 
 
 
@@ -43,7 +52,6 @@ class menuView(APIView):
         menu_data = []
         menu_class = menu()
         menu_data = menu_class.get_menu()
-            
         return Response(menu_data, status= status.HTTP_200_OK, content_type="application/json")
 
     
@@ -51,12 +59,8 @@ class menuView(APIView):
 class Confirm(APIView):
 
     def post(self,request, format=None):
-
         confirm_class = confirm()
-
         return_obj = confirm_class.confirm()
-        
-
         return Response("WHATS COOKIN, GOOD LOOKIN ;)", status= status.HTTP_200_OK, content_type="application/json")
    
  
@@ -82,7 +86,6 @@ class JoinRoom(APIView):
 
 class CreateRoomView(APIView):
     serializer_class = CreateRoomSerializer
-
 
 
     def post(self, request, format=None):
@@ -111,19 +114,8 @@ class CreateRoomView(APIView):
                 self.request.session['room_code'] = room.code
             return Response(RoomSerializer(room).data, status = status.HTTP_201_CREATED)
 
-class UserInRoom(APIView):
-    def get(self, request, format=None):
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
-
-        data = {
-            'code': self.request.session.get('room_code')
-        }
-        return JsonResponse(data, status=status.HTTP_200_OK)
         
 #Method 2
-# def home(request):
-#     return HttpResponse("hello test my guy")
 
 # def create(request):
 #     return HttpResponse("Create")
@@ -133,6 +125,3 @@ class UserInRoom(APIView):
 
 # def maintenance(request):
 #     return HttpResponse("Maintenance")
-
-# def confirm(request):
-#     return HttpResponse("Confirm")
