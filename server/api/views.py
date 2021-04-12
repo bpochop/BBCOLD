@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.utils import serializer_helpers
 from .serializers import RoomSerializer, CreateRoomSerializer, PumpSerializer, IngredientSerializer, RatioSerializer 
-from .models import Room, pumps, ratio, menu, confirm, settings
+from .models import Room, pumps, ratio, menu, settings
 import json, collections
 
 from rest_framework.response import Response
@@ -30,6 +30,22 @@ class UpdatePumps(APIView):
         return Response({'message': 'Pumps Updated Papi Chulo'}, status = status.HTTP_200_OK, content_type = "application/json")
 
 
+class CreateDrink(APIView):
+
+    def post(self, request, format = None):
+        '''
+            1) Query Menu for the last object in the database
+            2) Create objects to send to each class to update the database
+            3) Call functions. 
+
+        '''
+        
+        menu_class = menu()
+        ratio_class = ratio()
+
+
+        menu_class.create_drink()
+
 class SettingsView(APIView):
 
     def get(self, request,format=None):
@@ -37,9 +53,9 @@ class SettingsView(APIView):
 
         if (request == "Motor_up"):
             settings_mode.mixer_up()
-        else if(request == "Motor_down"):
+        elif(request == "Motor_down"):
             settings_mode.mixer_down()
-        else if(request == "clean_pump"):
+        elif(request == "clean_pump"):
             settings_mode.clean_pump()
         
 
@@ -52,15 +68,18 @@ class menuView(APIView):
         menu_data = []
         menu_class = menu()
         menu_data = menu_class.get_menu()
+       
         return Response(menu_data, status= status.HTTP_200_OK, content_type="application/json")
 
     
 
-class Confirm(APIView):
+class confirmView(APIView):
 
     def post(self,request, format=None):
-        confirm_class = confirm()
-        return_obj = confirm_class.confirm()
+    
+        confirm_class = settings()
+        return_obj = confirm_class.confirm(request.data)
+
         return Response("WHATS COOKIN, GOOD LOOKIN ;)", status= status.HTTP_200_OK, content_type="application/json")
    
  

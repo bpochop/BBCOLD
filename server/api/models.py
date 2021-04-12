@@ -7,6 +7,7 @@ import time as t
 import threading
 import asyncio
 import json
+import pyfirmata
 
 # Create your models here.
 #PUT MOST OF YOUR LOGIC IN THE MODEL
@@ -19,33 +20,36 @@ medium_mili = 150
 large_mili = 210
 shot_mili = 40
 
-
+step_count = 1950  # length of up and down
+delay = .0005  # speed of up and down
+clean_time = 15    
 
 def insertPins():
    # DETECT HOW MANY BOXES WE HAVE SETUP 
+   pass
 
     # pump station 1
-    pump1_1 = board1.get_pin('d:2:o')
-    pump1_2 = board1.get_pin('d:3:o')
-    pump1_3 = board1.get_pin('d:4:o')
-    pump1_4 = board1.get_pin('d:5:o')
-    pump1_5 = board1.get_pin('d:6:o')
-    pump1_6 = board1.get_pin('d:7:o')
-    pump1_7 = board1.get_pin('d:8:o')
-    pump1_8 = board1.get_pin('d:9:o')
+    # pump1_1 = board1.get_pin('d:2:o')
+    # pump1_2 = board1.get_pin('d:3:o')
+    # pump1_3 = board1.get_pin('d:4:o')
+    # pump1_4 = board1.get_pin('d:5:o')
+    # pump1_5 = board1.get_pin('d:6:o')
+    # pump1_6 = board1.get_pin('d:7:o')
+    # pump1_7 = board1.get_pin('d:8:o')
+    # pump1_8 = board1.get_pin('d:9:o')
     
-    # pump station 2
-    pump2_1 = board2.get_pin('d:2:o')
-    pump2_2 = board2.get_pin('d:3:o')
-    pump2_3 = board2.get_pin('d:4:o')
-    pump2_4 = board2.get_pin('d:5:o')
-    pump2_5 = board2.get_pin('d:6:o')
-    pump2_6 = board2.get_pin('d:7:o')
-    pump2_7 = board2.get_pin('d:8:o')
-    pump2_8 = board2.get_pin('d:9:o')
+    # # pump station 2
+    # pump2_1 = board2.get_pin('d:2:o')
+    # pump2_2 = board2.get_pin('d:3:o')
+    # pump2_3 = board2.get_pin('d:4:o')
+    # pump2_4 = board2.get_pin('d:5:o')
+    # pump2_5 = board2.get_pin('d:6:o')
+    # pump2_6 = board2.get_pin('d:7:o')
+    # pump2_7 = board2.get_pin('d:8:o')
+    # pump2_8 = board2.get_pin('d:9:o')
 
-    for x in range(16):
-        temp = pumps
+    # for x in range(16):
+    #     temp = pumps
 
 
 def generate_unique_code():
@@ -99,7 +103,7 @@ class pumps(models.Model):
 
         #we may have to format the request object holding the pump data, it depends how the front end sends it. 
         pump_components = pumps.objects.all()
-        pump_components = request
+        pump_components = request.data
         pump_components.save()
         
     
@@ -118,14 +122,14 @@ class menu(models.Model):
     # recipes = d["drinks"]
     # shotrecipies = d["shot"]
     # nread.close()
-    width = 400 
-    height =400
+    width = "400"
+    height = "400"
 
     id = models.IntegerField(primary_key =True, unique=True)
     name = models.CharField(max_length=50, unique=True)
     creator_id = models.CharField(max_length=20, default="BBC")
     type_id = models.CharField(max_length=2)
-    picture = models.ImageField(upload_to = "../../img/", default= "../../img/cocktail_PNG173.png", width_field = width, height_field=height)
+    picture = models.ImageField(upload_to = "../../img/", default= "../../img/cocktail_PNG173.png")
 
     def buildObject(self,data):
         #3)Graab name of all recipies that make it through the filter
@@ -144,9 +148,10 @@ class menu(models.Model):
                 "name": "",
                 "creator_id": "",
                 "type_id": "",
-                "ingredients":{}
+                "ingredients":{},
+                "picture": ""
             }
-            name = menu.objects.values('name','creator_id', 'type_id').filter(id=x)
+            name = menu.objects.values('name','creator_id', 'type_id', 'picture').filter(id=x)
             temp = ratio.objects.values('ingredient','amount').filter(menu_id=x)
             
             type_id = name[0]['type_id']
@@ -155,6 +160,7 @@ class menu(models.Model):
             name_array['creator_id'] = name[0]['creator_id']
             name_array['type_id'] = name[0]['type_id']
             name_array['ingredients']  = temp[0]
+            name_array['picture'] = name[0]['picture']
             
             if type_id == "C":
                 menu_data["C"].append(name_array)
@@ -162,7 +168,7 @@ class menu(models.Model):
                 menu_data["S"].append(name_array)
             elif type_id == "CS":
                 menu_data["CS"].append(name_array)
-
+        print(menu_data)
         return menu_data
 
     def get_menu(self):
@@ -224,135 +230,137 @@ class menu(models.Model):
         menu_data = self.buildObject(data)
 
         return menu_data
+    
+    def create_drink(self):
+        '''
+            1) add data to database
+        '''
+        pass
 
-class board_object:
-    def __init__(self, station, pin):
-        self.station = station
-        self.pin = pin
+
 
 class settings():
-    '''
-    # Values to control stepper motor
-    step_count = 1950  # length of up and down
-    delay = .0005  # speed of up and down
-          
-    board_list = []
-    pump_list = [
-        station[]
-    ]
-    for x in range(10):
-        try:
-            file_path = '/dev/ttyUSB' + str(x)
-            board_list[x] = pyfirmata.Arduino(file_path)
-        except:
-            break
 
-    # board0 = arduino inside main station
-    #board0 = pyfirmata.Arduino('/dev/ttyUSB0')
-    # board1 = pump station 1
-    #board1 = pyfirmata.Arduino('/dev/ttyUSB1')
-    # board2 = pump station 2
-    #board2 = pyfirmata.Arduino('/dev/ttyUSB2')
-        
-    ####Intializing arduino pin to a variable. ex. pump1_3 = pump station #1 pump#3
-    for x in board_list:
-        pump_list.append(board_object())
-
-    # pump station 1
-    pump1_1 = board1.get_pin('d:2:o')
-    pump1_2 = board1.get_pin('d:3:o')
-    pump1_3 = board1.get_pin('d:4:o')
-    pump1_4 = board1.get_pin('d:5:o')
-    pump1_5 = board1.get_pin('d:6:o')
-    pump1_6 = board1.get_pin('d:7:o')
-    pump1_7 = board1.get_pin('d:8:o')
-    pump1_8 = board1.get_pin('d:9:o')
-    
-    # pump station 2
-    pump2_1 = board2.get_pin('d:2:o')
-    pump2_2 = board2.get_pin('d:3:o')
-    pump2_3 = board2.get_pin('d:4:o')
-    pump2_4 = board2.get_pin('d:5:o')
-    pump2_5 = board2.get_pin('d:6:o')
-    pump2_6 = board2.get_pin('d:7:o')
-    pump2_7 = board2.get_pin('d:8:o')
-    pump2_8 = board2.get_pin('d:9:o')
-    
-    ####Initializing arduino pin for the steppper motor inside main station
-    stepper_motor_dir = board0.get_pin('d:2:o')
-    stepper_motor_step = board0.get_pin('d:3:o')
-    stepper_motor_enable = board0.get_pin('d:7:o')
-    mixer_motor = board0.get_pin('d:4:o')
-    
-    # makes sure pumps are off (1 = "OFF" specifically for the pumps)
-    pump1_1.write(1)
-    pump1_2.write(1)
-    pump1_3.write(1)
-    pump1_4.write(1)
-    pump1_5.write(1)
-    pump1_6.write(1)
-    pump1_7.write(1)
-    pump1_8.write(1)
-    pump2_1.write(1)
-    pump2_2.write(1)
-    pump2_3.write(1)
-    pump2_4.write(1)
-    pump2_5.write(1)
-    pump2_6.write(1)
-    pump2_7.write(1)
-    pump2_8.write(1)
-    
-    # makes sure mixer motor is off
-    mixer_motor.write(1)
-    stepper_motor_enable.write(0)
-    
-    # Values to control stepper motor
-    step_count = 1950  # length of up and down
-    delay = .0005  # speed of up and down
-
-    '''
-
-    def get_stations():
-
-
-    def mixer_up():
+    def __init__(self):
+        #self.get_stations()
         pass
-    #     stepper_motor_dir.write(1)
-    #     for x in range(step_count):
-    # #         GPIO.output(STEP, GPIO.HIGH)
-    #         stepper_motor_step.write(1)
-    #         t.sleep(delay)
-    #         stepper_motor_step.write(0)
-    #         t.sleep(delay)
-    #     stepper_motor_enable.write(1)
+
+    def get_stations(self):
+            
+        board_list = []
+        self.pump_list = []
+        #  board0 = arduino inside main station
+        board0 = pyfirmata.Arduino('/dev/ttyUSB0')
+        #We start at 1 because board0 is reserved for the main board, this board is not inside of a pump
+        for x in range(1,10):
+            try:
+                file_path = '/dev/ttyUSB' + str(x)
+                board_list.append(pyfirmata.Arduino(file_path))
+            except:
+                print('it broke bitch boy')
+                break
+
+
+        #OLD WAY
+        # board1 = pump station 1
+        #board1 = pyfirmata.Arduino('/dev/ttyUSB1')
+        # board2 = pump station 2
+        #board2 = pyfirmata.Arduino('/dev/ttyUSB2')
+            
+        ####Intializing arduino pin to a variable. ex. pump1_3 = pump station #1 pump#3
+        for x in board_list:
+            #x = board1, board2
+            for y in range(2,9):
+                #pin = d:2:0, d:3:o
+                pin = 'd:' +str(y) +'o' 
+               # x.get_pin = board1.getpin, board2.getpin
+                self.pump_list.append(x.get_pin(pin))
+
+
+        #OLD WAY
+        # pump station 1
+        # pump1_1 = board1.get_pin('d:2:o')
+        # pump1_2 = board1.get_pin('d:3:o')
+        # pump1_3 = board1.get_pin('d:4:o')
+        # pump1_4 = board1.get_pin('d:5:o')
+        # pump1_5 = board1.get_pin('d:6:o')
+        # pump1_6 = board1.get_pin('d:7:o')
+        # pump1_7 = board1.get_pin('d:8:o')
+        # pump1_8 = board1.get_pin('d:9:o')
+        
+        # # pump station 2
+        # pump2_1 = board2.get_pin('d:2:o')
+        # pump2_2 = board2.get_pin('d:3:o')
+        # pump2_3 = board2.get_pin('d:4:o')
+        # pump2_4 = board2.get_pin('d:5:o')
+        # pump2_5 = board2.get_pin('d:6:o')
+        # pump2_6 = board2.get_pin('d:7:o')
+        # pump2_7 = board2.get_pin('d:8:o')
+        # pump2_8 = board2.get_pin('d:9:o')
+        
+        ####Initializing arduino pin for the steppper motor inside main station
+        self.stepper_motor_dir = board0.get_pin('d:2:o')
+        self.stepper_motor_step = board0.get_pin('d:3:o')
+        self.stepper_motor_enable = board0.get_pin('d:7:o')
+        self.mixer_motor = board0.get_pin('d:4:o')
+        
+        # makes sure pumps are off (1 = "OFF" specifically for the pumps)
+        for x in self.pump_list:
+            x.write(1)
+
+        # pump1_1.write(1)
+        # pump1_2.write(1)
+        # pump1_3.write(1)
+        # pump1_4.write(1)
+        # pump1_5.write(1)
+        # pump1_6.write(1)
+        # pump1_7.write(1)
+        # pump1_8.write(1)
+        # pump2_1.write(1)
+        # pump2_2.write(1)
+        # pump2_3.write(1)
+        # pump2_4.write(1)
+        # pump2_5.write(1)
+        # pump2_6.write(1)
+        # pump2_7.write(1)
+        # pump2_8.write(1)
+        
+        # makes sure mixer motor is off
+        self.mixer_motor.write(1)
+        self.stepper_motor_enable.write(0)
+        
+      
+
+    def mixer_up(self):
+        self.stepper_motor_dir.write(1)
+   
+        for x in range(step_count):
+    #         GPIO.output(STEP, GPIO.HIGH)
+            self.stepper_motor_step.write(1)
+            t.sleep(delay)
+            self.stepper_motor_step.write(0)
+            t.sleep(delay)
+        self.stepper_motor_enable.write(1)
 
     def mixer_down(self):
+        self.stepper_motor_dir.write(0)
+        
+        for x in range(step_count):
+            self.stepper_motor_step.write(1)
+            t.sleep(delay)
+            self.stepper_motor_step.write(0)
+            t.sleep(delay)
+
+    def led_off(self):
         pass
-        # stepper_motor_dir.write(0)
-        #
-        # for x in range(step_count):
-        #     stepper_motor_step.write(1)
-        #     t.sleep(delay)
-        #     stepper_motor_step.write(0)
-        #     t.sleep(delay)
-
-    def led_off():
-        pass
-    def led_on():
+    def led_on(self):
         pass
 
-    def clean_pump():
+    def clean_pump(self):
 
-  
-class ratio(models.Model):
-    menu_id= models.IntegerField()
-    ingredient = models.CharField(max_length=50)
-    amount = models.IntegerField()
-    total_ingredients = models.IntegerField()
-
-
-class confirm():
-
+        for x in self.pump_list:
+            x.write(1)
+        
     def confirm(self, request, format = None):
         '''
 
@@ -381,17 +389,17 @@ class confirm():
                 2) WE THEN WENT TO A BUFFER FUNTION, THIS FUNCTION ADDED OUR TASK (DISPENSING PUMPS) TO THE LIST/ARRAY OF WORK WE NEEDED TO GET DONE. EACH PUMP THAT WE NEEDED GOT ADDED TO THE LIST. 
                 3) WE THEN BEGAN THE WORK OF FIND OUT WHICH PUMP HAD WHICH INGREDIENT AND THEN TELLING THAT PUMP TO TURN ON. 
         '''
-
+       
         #1. BAEFY SECURED, MOVING OUT
-        pump_list = []
+        temp_pump_list = []
 
         #2. GRAB ALL THE PUMP INGREDIENTS
         pump_components2 = pumps.objects.values('pump','ingredient_id')
     
         y=0
-        for x in pump_components2:
-           print(x['pump'])
-           print(x['ingredient_id'])
+        # for x in pump_components2:
+        #    print(x['pump'])
+        #    print(x['ingredient_id'])
 
 
         #3) GRAB FROM THE FRONT END THE INGREDIENTS AND size 
@@ -406,8 +414,11 @@ class confirm():
         '''
 
         #work on this not sure if this will work sadly lmao roflcopter
-        recipe_id = request.POST.get('menu_id')
-        size = request.POST.get('size')
+        recipe_id = request['id']
+        size = request['size']
+
+        print(recipe_id)
+        print(size)
 
 
         #4) GRAB THE RECIPE FROM THE BACKEND AND RATIO IN SHIT
@@ -417,16 +428,19 @@ class confirm():
         for x in drinkOBJ: 
             for y in pump_components2:
                 if x['ingredient'] == y["ingredient_id"]:
-                    pump_list.append(y["pump"])
+                    temp_pump_list.append(y["pump"])
 
-        print(pump_list)
-   
-        return self.buffer_function(pump_list, drinkOBJ['amount'],size)
+        print(temp_pump_list)
+        return self.buffer_function(temp_pump_list, drinkOBJ,size)
       
 
-    def buffer_function(self, pump_list, ratio, size):
+    def buffer_function(self, temp_pump_list, ratio, size):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        self.async_loop = asyncio.get_event_loop()
         # self.setlayout()
-        self.async_loop.run_until_complete(self.mainLoop(pump_list, ratio, size))
+        print("buffer functionbitches")
+        self.async_loop.run_until_complete(self.mainLoop(temp_pump_list, ratio, size))
         print("test")
         # stepper_motor_enable.write(0)
         # t.sleep(1)
@@ -455,22 +469,45 @@ class confirm():
 
     async def findPump(self, pump, ratio, size):
 
-        time = (ratio * size) / 3
+       
+
+        time = (ratio * int(size)) / 3
         z = ""
-        for x in pump:
-            if x == 1:
-                pump1.write(0)
-                pump1_1.write(0)
-                await asyncio.sleep(time)
-                pump1_1.write(1)
+
+        print(self.pump_list)
+       
+        self.pump_list[x].write(0)
+        await asyncio.sleep(time)
+        self.pump_list[x].write(1)
+            # if x == 1:
+            #     pump1.write(0)
+            #     pump1_1.write(0)
+            #     await asyncio.sleep(time)
+            #     pump1_1.write(1)
                 
     
-    async def mainLoop(self, pump_list, ratio, size):
-
-        for a in pump_list:
-            pump.append(self.async_loop.create_task(self.findPump(a, ratio, size)))
-
+    async def mainLoop(self, temp_pump_list, ratio, size):
+        x=0
+        pump = []
+        for a in temp_pump_list:
+            pump.append(self.async_loop.create_task(self.findPump(a, ratio[x]['amount'], size)))
+            print(ratio[x]['amount'])
+            x = x+1
         await asyncio.wait(pump)
+
+  
+class ratio(models.Model):
+    menu_id= models.IntegerField()
+    ingredient = models.CharField(max_length=50)
+    amount = models.IntegerField()
+    total_ingredients = models.IntegerField()
+
+    def create_drink(self):
+        '''
+            1) add data to database
+        '''
+        pass
+
 
 
 

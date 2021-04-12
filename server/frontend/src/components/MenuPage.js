@@ -29,7 +29,16 @@ export default class MenuPage extends Component {
   }
 
   getCurrentSong() {
-      fetch("/api/get-menu")
+    console.log("TestTestTest")
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        id:'5',
+        size: "90"
+       })
+      };
+      fetch("/api/confirm", requestOptions)
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
