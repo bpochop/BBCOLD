@@ -42,6 +42,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='room',
             name='code',
-            field=models.CharField(default=api.models.generate_unique_code, max_length=8, unique=True),
+            field=models.CharField(max_length=8, unique=True),
         ),
     ]

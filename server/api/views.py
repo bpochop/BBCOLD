@@ -3,14 +3,17 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.utils import serializer_helpers
-from .serializers import RoomSerializer, CreateRoomSerializer, PumpSerializer, IngredientSerializer, RatioSerializer 
-from .models import Room, pumps, ratio, menu, settings
+from .serializers import PumpSerializer, IngredientSerializer, RatioSerializer 
+from .models import pumps, ratio, menu, settings, check_config, get_stations, progress
 import json, collections
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import JsonResponse
 # Create your views here.
+
+check_config()
+confirm_class = settings()
 
 
 class pumpsView(APIView):
@@ -76,13 +79,19 @@ class menuView(APIView):
 class confirmView(APIView):
 
     def post(self,request, format=None):
-    
-        confirm_class = settings()
-        return_obj = confirm_class.confirm(request.data)
+        #new plan store a value in the database to see if a session is already running. 
 
-        return Response("WHATS COOKIN, GOOD LOOKIN ;)", status= status.HTTP_200_OK, content_type="application/json")
-   
+        prog = progress()
+        print(prog.check_progress)
+        
+        check_config()
+    
+        #confirm_class.confirm(request.data)
  
+        #confirm_class.mixer_up()
+
+        return Response("making drink", status= status.HTTP_200_OK, content_type="application/json")
+
 
 #Checking if room exists or maybe drink exists and shit
 class JoinRoom(APIView):
@@ -103,35 +112,35 @@ class JoinRoom(APIView):
         return Response({'Bad Request': 'Invalid post data, did not find a code key'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CreateRoomView(APIView):
-    serializer_class = CreateRoomSerializer
+# class CreateRoomView(APIView):
+#     serializer_class = CreateRoomSerializer
 
 
-    def post(self, request, format=None):
-        #if current user has an active session with our website, I dont think well need this for our program 
-        if not self.request.session.exists(self.request.session.session_key):
-            self.request.session.create()
+#     def post(self, request, format=None):
+#         #if current user has an active session with our website, I dont think well need this for our program 
+#         if not self.request.session.exists(self.request.session.session_key):
+#             self.request.session.create()
 
-        #take our data and give us a python version, WE WILL NEED THIS BABY
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            guest_can_pause = serializer.data.get('guest_can_pause')
-            votes_to_skip = serializer.data.get('votes_to_skip')
-            host = self.request.session.session_key
-            #checking our database to see if a host has an active session already, may need this?
-            queryset = Room.objects.filter(host =host)
-            if queryset.exists():
-                room = queryset[0]
-                room.guest_can_pause = guest_can_pause
-                room.votes_to_skip = votes_to_skip
-                room.save(update_fields = ['guest_can_pause', 'votes_to_skip'])
-                self.request.session['room_code'] = room.code
-                return Response(RoomSerializer(room).data, status = status.HTTP_202_ACCEPTED)
-            else: 
-                room = Room(host = host, guest_can_pause = guest_can_pause, votes_to_skip = votes_to_skip)
-                room.save()
-                self.request.session['room_code'] = room.code
-            return Response(RoomSerializer(room).data, status = status.HTTP_201_CREATED)
+#         #take our data and give us a python version, WE WILL NEED THIS BABY
+#         serializer = self.serializer_class(data=request.data)
+#         if serializer.is_valid():
+#             guest_can_pause = serializer.data.get('guest_can_pause')
+#             votes_to_skip = serializer.data.get('votes_to_skip')
+#             host = self.request.session.session_key
+#             #checking our database to see if a host has an active session already, may need this?
+#             queryset = Room.objects.filter(host =host)
+#             if queryset.exists():
+#                 room = queryset[0]
+#                 room.guest_can_pause = guest_can_pause
+#                 room.votes_to_skip = votes_to_skip
+#                 room.save(update_fields = ['guest_can_pause', 'votes_to_skip'])
+#                 self.request.session['room_code'] = room.code
+#                 return Response(RoomSerializer(room).data, status = status.HTTP_202_ACCEPTED)
+#             else: 
+#                 room = Room(host = host, guest_can_pause = guest_can_pause, votes_to_skip = votes_to_skip)
+#                 room.save()
+#                 self.request.session['room_code'] = room.code
+#             return Response(RoomSerializer(room).data, status = status.HTTP_201_CREATED)
 
         
 #Method 2

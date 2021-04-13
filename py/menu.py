@@ -24,6 +24,10 @@ shotrecipies = d["shot"]
 nread.close()
 
 
+if __name__ == "__main__":
+    check_config()
+
+
 class dispenseLayout():
     def __init__(self, master, content, obj, ratio, dtype):
         self.master = master
