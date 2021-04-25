@@ -84,8 +84,44 @@ def get_stations():
     # makes sure pumps are off (1 = "OFF" specifically for the pumps)
     for x in pump_list:
         x.write(1)
+
     
 
+    '''
+        Here we are Cleaning up the database if they remove/add a pump
+
+        1) Get pump database size
+        2) if sum of arduino pumps are greater then database size pumps remove excess
+        ^
+        Im guessing this one wont be used much, but it might help us troubleshoot later. 
+        3) if sum of arduino pumps are less then database size then add extra pumps to the database.
+
+    '''
+
+    #1)
+    pump_size = pumps()
+    db_size = pump_size.objects.count()
+    actual_pumps = pump_list.len()
+
+    #2)
+    if actual_pumps < db_size:
+        
+        #get the difference in pumps i.e db_size = 16 acutal_pumps = 8; size = 8
+        x = db_size - actual_pumps
+        
+        #then from 8 -> 16 we are deleting the excess database objects
+        for i in range(x,db_size):
+            temp = pump_size.object.get(pump = i)
+            temp.delete()
+    #3)
+    elif actual_pumps > db_size: 
+        #get the difference in pumps i.e db_size = 8 acutal_pumps = 16; size = 8
+        x = actual_pumps - db_size
+
+        #then from 8 -> 16 we are adding the extra database objects
+        for i in range(x, actual_pumps):
+            new_entry = pumps(id=i+1)
+            new_entry.save()
 
 
 
@@ -137,11 +173,6 @@ class display(models.Model):
 
 class menu(models.Model):
     
-    # nread = open("../../data/recipes.json", "r")
-    # d = json.load(nread)
-    # recipes = d["drinks"]
-    # shotrecipies = d["shot"]
-    # nread.close()
     width = "400"
     height = "400"
 
@@ -251,11 +282,20 @@ class menu(models.Model):
 
         return menu_data
     
-    def create_drink(self):
+    def create_drink(self, data):
         '''
-            1) add data to database
+            1) Grab last id inserted into database
+            2) Increase Id
+            3) create new Object for table
+            4) Save
         '''
-        pass
+        
+        last_id = int(menu.objects.values('id').last())
+        last_id = last_id + 1
+        
+        new_entry = menu(id=last_id, name= data['name'], type_id=data['type'])
+        new_entry.save()
+
 
 
 
@@ -316,6 +356,10 @@ class settings():
         for x in range(split):
             pump_list[x].write(1)
 
+    def detect_Pumps(self):
+        #this should redo the Pumps detection
+        get_stations()
+
 
     def confirm(self, request, format = None):
         '''
@@ -367,28 +411,20 @@ class settings():
                 'rum' : .20
             ]
 
-            IF NOT I AM JUST GOING TO GRAB THE RECIPE FROM THE BACKEND WITH THE INGREDIENT ID AHUKE
         '''
 
-        #work on this not sure if this will work sadly lmao roflcopter
-        recipe_id = request['id']
+
+        #ADJUST THIS ONCE FRONT END GETS DONE!
+
         size = request['size']
 
-        print(recipe_id)
-        print(size)
-
-
-        #4) GRAB THE RECIPE FROM THE BACKEND AND RATIO IN SHIT
-        drinkOBJ = (ratio.objects.values('amount','ingredient').filter(menu_id=recipe_id))
-
-        #5) CREATE A LIST OF ALL THE PUMPS THAT NEED TO BE TURNED ON 
-        for x in drinkOBJ: 
+        for x in request['ingredients']:
             for y in pump_components2:
-                if x['ingredient'] == y["ingredient_id"]:
+                if x == y['ingredient_id']
                     temp_pump_list.append(y["pump"])
-
+                    
     
-        self.buffer_function(temp_pump_list, drinkOBJ,size)
+        self.buffer_function(temp_pump_list, request,size)
         return change_progress(False)
         
 
@@ -472,9 +508,16 @@ class settings():
         pump = []
         stepper_motor_enable.write(0)
        
+        '''
+            ingredients:[
+                'vodka': .10,
+                'rum' : .20
+            ]
+        '''
+
         
         for a in temp_pump_list:
-            pump.append(self.async_loop.create_task(self.findPump(a, ratio[x]['amount'], size)))
+            pump.append(self.async_loop.create_task(self.findPump(a, ratio[a]['amount'], size)))
             x = x+1
         #pump.append(self.async_loop.create_task(self.down()))
         await asyncio.wait(pump)
@@ -484,13 +527,50 @@ class ratio(models.Model):
     menu_id= models.IntegerField()
     ingredient = models.CharField(max_length=50)
     amount = models.IntegerField()
-    total_ingredients = models.IntegerField()
 
-    def create_drink(self):
+    def create_drink(self, data):
         '''
-            1) add data to database
+            1) Grab the newly inserted Menu ID 
+            2) For each new Item insert it into the data base
+
+            ?) Profit?
+
+            I will have to sync up with the front end on how we are going to build that object.
         '''
-        pass
+
+
+        new_entry = menu(id=last_id, name= data['name'], type_id=data['type'])
+        new_entry.save()
+
+
+        #1)
+        menu_id = menu()
+        #We should just be able to grab the last Id since we just inserted it, otherwise we gotta do some gay ass filering lol. 
+        recent_id = menu_id.objects.values('id').last()
+        
+
+        ''' 
+        Maybe how  this will look
+            data = {
+                "ingredients":[
+                    rum,
+                    whiskey,
+                    coke,
+                    drugs
+                ],
+                ratio:[
+                    0.4,
+                    0.4,
+                    0.2
+                ]
+            }
+        '''
+        #2)
+        for i in range(data['ingredients'].len())
+            new_entry = ratio(menu_id = recent_id, ingredient = data['ingredients'][i], amount = data['ratio'][i])
+            new_entry.save()
+
+
 
 
 class progress(models.Model):
@@ -508,200 +588,6 @@ class progress(models.Model):
         prog = progress.objects.values('in_progress')
         prog['in_progress'] = x
         prog.save()
-
-
-    
-'''
-   def createloadingwindow(self, content, ratio, dtype):
-        self.done_dispensing = False
-        self.async_loop = asyncio.get_event_loop()
-        # t.sleep(5)
-        s = t.perf_counter()
-
-        thread1 = threading.Thread(target=self.buffer_function, args=(content, ratio, dtype))
-        # thread2 = threading.Thread(target= self.setLED)
-
-        thread1.start()
-        # thread2.start()
-
-        # led.LEDISDONE()
-        # led.colorWipe(strip, Color(0, 0, 0))
-
-        thread1.join()
-        # thread2.join()
-        self.master.destroy()
-
-    def setLED(self):
-        pass
-        # led.mainLoop(strip)
-
-    async def findPump(self, pumpdata, i, content, ratio, size):
-
-        time = (ratio[i + "r"] * size) / 3
-        z = ""
-        for x in pumpdata:
-            if content[i].title() in pumpdata[x]:
-                z = x
-                
-                if z == "pump1_1":
-
-                    pump1_1.write(0)
-                    await asyncio.sleep(time)
-                    pump1_1.write(1)
-                    break
-
-                if z == "pump1_2":
-
-                    pump1_2.write(0)
-                    await asyncio.sleep(time)
-                    pump1_2.write(1)
-                    break
-
-                if z == "pump1_3":
-
-                    pump1_3.write(0)
-                    await asyncio.sleep(time)
-                    pump1_3.write(1)
-                    break
-
-                if z == "pump1_4":
-
-                    pump1_4.write(0)
-                    await asyncio.sleep(time)
-                    pump1_4.write(1)
-                    break
-
-                if z == "pump1_5":
-                    pump1_5.write(0)
-                    await asyncio.sleep(time)
-                    pump1_5.write(1)
-                    break
-
-                if z == "pump1_6":
-                    pump1_6.write(0)
-                    await asyncio.sleep(time)
-                    pump1_6.write(1)
-                    break
-
-                if z == "pump1_7":
-                    pump1_7.write(0)
-                    await asyncio.sleep(time)
-                    pump1_7.write(1)
-                    break
-
-                if z == "pump1_8":
-                    pump1_8.write(0)
-                    await asyncio.sleep(time)
-                    pump1_8.write(1)
-                    break
-                if z == "pump2_1":
-                    pump2_1.write(0)
-                    await asyncio.sleep(time)
-                    pump2_1.write(1)
-                    break
-
-                if z == "pump2_2":
-                    pump2_2.write(0)
-                    await asyncio.sleep(time)
-                    pump2_2.write(1)
-                    break
-
-                if z == "pump2_3":
-                    pump2_3.write(0)
-                    await asyncio.sleep(time)
-                    pump2_3.write(1)
-                    break
-
-                if z == "pump2_4":
-                    pump2_4.write(0)
-                    await asyncio.sleep(time)
-                    pump2_4.write(1)
-                    break
-
-                if z == "pump2_5":
-                    pump2_5.write(0)
-                    await asyncio.sleep(time)
-                    pump2_5.write(1)
-                    break
-
-                if z == "pump2_6":
-                    pump2_6.write(0)
-                    await asyncio.sleep(time)
-                    pump2_6.write(1)
-                    break
-
-                if z == "pump2_7":
-                    pump2_7.write(0)
-                    await asyncio.sleep(time)
-                    pump2_7.write(1)
-                    break
-
-                if z == "pump2_8":
-                    pump2_8.write(0)
-                    await asyncio.sleep(time)
-                    pump2_8.write(1)
-                    break
-
-
-    async def mainLoop(self, content, ratio, size):
-
-        read = open("../data/pumps.json", "r")
-        pumpdata = json.load(read)
-        read.close()
-
-        pump = []
-
-        for a in content:
-            pump.append(self.async_loop.create_task(self.findPump(pumpdata, a, content, ratio, size)))
-
-        await asyncio.wait(pump)
-
-    def buffer_function(self, content, ratio, size):
-        # self.setlayout()
-        self.async_loop.run_until_complete(self.mainLoop(content, ratio, size))
-        print("test")
-        # stepper_motor_enable.write(0)
-        # t.sleep(1)
-        # self.down()
-        # t.sleep(1)
-        # self.spinMotor()
-        # t.sleep(1)
-        # self.up()
-
-        self.done_dispensing = False
-
-    def up(self):
-        pass
-
-    #     stepper_motor_dir.write(1)
-    #     for x in range(step_count):
-    # #         GPIO.output(STEP, GPIO.HIGH)
-    #         stepper_motor_step.write(1)
-    #         t.sleep(delay)
-    #         stepper_motor_step.write(0)
-    #         t.sleep(delay)
-    #     stepper_motor_enable.write(1)
-
-    def down(self):
-        pass
-        # stepper_motor_dir.write(0)
-        #
-        # for x in range(step_count):
-        #     stepper_motor_step.write(1)
-        #     t.sleep(delay)
-        #     stepper_motor_step.write(0)
-        #     t.sleep(delay)
-
-    def spinMotor(self):
-        pass
-        # CHECK HERE FOR BUGS, ON 3RD DRINK IT KEPT SPINNING FOREVER!
-        # mixer_motor.write(0)# turns on motor
-        # t.sleep(5) #BUG HERE MAYBE? DIDNT WAKE UP
-        # mixer_motor.write(1)
-
-
-
-'''
 
 
 

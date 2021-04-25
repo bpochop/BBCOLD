@@ -30,22 +30,19 @@ class UpdatePumps(APIView):
         pumpclass = pumps()
         pumpclass.update_pumps(request)
         return_obj = pumpclass.get_pumps()
-        return Response({'message': 'Pumps Updated Papi Chulo'}, status = status.HTTP_200_OK, content_type = "application/json")
+        return Response({'message': 'Pumps'}, status = status.HTTP_200_OK, content_type = "application/json")
 
 
 class CreateDrink(APIView):
 
-    def post(self, request, format = None):
-        '''
-            1) Query Menu for the last object in the database
-            2) Create objects to send to each class to update the database
-            3) Call functions. 
+    def post(self, request, format = None):       
 
-        '''
-        
         menu_class = menu()
-        ratio_class = ratio()
+        menu_class.create_drink(request.data)
 
+
+        ratio_class = ratio()
+        ratio_class.create_drink(request.data)
 
         menu_class.create_drink()
 
@@ -54,12 +51,16 @@ class SettingsView(APIView):
     def get(self, request,format=None):
         settings_mode = settings()
 
-        if (request == "Motor_up"):
+        if request.data == "detect":
+            settings_mode.detect_Pumps
+        elif (request == "Motor_up"):
             settings_mode.mixer_up()
         elif(request == "Motor_down"):
             settings_mode.mixer_down()
         elif(request == "clean_pump"):
             settings_mode.clean_pump()
+        
+        return Response("Uh YUH", status=status.HTTP_200_OK,  content_type="application/json")
         
 
 
@@ -86,7 +87,7 @@ class confirmView(APIView):
         
         check_config()
     
-        #confirm_class.confirm(request.data)
+        confirm_class.confirm(request.data)
  
         #confirm_class.mixer_up()
 
