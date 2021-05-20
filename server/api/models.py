@@ -37,7 +37,7 @@ drink_in_progress = False
 
 
 mixer_motor.write(1)
-stepper_motor_enable.write(0)
+stepper_motor_enable.write(1)
 
 def check_drink_inprogress():
     print("TESTING FOR DRINK")
@@ -100,8 +100,10 @@ def get_stations():
 
     #1)
     pump_size = pumps()
-    db_size = pump_size.objects.count()
-    actual_pumps = pump_list.len()
+    db_size = pumps.objects.count()
+    actual_pumps = len(pump_list)\
+    
+    print(db_size)
 
     #2)
     if actual_pumps < db_size:
@@ -193,10 +195,12 @@ class menu(models.Model):
             "S":[],
             "CS":[]
         }
+        print(data)
 
         for x in data:
             name_array = {
                 "name": "",
+                "drink_id":"",
                 "creator_id": "",
                 "type_id": "",
                 "ingredients":{},
@@ -204,13 +208,16 @@ class menu(models.Model):
             }
             name = menu.objects.values('name','creator_id', 'type_id', 'picture').filter(id=x)
             temp = ratio.objects.values('ingredient','amount').filter(menu_id=x)
+            print(temp)
             
             type_id = name[0]['type_id']
 
             name_array['name'] = name[0]['name']
             name_array['creator_id'] = name[0]['creator_id']
             name_array['type_id'] = name[0]['type_id']
-            name_array['ingredients']  = temp[0]
+
+
+            name_array['ingredients']= temp
             name_array['picture'] = name[0]['picture']
             
             if type_id == "C":
@@ -219,7 +226,7 @@ class menu(models.Model):
                 menu_data["S"].append(name_array)
             elif type_id == "CS":
                 menu_data["CS"].append(name_array)
-        print(menu_data)
+        #print(menu_data)
         return menu_data
 
     def get_menu(self):
@@ -420,7 +427,7 @@ class settings():
 
         for x in request['ingredients']:
             for y in pump_components2:
-                if x == y['ingredient_id']
+                if x == y['ingredient_id']:
                     temp_pump_list.append(y["pump"])
                     
     
@@ -566,7 +573,7 @@ class ratio(models.Model):
             }
         '''
         #2)
-        for i in range(data['ingredients'].len())
+        for i in range(data['ingredients'].len()):
             new_entry = ratio(menu_id = recent_id, ingredient = data['ingredients'][i], amount = data['ratio'][i])
             new_entry.save()
 

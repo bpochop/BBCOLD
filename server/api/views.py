@@ -48,7 +48,7 @@ class CreateDrink(APIView):
 
 class SettingsView(APIView):
 
-    def get(self, request,format=None):
+    def post(self, request,format=None):
         settings_mode = settings()
 
         if request.data == "detect":
@@ -82,12 +82,13 @@ class confirmView(APIView):
     def post(self,request, format=None):
         #new plan store a value in the database to see if a session is already running. 
 
-        prog = progress()
-        print(prog.check_progress)
+        # prog = progress()
+        # print(prog.check_progress)
+        print(request.data)
         
-        check_config()
+        #check_config()
     
-        confirm_class.confirm(request.data)
+        #confirm_class.confirm(request.data)
  
         #confirm_class.mixer_up()
 
