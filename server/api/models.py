@@ -7,7 +7,7 @@ import time as t
 import threading
 import asyncio
 import json
-import pyfirmata
+#import pyfirmata
 
 # Create your models here.
 #PUT MOST OF YOUR LOGIC IN THE MODEL
@@ -26,18 +26,18 @@ clean_time = 5
 spin_time = 3
 
 pump_list = []
-board0 = pyfirmata.Arduino('/dev/ttyUSB0')
-####Initializing arduino pin for the steppper motor inside main station
-stepper_motor_dir = board0.get_pin('d:2:o')
-stepper_motor_step = board0.get_pin('d:3:o')
-stepper_motor_enable = board0.get_pin('d:7:o')
-mixer_motor = board0.get_pin('d:4:o')
+# board0 = pyfirmata.Arduino('/dev/ttyUSB0')
+# ####Initializing arduino pin for the steppper motor inside main station
+# stepper_motor_dir = board0.get_pin('d:2:o')
+# stepper_motor_step = board0.get_pin('d:3:o')
+# stepper_motor_enable = board0.get_pin('d:7:o')
+# mixer_motor = board0.get_pin('d:4:o')
 
 drink_in_progress = False
 
 
-mixer_motor.write(1)
-stepper_motor_enable.write(1)
+# mixer_motor.write(1)
+# stepper_motor_enable.write(1)
 
 def check_drink_inprogress():
     print("TESTING FOR DRINK")
@@ -132,37 +132,68 @@ def get_stations():
 
 class Ingredient_id(models.Model):
 
-    width = 400
-    height=500
+    width = "400"
+    height="500"
    
-    ingredient_id = models.IntegerField(primary_key=True, unique= True)
-    ingredient= models.CharField(max_length=50, unique=True)
-    pump_picture = models.ImageField(upload_to = "../../img", default = "../../img/default.png", width_field= width, height_field=height)
+    ingredient= models.CharField(primary_key = True,max_length=50, unique=True)
+    dtype = models.CharField(max_length=2, unique = False, default= "a")
+    pump_picture = models.ImageField(upload_to = "../../img", default = "../../img/default.png", height_field=None, width_field=None)
+
+    def get_liquor(self):
+        alc_list = []
+        alc_list = Ingredient_id.objects.values('ingredient','pump_picture').filter(dtype="a")
+        return alc_list
+    
+    def get_mixer(self):
+        mixer_list = Ingredient_id.objects.values('ingredient', 'pump_picture').filter(dtype="m")
+        return mixer_list
+
+    def add_to_list(self, ingredient, dtype):
+       
+        Ingredient_id.objects.create(ingredient=ingredient, dtype = dtype)
+        return True
+    
+    
+
+
+        
 
 class pumps(models.Model):
     
     #JUST PULL DATA FROM DATABASE ON WHATS IN THE PUMPS, WE NEED TO BE ABLE TO INSERT THEM INTO THE DATABASE, SO BUILD OUT ROUTING TO FRONT END.
     pump = models.IntegerField(primary_key = True, unique=True)
     ingredient_id = models.CharField(max_length = 100)
-    pump_id = models.IntegerField()
     volume_left = models.IntegerField()
 
 
 
-    def get_pumps(self, request, format = None):
+    def get_pumps(self):
         print("were in get_pumps")
         pump_components = pumps.objects.all()
-
-        pump_data = PumpSerializer(pump_components, many=True)
-
-        return pump_data
+        return pump_components
     
-    def update_pumps(self, request, format = None): 
+    def update_pumps(self, data): 
 
         #we may have to format the request object holding the pump data, it depends how the front end sends it. 
-        pump_components = pumps.objects.all()
-        get_stationspump_components = request.data
-        pump_components.save()
+       
+        for x in data:
+            print(x)
+            pump_components = pumps.objects.get(pump = (x['pump']))
+            pump_components.ingredient_id = x['ingredient_id']
+            pump_components.save()
+
+       
+
+    def get_pump_count(self):
+        pump_components = pumps.objects.all().count()
+        return (pump_components)
+    
+    def start_pump_prime(self, pump):
+        pump_list[pump].write(1)
+    
+    def stop_pump_prime(self, pump):
+        pump_list[pump].write(0)
+
         
     
 
@@ -183,6 +214,7 @@ class menu(models.Model):
     creator_id = models.CharField(max_length=20, default="BBC")
     type_id = models.CharField(max_length=2)
     picture = models.ImageField(upload_to = "../../img/", default= "../../img/cocktail_PNG173.png")
+
 
     def buildObject(self,data):
         #3)Graab name of all recipies that make it through the filter
@@ -381,11 +413,13 @@ class settings():
             GOALS:
                 1) GET A BAEFY
                 2) GRAB ALL PUMP INGREDIENTS
-                3) GRAB FROM THE FRONT END THE INGREDIENTS AND SIZE OF CUP
-                4) GRAB THE RECIPE FROM THE BACKEND AND RATIO IN SHIT
-                5) CREATE A LIST OF ALL THE PUMPS THAT NEED TO BE TURNED ON 
-                6) CALCULATE HOW LONG THE PUMPS NEED TO RUN BASED ON SIZE OF CUP 
-                7) EXECUTE IT ASYNCHRONOUSLY (FUUUUUUUCCKKKKK)
+                3) GRAB ALL INFORMATION WE NEED FOR CALCULATIONS
+                4) GRAB ALL ITEMS WE NEED TO INCRESE/DECRESE FOR SLIDER
+                5) RUN A CHECK TO SEE IF WE CAN EVEN INCREASE VALUES AS WE HAVE SOME RECIPES THAT CONTAIN ALL LIQUOR
+                6) RATIO MATH
+                7) FIND PUMPS WE NEED TO EXECUTE ON
+                8) SEND INFO TO BE ADDED TO OUR TASK LIST
+                9) EXECUTE IT ASYNCHRONOUSLY (FUUUUUUUCCKKKKK)
                 
                 EXTRA CREDIT ;):
                     1) GET THEM LED'S FOOKIN WORKING AMRIGHT
@@ -404,35 +438,124 @@ class settings():
         #2. GRAB ALL THE PUMP INGREDIENTS
         pump_components2 = pumps.objects.values('pump','ingredient_id')
     
-        y=0
-        # for x in pump_components2:
-        #    print(x['pump'])
-        #    print(x['ingredient_id'])
-
-
-        #3) GRAB FROM THE FRONT END THE INGREDIENTS AND size 
+   
+        #3) GRAB ALL INFORMATION WE NEED FOR CALCULATIONS
         '''
             HOPEFULLY WE CAN CREATE THE DATA SO ITS INTHE FORMAT OF 
+            REQUEST:[
+                'menu_id': "ARKANSAS RAZERBACK,
+                'size' : 'M',
+                'ratio: .21
+            ]
+
+        '''
+        recipe_id = ratio.objects.filter(menu_id = request['menu_id'])
+        size = request['size']
+        adjust_ratio = request['ratio']
+        liquor_list = Ingredient_id.objects.filter(dtype = "a")
+        mixer_list = Ingredient_id.objects.filter(dtype = "m")
+        lcount = []
+        mcount = []
+
+
+        #4) GRAB ALL ITEMS WE NEED TO INCRESE/DECRESE FOR SLIDER
+        for x in recipe_id['ingredient']:
+            if x in liquor_list:
+                lcount.append(x)
+            else:
+                mcount.append(x)
+
+
+        # 5) RUN A CHECK TO SEE IF WE CAN EVEN INCREASE VALUES AS WE HAVE SOME RECIPES THAT CONTAIN ALL LIQUOR
+        if len(lcount) == len(recipe_id):
+            pass
+            #skip Ratio math
+        else: 
+        # 6) RATIO MATH
+            '''
+                N = number we want to increase/decrease the ratio by
+                R = Ratio we are decreasing by
+                p = percentages we are decreasing everything by
+                t = total amount of ingredients in the list - 1 because we are increasing one
+
+                R = 100 - N
+                p = R / t
+
+
+            '''
+        # 7) FIND PUMPS WE NEED TO EXECUTE ON
+        # 8) SEND INFO TO BE ADDED TO OUR TASK LIST    
+
+
+    
+
+
+    
+        self.buffer_function(temp_pump_list, request,size)
+        return change_progress(False)
+    
+    def buffer_function(self, temp_pump_list, ratio, size):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        self.async_loop = asyncio.get_event_loop()
+        # self.setlayout()
+        
+        self.async_loop.run_until_complete(self.mainLoop(temp_pump_list, ratio, size))
+   
+        
+        t.sleep(1)
+       # self.spinMotor()
+        t.sleep(1)
+        #self.up()
+
+        return True
+
+      
+      
+
+    async def findPump(self, pump, ratio, size):
+          #5) CALCULATE HOW LONG THE PUMPS NEED TO RUN BASED ON SIZE OF CUP
+        '''
+            DATA WE ARE WORKING WITH:
+             size =    small_mili = 90
+             size =    medium_mili = 150
+             size =    large_mili = 210
+              size =   shot_mili = 40
+                
+                ratio = .3 out of 1 or 1/3
+            
+            formula: time = (ratio * size) / 3
+
+            I cant remember why we are diving by 3 but well figure it out when we test LOL
+        '''
+
+        time = (ratio * int(size)) / 3
+        print(time)
+        print(pump)
+       
+        pump_list[pump-1].write(0)
+        await asyncio.sleep(time)
+        pump_list[pump-1].write(1)
+    
+    async def mainLoop(self, temp_pump_list, ratio, size):
+        x=0
+        pump = []
+        stepper_motor_enable.write(0)
+       
+        '''
             ingredients:[
                 'vodka': .10,
                 'rum' : .20
             ]
-
         '''
 
+        
+        for a in temp_pump_list:
+            pump.append(self.async_loop.create_task(self.findPump(a, ratio[a]['amount'], size)))
+            x = x+1
+        #pump.append(self.async_loop.create_task(self.down()))
+        await asyncio.wait(pump)
 
-        #ADJUST THIS ONCE FRONT END GETS DONE!
-
-        size = request['size']
-
-        for x in request['ingredients']:
-            for y in pump_components2:
-                if x == y['ingredient_id']:
-                    temp_pump_list.append(y["pump"])
-                    
-    
-        self.buffer_function(temp_pump_list, request,size)
-        return change_progress(False)
         
 
     async def down(self):
@@ -468,67 +591,7 @@ class settings():
         t.sleep(5) #BUG HERE MAYBE? DIDNT WAKE UP
         mixer_motor.write(1)
 
-    def buffer_function(self, temp_pump_list, ratio, size):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        self.async_loop = asyncio.get_event_loop()
-        # self.setlayout()
-        
-        self.async_loop.run_until_complete(self.mainLoop(temp_pump_list, ratio, size))
    
-        
-        t.sleep(1)
-       # self.spinMotor()
-        t.sleep(1)
-        #self.up()
-
-        return True
-
-        #5) CALCULATE HOW LONG THE PUMPS NEED TO RUN BASED ON SIZE OF CUP
-        '''
-            DATA WE ARE WORKING WITH:
-             size =    small_mili = 90
-             size =    medium_mili = 150
-             size =    large_mili = 210
-              size =   shot_mili = 40
-                
-                ratio = .3 out of 1 or 1/3
-            
-            formula: time = (ratio * size) / 3
-
-            I cant remember why we are diving by 3 but well figure it out when we test LOL
-        '''
-      
-
-    async def findPump(self, pump, ratio, size):
-
-        time = (ratio * int(size)) / 3
-        print(time)
-        print(pump)
-       
-        pump_list[pump-1].write(0)
-        await asyncio.sleep(time)
-        pump_list[pump-1].write(1)
-    
-    async def mainLoop(self, temp_pump_list, ratio, size):
-        x=0
-        pump = []
-        stepper_motor_enable.write(0)
-       
-        '''
-            ingredients:[
-                'vodka': .10,
-                'rum' : .20
-            ]
-        '''
-
-        
-        for a in temp_pump_list:
-            pump.append(self.async_loop.create_task(self.findPump(a, ratio[a]['amount'], size)))
-            x = x+1
-        #pump.append(self.async_loop.create_task(self.down()))
-        await asyncio.wait(pump)
-
   
 class ratio(models.Model):
     menu_id= models.IntegerField()

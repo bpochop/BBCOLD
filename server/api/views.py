@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from rest_framework import generics, status
 from rest_framework.utils import serializer_helpers
 from .serializers import PumpSerializer, IngredientSerializer, RatioSerializer 
-from .models import pumps, ratio, menu, settings, check_config, get_stations, progress
+from .models import pumps, ratio, menu, settings, check_config, get_stations, progress, Ingredient_id
 import json, collections
 
 from rest_framework.response import Response
@@ -50,29 +50,65 @@ class SettingsView(APIView):
 
     def post(self, request,format=None):
         settings_mode = settings()
+        count=""
 
-        if request.data == "detect":
-            settings_mode.detect_Pumps
-        elif (request == "Motor_up"):
+        if (request.data['data']  == "Motor_up"):
             settings_mode.mixer_up()
-        elif(request == "Motor_down"):
+            count="Motor is up"
+
+        elif(request.data['data']  == "Motor_down"):
             settings_mode.mixer_down()
-        elif(request == "clean_pump"):
+            count="Motor is down"
+        elif(request.data['data']  == "clean_pump"):
             settings_mode.clean_pump()
+            count="cleaning"
+        elif(request.data['data']  == "get_stations_count"):
+            pump_class = pumps()
+            count = pump_class.get_pump_count()
+        elif(request.data['data'] == "start_prime_stations"):
+            pump_class = pumps()
+            pump_class.start_pump_prime(request.data['pump'])
+            count="stop priming"
+        elif(request.data['data'] == "stop_prime_stations"):
+            pump_class = pumps()
+            pump_class.start_pump_prime(request.data['pump'])
+            count="stop priming"
+        elif(request.data['data'] == "update_pump"):
+            pump_class = pumps()
+            pump_class.update_pumps(request.data['pump_list'])
+            count = "updated"
+        elif(request.data['data'] == "add_station"):
+            settings_mode.detect_Pumps
+            count="Reditecting"
         
-        return Response("Uh YUH", status=status.HTTP_200_OK,  content_type="application/json")
+        return Response(count, status=status.HTTP_200_OK,  content_type="application/json")
         
 
 
 
 class menuView(APIView):
   
-    def get(self,request,format=None):
+    def post(self,request,format=None):
 
         menu_data = []
-        menu_class = menu()
-        menu_data = menu_class.get_menu()
-       
+     
+        if request.data['data'] == "filtered_menu":
+            menu_class = menu()
+            menu_data = menu_class.get_menu()
+        elif request.data['data'] == "get_liquor":
+            ingredient_list = Ingredient_id()
+            print("is it getting here?")
+            menu_data = ingredient_list.get_liquor()
+        elif request.data['data'] == "get_mixer":
+            ingredient_list = Ingredient_id()
+            print("is it getting here?")
+            menu_data = ingredient_list.get_mixer()
+        elif request.data['data'] == "add_to_list":
+            ingredient_list = Ingredient_id()
+            ingredient_list.add_to_list(request.data['item'], request.data['type'])
+
+            
+        
         return Response(menu_data, status= status.HTTP_200_OK, content_type="application/json")
 
     
