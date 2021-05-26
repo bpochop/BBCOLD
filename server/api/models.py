@@ -456,33 +456,54 @@ class settings():
         mixer_list = Ingredient_id.objects.filter(dtype = "m")
         lcount = []
         mcount = []
+        final_list = []
 
 
         #4) GRAB ALL ITEMS WE NEED TO INCRESE/DECRESE FOR SLIDER
-        for x in recipe_id['ingredient']:
-            if x in liquor_list:
+        for x in recipe_id:
+            if x['ingredient'] in liquor_list:
                 lcount.append(x)
             else:
                 mcount.append(x)
 
+        alcohol_ratio = len(lcount)/ (len(lcount) + len(mcount))
 
+  
         # 5) RUN A CHECK TO SEE IF WE CAN EVEN INCREASE VALUES AS WE HAVE SOME RECIPES THAT CONTAIN ALL LIQUOR
         if len(lcount) == len(recipe_id):
             pass
             #skip Ratio math
         else: 
-        # 6) RATIO MATH
-            '''
-                N = number we want to increase/decrease the ratio by
-                R = Ratio we are decreasing by
-                p = percentages we are decreasing everything by
-                t = total amount of ingredients in the list - 1 because we are increasing one
-
-                R = 100 - N
-                p = R / t
-
 
             '''
+                THE GREAT RATIO ADJUSTER:
+                    1% - 20% ALCOHOL = MAX_RATIO OF 40%
+                    21% - 40% ALCOHOL = MAX_RATIO OF 25%
+                    40% - 60% ALCOHOL = MAX_RATIO OF 15%
+                    60% - 100% ALCOHOL = MAX_RATIO OF 10% 
+
+                    check what amount they put and see if it falls within our matrix ratio
+
+            '''
+            if adjust_ratio == 0:
+                final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
+            elif (alcohol_ratio >1 and alcohol_ratio <= .20 ) and (int(adjust_ratio)/100) > .40:
+                adjust_ratio = .40
+                final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
+            elif (alcohol_ratio > .21 and alcohol_ratio <=40) and (int(adjust_ratio)/100) > .25:
+                adjust_ratio = .25
+                final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
+            elif (alcohol_ratio > .41 and alcohol_ratio <= 60) and (int(adjust_ratio)/100) > .15:
+                adjust_ratio = .15
+                final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
+            elif (alcohol_ratio >= .61) and (int(adjust_ratio)/100) > .10:
+                adjust_ratio = .10
+                final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
+            else:
+                final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
+            
+
+
         # 7) FIND PUMPS WE NEED TO EXECUTE ON
         # 8) SEND INFO TO BE ADDED TO OUR TASK LIST    
 
@@ -493,6 +514,91 @@ class settings():
     
         self.buffer_function(temp_pump_list, request,size)
         return change_progress(False)
+
+    def calculate_ratios(self, llist, mlist, ratio):
+          
+        # 6) RATIO MATH
+            '''
+               P = percentage we want to increase/decrease by
+               1 = 1 complete drink
+               N = new complete drink after we subtract the increased ratio. 
+
+               ex. 
+
+               we want to increase the drink by 32%
+
+               alcohol 1 = .30
+               alcohol 2 = .40
+               mixer 3 = .20
+               mixer 4 = .10
+              
+                #1 (.30 + .40) = .70
+               
+
+                #2
+                alcohol ratio (alcohol * % you want to raise by) = .70 * 1.32% = .924
+                alcohol ratio = .924
+
+                #3
+                alcohol 1 = (.40/.70) * .924 = .528
+                alcohol 2 = (.30/.70) * .924 = .396
+
+                #4
+                mixer ratio = 1 - .924 = .076
+                the new total can't be 100, it has to be whatever is left that needs to be decreased soooooooo
+
+                #5
+                .20 + .10 = .30
+
+                #6
+                mixer 3 = (.20/.30) * .076 = .05066666
+                mixer 4 = (.10/.30) * .076 = .025333333\
+
+                    
+
+                final mixed drink ratio =  .396 + .3451 + .17257 + .08628 = .999999995 (we lost some precision with a normal calculator but the computer wont loose precision hehee)
+
+
+                #7
+                merge lists 
+
+            '''
+            if ratio == 0:
+                #merge lists
+                pass
+            else: 
+                a_total = 0
+                #1 grabbing total amount of liquor in drink
+                for x in llist['amount']:
+                    a_total = a_total + x
+
+                #2
+                a_ratio = a_total * (1 + ratio)
+
+                #3
+                for x in llist['amount']:
+                    llist['amount'] = (x/a_total) * a_ratio
+                
+                #4
+                m_ratio = 1 - a_ratio
+
+                #5
+                m_total = 0
+                for x in mlist['amount']:
+                    m_total = m_total + x
+                
+                #6
+                for x in mlist['amount']:
+                    mlist['amount'] = (x/m_total) * m_ratio
+
+                
+
+                
+
+
+
+            
+
     
     def buffer_function(self, temp_pump_list, ratio, size):
         loop = asyncio.new_event_loop()
