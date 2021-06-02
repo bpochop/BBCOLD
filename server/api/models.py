@@ -327,13 +327,17 @@ class menu(models.Model):
             2) Increase Id
             3) create new Object for table
             4) Save
+
+
+            
         '''
         
-        last_id = int(menu.objects.values('id').last())
-        last_id = last_id + 1
+        last_id = (menu.objects.values('id').last())
+        last_id = int(last_id['id']) + 1
         
         new_entry = menu(id=last_id, name= data['name'], type_id=data['type'])
         new_entry.save()
+
 
 
 
@@ -772,7 +776,7 @@ class settings():
 class ratio(models.Model):
     menu_id= models.IntegerField()
     ingredient = models.CharField(max_length=50)
-    amount = models.IntegerField()
+    amount = models.CharField(max_length = 4)
 
     def create_drink(self, data):
         '''
@@ -784,36 +788,31 @@ class ratio(models.Model):
             I will have to sync up with the front end on how we are going to build that object.
         '''
 
-
-        new_entry = menu(id=last_id, name= data['name'], type_id=data['type'])
-        new_entry.save()
-
-
         #1)
         menu_id = menu()
-        #We should just be able to grab the last Id since we just inserted it, otherwise we gotta do some gay ass filering lol. 
-        recent_id = menu_id.objects.values('id').last()
+        #We should just be able to grab the last Id since we just inserted it, otherwise we gotta do some dumb ass filering lol. 
+        recent_id = menu.objects.values('id').last()
         
 
         ''' 
-        Maybe how  this will look
-            data = {
-                "ingredients":[
+            "ingredients":{
                     rum,
                     whiskey,
                     coke,
                     drugs
-                ],
-                ratio:[
+                },
+                ratio:{
                     0.4,
                     0.4,
+                    0.2,
                     0.2
-                ]
+                }
             }
         '''
         #2)
-        for i in range(data['ingredients'].len()):
-            new_entry = ratio(menu_id = recent_id, ingredient = data['ingredients'][i], amount = data['ratio'][i])
+        print("range", len(data['ingredients']))
+        for i in range(len(data['ingredients'])):
+            new_entry = ratio(menu_id = int(recent_id['id']), ingredient = data['ingredients'][i], amount = data['ratio'][i])
             new_entry.save()
 
 

@@ -44,7 +44,7 @@ class CreateDrink(APIView):
         ratio_class = ratio()
         ratio_class.create_drink(request.data)
 
-        menu_class.create_drink()
+        return Response({'message': 'Added!'}, status = status.HTTP_200_OK, content_type = "application/json")
 
 class SettingsView(APIView):
 
@@ -73,10 +73,6 @@ class SettingsView(APIView):
             pump_class = pumps()
             pump_class.start_pump_prime(request.data['pump'])
             count="stop priming"
-        elif(request.data['data'] == "update_pump"):
-            pump_class = pumps()
-            pump_class.update_pumps(request.data['pump_list'])
-            count = "updated"
         elif(request.data['data'] == "add_station"):
             settings_mode.detect_Pumps
             count="Adding Station"

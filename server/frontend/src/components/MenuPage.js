@@ -38,12 +38,25 @@ export default class MenuPage extends Component {
         "Access-Control-Allow-Credentials" : true },
       body: JSON.stringify({  
         //'data':'filtered_menu' 
-        'menu_id': "Yellow Hammer",
-          'ratio': 25,
-          'size': "medium"
-       })
+          'name': "Ligma",
+          'type': 'c',
+          'creator_id': "Big Boss Bryant",
+          'ingredients':[
+            'vodka',
+            'lemon juice',
+            'sprite',
+            'midori',
+          ],
+          'ratio': [
+            .25,
+            .25,
+            .25,
+            .25
+          ]
+
+        })
       };
-      fetch("/api/confirm",requestOptions)
+      fetch("/api/createDrink",requestOptions)
         .then((response) => response.json())
         .then((data) => {
           console.log(data)
