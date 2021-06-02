@@ -79,7 +79,7 @@ class SettingsView(APIView):
             count = "updated"
         elif(request.data['data'] == "add_station"):
             settings_mode.detect_Pumps
-            count="Reditecting"
+            count="Adding Station"
         
         return Response(count, status=status.HTTP_200_OK,  content_type="application/json")
         
@@ -123,8 +123,8 @@ class confirmView(APIView):
         print(request.data)
         
         #check_config()
-    
-        #confirm_class.confirm(request.data)
+        confirm_class = settings()
+        confirm_class.confirm(request.data)
  
         #confirm_class.mixer_up()
 

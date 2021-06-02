@@ -29,28 +29,21 @@ export default class MenuPage extends Component {
   }
 
   getCurrentSong() {
-    console.log("TestTestTest")
+    console.log("new test")
     const requestOptions = {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json', 
         "Access-Control-Allow-Origin" : "*", 
         "Access-Control-Allow-Credentials" : true },
-      body: JSON.stringify({ 
-        data:"update_pump",
-        pump_list :[
-          {
-            "pump":"1",
-            "ingredient_id":"Redbull"
-          },
-          {
-            "pump":"2",
-            "ingredient_id":"Coke"
-          }
-        ]
+      body: JSON.stringify({  
+        //'data':'filtered_menu' 
+        'menu_id': "Yellow Hammer",
+          'ratio': 25,
+          'size': "medium"
        })
       };
-      fetch("/api/settings",requestOptions)
+      fetch("/api/confirm",requestOptions)
         .then((response) => response.json())
         .then((data) => {
           console.log(data)

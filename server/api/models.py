@@ -432,8 +432,6 @@ class settings():
         '''
        
         #1. BAEFY SECURED, MOVING OUT
-        temp_pump_list = []
-        change_progress(True)
 
         #2. GRAB ALL THE PUMP INGREDIENTS
         pump_components2 = pumps.objects.values('pump','ingredient_id')
@@ -449,71 +447,131 @@ class settings():
             ]
 
         '''
-        recipe_id = ratio.objects.filter(menu_id = request['menu_id'])
+
+        menuid = menu.objects.values('id').filter(name=request['menu_id'])
+
+        
+        recipe_id = ratio.objects.filter(menu_id = menuid[0]['id'])
+       
         size = request['size']
         adjust_ratio = request['ratio']
         liquor_list = Ingredient_id.objects.filter(dtype = "a")
-        mixer_list = Ingredient_id.objects.filter(dtype = "m")
         lcount = []
+        clean_list = []
         mcount = []
         final_list = []
+        ltotal = 0
+        mtotal =0
+
+
+       
+        for x in liquor_list:
+            clean_list.append(x.ingredient)
+
+      
 
 
         #4) GRAB ALL ITEMS WE NEED TO INCRESE/DECRESE FOR SLIDER
         for x in recipe_id:
-            if x['ingredient'] in liquor_list:
-                lcount.append(x)
+            drink_obj = {
+                "ingredient": '',
+                "amount": 0,
+                'pump': 0
+            }
+            if x.ingredient in clean_list:
+                drink_obj['ingredient'] = x.ingredient
+                drink_obj['amount'] = x.amount
+                ltotal = ltotal + x.amount
+                lcount.append(drink_obj)
             else:
-                mcount.append(x)
+                drink_obj['ingredient'] = x.ingredient
+                drink_obj['amount'] = x.amount
+                mtotal = mtotal + x.amount
+                mcount.append(drink_obj)
 
-        alcohol_ratio = len(lcount)/ (len(lcount) + len(mcount))
-
-  
+        alcohol_ratio = ltotal / (mtotal + ltotal)
+    
+      
         # 5) RUN A CHECK TO SEE IF WE CAN EVEN INCREASE VALUES AS WE HAVE SOME RECIPES THAT CONTAIN ALL LIQUOR
         if len(lcount) == len(recipe_id):
-            pass
+            final_list = lcount
+            
             #skip Ratio math
         else: 
 
             '''
+                WE MAY NEED TO TUNE THIS
                 THE GREAT RATIO ADJUSTER:
-                    1% - 20% ALCOHOL = MAX_RATIO OF 40%
-                    21% - 40% ALCOHOL = MAX_RATIO OF 25%
-                    40% - 60% ALCOHOL = MAX_RATIO OF 15%
-                    60% - 100% ALCOHOL = MAX_RATIO OF 10% 
+                1)    1% - 20% ALCOHOL = MAX_RATIO OF 40%
+                2)    21% - 40% ALCOHOL = MAX_RATIO OF 25%
+                3)    40% - 60% ALCOHOL = MAX_RATIO OF 15%
+                4)    60% - 100% ALCOHOL = MAX_RATIO OF 10% 
 
                     check what amount they put and see if it falls within our matrix ratio
 
             '''
+            print("Alcohol Ratio: ", alcohol_ratio)
+
+            print("Adjusted Ratio: ", int(adjust_ratio)/100)
+            adjust_ratio = int(adjust_ratio)/100
+
+
             if adjust_ratio == 0:
+                print("0")
                 final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
-            elif (alcohol_ratio >1 and alcohol_ratio <= .20 ) and (int(adjust_ratio)/100) > .40:
+            elif (alcohol_ratio >.1 and alcohol_ratio <= .20 ) and adjust_ratio > .40:
                 adjust_ratio = .40
+                print("1")
                 final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
-            elif (alcohol_ratio > .21 and alcohol_ratio <=40) and (int(adjust_ratio)/100) > .25:
+            elif (alcohol_ratio > .21 and alcohol_ratio <=.40) and adjust_ratio > .25:
                 adjust_ratio = .25
+                print("2")
                 final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
-            elif (alcohol_ratio > .41 and alcohol_ratio <= 60) and (int(adjust_ratio)/100) > .15:
+            elif (alcohol_ratio > .41 and alcohol_ratio <= .60) and adjust_ratio > .15:
                 adjust_ratio = .15
+                print("3")
                 final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
-            elif (alcohol_ratio >= .61) and (int(adjust_ratio)/100) > .10:
+            elif (alcohol_ratio >= .61) and adjust_ratio > .10:
                 adjust_ratio = .10
+                print("4")
                 final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
             else:
+                print("nothing lmao")
                 final_list = self.calculate_ratios(lcount,mcount, adjust_ratio)
             
 
 
         # 7) FIND PUMPS WE NEED TO EXECUTE ON
+        clean_list = []
+        for x in pump_components2:
+            clean_list.append(x['ingredient_id'])
+
+        for x in final_list:
+            for y in pump_components2:
+                if x['ingredient'] == y['ingredient_id']:
+                    x['pump'] = y['pump']
+
+        #7.5) Format size
+        '''
+         size =    small = 90 militers
+             size =    medium = 150 militers
+             size =    large = 210 militers
+              size =   shot = 40 milter
+        '''
+        if size == "small":
+            size = 90
+        elif size == "medium":
+            size = 150
+        elif size == "large":
+            size =210
+        elif size == "shot":
+            size = 40
+            
+
+        print(final_list)
         # 8) SEND INFO TO BE ADDED TO OUR TASK LIST    
-
-
-    
-
-
-    
-        self.buffer_function(temp_pump_list, request,size)
-        return change_progress(False)
+        self.buffer_function(final_list,size)
+        return True
 
     def calculate_ratios(self, llist, mlist, ratio):
           
@@ -552,7 +610,7 @@ class settings():
 
                 #6
                 mixer 3 = (.20/.30) * .076 = .05066666
-                mixer 4 = (.10/.30) * .076 = .025333333\
+                mixer 4 = (.10/.30) * .076 = .025333333
 
                     
 
@@ -563,50 +621,66 @@ class settings():
                 merge lists 
 
             '''
+            finalList = []
+
             if ratio == 0:
                 #merge lists
                 pass
             else: 
                 a_total = 0
                 #1 grabbing total amount of liquor in drink
-                for x in llist['amount']:
-                    a_total = a_total + x
+                for x in llist:
+                    a_total = a_total + x['amount']
 
                 #2
                 a_ratio = a_total * (1 + ratio)
 
                 #3
-                for x in llist['amount']:
-                    llist['amount'] = (x/a_total) * a_ratio
+                count=0
+                for x in llist:
+                    llist[count]['amount'] = (x['amount']/a_total) * a_ratio
+                    count+=1
                 
                 #4
                 m_ratio = 1 - a_ratio
 
                 #5
                 m_total = 0
-                for x in mlist['amount']:
-                    m_total = m_total + x
+                for x in mlist:
+                    m_total = m_total + x['amount']
                 
                 #6
-                for x in mlist['amount']:
-                    mlist['amount'] = (x/m_total) * m_ratio
-
-                
-
-                
-
-
-
+                count = 0
+                for x in mlist: 
+                    mlist[count]['amount'] = (x['amount']/m_total) * m_ratio
+                    count += 1
             
 
+
+            #DOING THIS BECAUSE IT GAVE ME A WEIRD NESTED ARRAY WHEN IT DIDNT NEED TO BE. 
+            for x in llist:
+                finalList.append(x)
+
+            for x in mlist:
+                finalList.append(x)
+
+          
+
+            return finalList
+
+                
+
+
+
+        
     
-    def buffer_function(self, temp_pump_list, ratio, size):
+    def buffer_function(self, drink_list, size):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         self.async_loop = asyncio.get_event_loop()
         # self.setlayout()
         
-        self.async_loop.run_until_complete(self.mainLoop(temp_pump_list, ratio, size))
+        self.async_loop.run_until_complete(self.mainLoop(drink_list, size))
    
         
         t.sleep(1)
@@ -616,6 +690,17 @@ class settings():
 
         return True
 
+    async def mainLoop(self, drink_list, size):
+        x=0
+        pump = []
+        #stepper_motor_enable.write(0)
+       
+        for a in drink_list:
+            pump.append(self.async_loop.create_task(self.findPump(a['pump'], a['amount'], size)))
+            x = x+1
+        #pump.append(self.async_loop.create_task(self.down()))
+        await asyncio.wait(pump)
+
       
       
 
@@ -623,44 +708,29 @@ class settings():
           #5) CALCULATE HOW LONG THE PUMPS NEED TO RUN BASED ON SIZE OF CUP
         '''
             DATA WE ARE WORKING WITH:
-             size =    small_mili = 90
-             size =    medium_mili = 150
-             size =    large_mili = 210
-              size =   shot_mili = 40
+             size =    small = 90 militers
+             size =    medium = 150 militers
+             size =    large = 210 militers
+              size =   shot = 40 milters
                 
                 ratio = .3 out of 1 or 1/3
             
             formula: time = (ratio * size) / 3
+            3 militers per second maybe?
 
             I cant remember why we are diving by 3 but well figure it out when we test LOL
         '''
+        
+
 
         time = (ratio * int(size)) / 3
         print(time)
         print(pump)
        
-        pump_list[pump-1].write(0)
+        # pump_list[pump-1].write(0)
         await asyncio.sleep(time)
-        pump_list[pump-1].write(1)
+        # pump_list[pump-1].write(1)
     
-    async def mainLoop(self, temp_pump_list, ratio, size):
-        x=0
-        pump = []
-        stepper_motor_enable.write(0)
-       
-        '''
-            ingredients:[
-                'vodka': .10,
-                'rum' : .20
-            ]
-        '''
-
-        
-        for a in temp_pump_list:
-            pump.append(self.async_loop.create_task(self.findPump(a, ratio[a]['amount'], size)))
-            x = x+1
-        #pump.append(self.async_loop.create_task(self.down()))
-        await asyncio.wait(pump)
 
         
 
