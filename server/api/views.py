@@ -1,3 +1,4 @@
+from os import write
 from django.db.models import query
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -6,6 +7,7 @@ from rest_framework.utils import serializer_helpers
 from .serializers import PumpSerializer, IngredientSerializer, RatioSerializer 
 from .models import pumps, ratio, menu, settings, check_config, get_stations, progress, Ingredient_id
 import json, collections
+from datetime import datetime
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,35 +16,54 @@ from django.http import JsonResponse
 
 check_config()
 confirm_class = settings()
+log = open("./api/LOGS/bbc_log", "a")
+buff_time = datetime.now()
+current_time = buff_time.strftime("%H:%M:%S")
+log.write(current_time + "   Beginning of $BBC_HOME/server/api/views.py \n")
+
+
+def write_logs(message):
+    buff_time = datetime.now()
+    current_time = buff_time.strftime("%H:%M:%S")
+    log.write(current_time + "   " + message +  "\n")
+
 
 
 class pumpsView(APIView):
 
     def get(self, request, format = None):
+        write_logs("***pumpsView*** $BBC_HOME/server/api/views.py function = pumpsView")
         return_obj = []
         newpumps = pumps()
-        return_obj = newpumps.get_pumps()
-        return Response(return_obj, status= status.HTTP_200_OK, content_type="application/json")
+        return_obj = newpumps.get_pumps(log)
+        return Response(return_obj, status= status.HTTP_200_OK, content_type="application/json")         
 
 class UpdatePumps(APIView):
 
     def post(self, request, format= None):
+        write_logs("***UpdatePumps*** $BBC_HOME/server/api/views.py function = post")
         pumpclass = pumps()
-        pumpclass.update_pumps(request)
-        return_obj = pumpclass.get_pumps()
+        pumpclass.update_pumps(request.data, log)
+        return_obj = pumpclass.get_pumps(log)
         return Response({'message': 'Pumps'}, status = status.HTTP_200_OK, content_type = "application/json")
 
 
 class CreateDrink(APIView):
 
     def post(self, request, format = None):       
-
+        write_logs("***CreateDrink*** $BBC_HOME/server/api/views.py function = post")
+       
         menu_class = menu()
-        menu_class.create_drink(request.data)
+        check = menu_class.create_drink(request.data,log)
+
+        if check == False: 
+            write_logs("***CreateDrink*** $BBC_HOME/server/api/views.py function = post 400 Bad request")
+            return Response({'message': 'Failed, Please enter a different name'}, status = status.HTTP_400_BAD_REQUEST, content_type = "application/json")
+
 
 
         ratio_class = ratio()
-        ratio_class.create_drink(request.data)
+        ratio_class.create_drink(request.data,log)
 
         return Response({'message': 'Added!'}, status = status.HTTP_200_OK, content_type = "application/json")
 

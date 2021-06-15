@@ -7,6 +7,7 @@ import time as t
 import threading
 import asyncio
 import json
+from datetime import datetime
 #import pyfirmata
 
 # Create your models here.
@@ -35,6 +36,10 @@ pump_list = []
 
 drink_in_progress = False
 
+def write_logs(log, message):
+    buff_time = datetime.now()
+    current_time = buff_time.strftime("%H:%M:%S")
+    log.write(current_time + "   " + message +  "\n")
 
 # mixer_motor.write(1)
 # stepper_motor_enable.write(1)
@@ -167,20 +172,26 @@ class pumps(models.Model):
 
 
 
-    def get_pumps(self):
-        print("were in get_pumps")
-        pump_components = pumps.objects.all()
+    def get_pumps(self, log):
+        write_logs(log,"We are in $BBC_HOME/server/api/models.py function get_pumps")
+        pump_components = pumps.objects.values('pump','ingredient_id')
         return pump_components
     
-    def update_pumps(self, data): 
-
+    def update_pumps(self, data, log): 
+        write_logs(log,"We are in $BBC_HOME/server/api/models.py function update_pumps ")
+        string = ''
         #we may have to format the request object holding the pump data, it depends how the front end sends it. 
-       
-        for x in data:
+
+        for x in data['pump_list']:
             print(x)
             pump_components = pumps.objects.get(pump = (x['pump']))
-            pump_components.ingredient_id = x['ingredient_id']
+            pump_components.ingredient_id = x['ingredient']
             pump_components.save()
+            string += "Pump: " + str(x['pump']) + " Ingredient: " + x['ingredient']
+         
+        
+        write_logs(log,string)
+       
 
        
 
@@ -321,7 +332,7 @@ class menu(models.Model):
 
         return menu_data
     
-    def create_drink(self, data):
+    def create_drink(self, data,log):
         '''
             1) Grab last id inserted into database
             2) Increase Id
@@ -331,12 +342,16 @@ class menu(models.Model):
 
             
         '''
-        
+        write_logs(log,"We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink")
+
         last_id = (menu.objects.values('id').last())
         last_id = int(last_id['id']) + 1
-        
         new_entry = menu(id=last_id, name= data['name'], type_id=data['type'])
-        new_entry.save()
+        write_logs(log, "Name = " + data['name'] + "\nType id =  " + data['type'] )
+        try:
+            new_entry.save()
+        except:
+            return(False)
 
 
 
@@ -514,9 +529,9 @@ class settings():
                     check what amount they put and see if it falls within our matrix ratio
 
             '''
-            print("Alcohol Ratio: ", alcohol_ratio)
+            # print("Alcohol Ratio: ", alcohol_ratio)
 
-            print("Adjusted Ratio: ", int(adjust_ratio)/100)
+            # print("Adjusted Ratio: ", int(adjust_ratio)/100)
             adjust_ratio = int(adjust_ratio)/100
 
 
@@ -778,7 +793,7 @@ class ratio(models.Model):
     ingredient = models.CharField(max_length=50)
     amount = models.CharField(max_length = 4)
 
-    def create_drink(self, data):
+    def create_drink(self, data, log):
         '''
             1) Grab the newly inserted Menu ID 
             2) For each new Item insert it into the data base
@@ -810,10 +825,13 @@ class ratio(models.Model):
             }
         '''
         #2)
-        print("range", len(data['ingredients']))
-        for i in range(len(data['ingredients'])):
-            new_entry = ratio(menu_id = int(recent_id['id']), ingredient = data['ingredients'][i], amount = data['ratio'][i])
-            new_entry.save()
+        log_string = ""
+        for i in data['ingredients']:
+           new_entry = ratio(menu_id = int(recent_id['id']), ingredient = i, amount = data['ingredients'][i])
+           new_entry.save()
+           log_string += "\nId: " + str(recent_id['id']) + "\nIngredient: " + i + "\nRatio: " + str(data['ingredients'][i])
+
+        write_logs(log, log_string)
 
 
 

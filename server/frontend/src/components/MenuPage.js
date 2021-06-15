@@ -33,30 +33,12 @@ export default class MenuPage extends Component {
     const requestOptions = {
       method: 'POST',
       headers: { 
-        'Content-Type': 'application/json', 
-        "Access-Control-Allow-Origin" : "*", 
-        "Access-Control-Allow-Credentials" : true },
+        'Content-Type': 'application/json' },
       body: JSON.stringify({  
-        //'data':'filtered_menu' 
-          'name': "Ligma",
-          'type': 'c',
-          'creator_id': "Big Boss Bryant",
-          'ingredients':[
-            'vodka',
-            'lemon juice',
-            'sprite',
-            'midori',
-          ],
-          'ratio': [
-            .25,
-            .25,
-            .25,
-            .25
-          ]
-
+          'data':'get_liquor'
         })
       };
-      fetch("/api/createDrink",requestOptions)
+      fetch("/api/get-menu",requestOptions)
         .then((response) => response.json())
         .then((data) => {
           console.log(data)

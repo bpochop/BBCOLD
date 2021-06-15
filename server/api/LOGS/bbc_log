@@ -1,0 +1,243 @@
+13:38:20   Beginning of $BBC_HOME/server/api/views.py 
+14:41:28   Beginning of $BBC_HOME/server/api/views.py 
+14:46:14   We are in $BBC_HOME/server/api/models.py function get_pumps
+14:46:41   Beginning of $BBC_HOME/server/api/views.py 
+14:46:44   We are in $BBC_HOME/server/api/models.py function get_pumps
+14:46:44   Here are the pump components<QuerySet [<pumps: pumps object (1)>, <pumps: pumps object (2)>, <pumps: pumps object (3)>, <pumps: pumps object (4)>, <pumps: pumps object (5)>, <pumps: pumps object (6)>, <pumps: pumps object (7)>, <pumps: pumps object (8)>, <pumps: pumps object (9)>]>
+14:47:08   Beginning of $BBC_HOME/server/api/views.py 
+14:48:06   Beginning of $BBC_HOME/server/api/views.py 
+14:57:31   Beginning of $BBC_HOME/server/api/views.py 
+14:57:42   We are in $BBC_HOME/server/api/models.py function get_pumps
+14:58:06   Beginning of $BBC_HOME/server/api/views.py 
+14:58:09   We are in $BBC_HOME/server/api/models.py function get_pumps
+14:59:02   Beginning of $BBC_HOME/server/api/views.py 
+14:59:06   We are in $BBC_HOME/server/api/models.py function get_pumps
+14:59:48   Beginning of $BBC_HOME/server/api/views.py 
+14:59:50   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:00:34   Beginning of $BBC_HOME/server/api/views.py 
+15:00:38   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:01:42   Beginning of $BBC_HOME/server/api/views.py 
+15:01:45   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:02:21   Beginning of $BBC_HOME/server/api/views.py 
+15:02:24   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:02:40   Beginning of $BBC_HOME/server/api/views.py 
+15:02:43   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:05:42   Beginning of $BBC_HOME/server/api/views.py 
+15:05:49   Beginning of $BBC_HOME/server/api/views.py 
+15:05:56   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:05:56   ***pumpsView*** $BBC_HOME/server/api/views.py function = pumpsView
+15:07:46   Beginning of $BBC_HOME/server/api/views.py 
+15:07:49   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:07:49   ***pumpsView*** $BBC_HOME/server/api/views.py function = pumpsView
+15:08:12   Beginning of $BBC_HOME/server/api/views.py 
+15:08:16   ***pumpsView*** $BBC_HOME/server/api/views.py function = pumpsView
+15:08:16   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:08:42   Beginning of $BBC_HOME/server/api/views.py 
+15:08:50   Beginning of $BBC_HOME/server/api/views.py 
+15:09:40   Beginning of $BBC_HOME/server/api/views.py 
+15:10:16   Beginning of $BBC_HOME/server/api/views.py 
+15:10:33   Beginning of $BBC_HOME/server/api/views.py 
+15:11:28   Beginning of $BBC_HOME/server/api/views.py 
+15:15:45   Beginning of $BBC_HOME/server/api/views.py 
+15:15:48   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:16:09   Beginning of $BBC_HOME/server/api/views.py 
+15:16:11   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:16:11   We are in $BBC_HOME/server/api/models.py function update_pumps
+15:16:49   Beginning of $BBC_HOME/server/api/views.py 
+15:16:51   Beginning of $BBC_HOME/server/api/views.py 
+15:16:53   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:16:53   We are in $BBC_HOME/server/api/models.py function update_pumps
+15:17:02   Beginning of $BBC_HOME/server/api/views.py 
+15:17:05   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:17:05   We are in $BBC_HOME/server/api/models.py function update_pumps
+15:17:57   Beginning of $BBC_HOME/server/api/views.py 
+15:18:01   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:18:08   Beginning of $BBC_HOME/server/api/views.py 
+15:18:40   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:18:40   We are in $BBC_HOME/server/api/models.py function update_pumps
+15:19:23   Beginning of $BBC_HOME/server/api/views.py 
+15:19:41   Beginning of $BBC_HOME/server/api/views.py 
+15:19:44   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:19:44   We are in $BBC_HOME/server/api/models.py function update_pumps
+15:20:06   Beginning of $BBC_HOME/server/api/views.py 
+15:20:08   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:20:08   We are in $BBC_HOME/server/api/models.py function update_pumps
+15:20:26   Beginning of $BBC_HOME/server/api/views.py 
+15:21:05   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:21:05   We are in $BBC_HOME/server/api/models.py function update_pumps
+15:21:05   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:21:39   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:21:39   We are in $BBC_HOME/server/api/models.py function update_pumps
+15:21:39   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:23:15   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:23:15   We are in $BBC_HOME/server/api/models.py function update_pumps
+15:23:15   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:23:39   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:23:39   We are in $BBC_HOME/server/api/models.py function update_pumps
+15:23:39   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:24:26   Beginning of $BBC_HOME/server/api/views.py 
+15:24:37   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:25:32   Beginning of $BBC_HOME/server/api/views.py 
+15:25:55   Beginning of $BBC_HOME/server/api/views.py 
+15:26:03   Beginning of $BBC_HOME/server/api/views.py 
+15:26:10   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:26:25   Beginning of $BBC_HOME/server/api/views.py 
+15:26:34   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:26:34   We are in $BBC_HOME/server/api/models.py function update_pumps 
+15:27:30   Beginning of $BBC_HOME/server/api/views.py 
+15:27:34   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:27:34   We are in $BBC_HOME/server/api/models.py function update_pumps 
+15:27:44   Beginning of $BBC_HOME/server/api/views.py 
+15:27:47   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:27:47   We are in $BBC_HOME/server/api/models.py function update_pumps 
+15:27:47   Pump: 5Ingredient: Midori
+15:27:47   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:28:12   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:28:12   We are in $BBC_HOME/server/api/models.py function update_pumps 
+15:28:12   Pump: 5Ingredient: Midori
+15:28:12   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:29:39   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:29:39   We are in $BBC_HOME/server/api/models.py function update_pumps 
+15:29:39   Pump: 5Ingredient: Midori
+15:29:39   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:29:58   ***UpdatePumps*** $BBC_HOME/server/api/views.py function = post
+15:29:58   We are in $BBC_HOME/server/api/models.py function update_pumps 
+15:29:58   Pump: 5Ingredient: Jack
+15:29:58   We are in $BBC_HOME/server/api/models.py function get_pumps
+15:30:09   Beginning of $BBC_HOME/server/api/views.py 
+15:30:35   Beginning of $BBC_HOME/server/api/views.py 
+15:33:41   Beginning of $BBC_HOME/server/api/views.py 
+15:35:02   Beginning of $BBC_HOME/server/api/views.py 
+15:36:05   Beginning of $BBC_HOME/server/api/views.py 
+15:44:40   Beginning of $BBC_HOME/server/api/views.py 
+15:44:50   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:44:50   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:44:50   Name = Test DrinkType id =  s
+15:45:17   Beginning of $BBC_HOME/server/api/views.py 
+15:45:20   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:45:20   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:45:20   Name = Test DrinkType id =  s
+15:45:42   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:45:42   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:45:42   Name = Test DrinkType id =  s
+15:48:34   Beginning of $BBC_HOME/server/api/views.py 
+15:48:40   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:48:40   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:48:40   Name = Test DrinkType id =  S
+15:48:54   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:48:54   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:48:54   Name = Test DrinkType id =  S
+15:49:59   Beginning of $BBC_HOME/server/api/views.py 
+15:50:01   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:50:01   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:50:01   Name = Test DrinkType id =  S
+15:50:13   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:50:13   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:50:13   Name = Test DrinkType id =  S
+15:50:20   Beginning of $BBC_HOME/server/api/views.py 
+15:50:35   Beginning of $BBC_HOME/server/api/views.py 
+15:50:38   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:50:38   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:50:38   Name = Test DrinkType id =  S
+15:50:52   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:50:52   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:50:52   Name = Test DrinkType id =  S
+15:51:21   Beginning of $BBC_HOME/server/api/views.py 
+15:51:29   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:51:29   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:51:29   Name = Test DrinkType id =  S
+15:51:45   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:51:45   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:51:45   Name = Test DrinkType id =  S
+15:52:27   Beginning of $BBC_HOME/server/api/views.py 
+15:52:30   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:52:30   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:52:30   Name = Test DrinkType id =  S
+15:52:44   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:52:44   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:52:44   Name = Test DrinkType id =  S
+15:55:49   Beginning of $BBC_HOME/server/api/views.py 
+15:55:59   Beginning of $BBC_HOME/server/api/views.py 
+15:56:01   Beginning of $BBC_HOME/server/api/views.py 
+15:56:11   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:56:11   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:56:11   Name = Test DrinkType id =  S
+15:56:22   Beginning of $BBC_HOME/server/api/views.py 
+15:56:33   Beginning of $BBC_HOME/server/api/views.py 
+15:56:36   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:56:36   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:56:36   Name = Test DrinkType id =  S
+15:57:22   Beginning of $BBC_HOME/server/api/views.py 
+15:57:34   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:57:34   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:57:34   Name = Test DrinkType id =  S
+15:57:48   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:57:48   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:57:48   Name = Test DrinkType id =  S
+15:58:31   Beginning of $BBC_HOME/server/api/views.py 
+15:58:42   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+15:58:42   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+15:58:42   Name = Test DrinkType id =  S
+16:00:30   Beginning of $BBC_HOME/server/api/views.py 
+16:00:41   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+16:00:41   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+16:00:41   Name = Test DrinkType id =  S
+16:01:08   Beginning of $BBC_HOME/server/api/views.py 
+16:01:20   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+16:01:20   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+16:01:20   Name = Test DrinkType id =  S
+16:01:57   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+16:01:57   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+16:01:57   Name = Test DrinkType id =  S
+16:03:48   Beginning of $BBC_HOME/server/api/views.py 
+16:03:56   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+16:03:56   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+16:03:56   Name = Test DrinkType id =  S
+16:04:07   Beginning of $BBC_HOME/server/api/views.py 
+16:04:17   Beginning of $BBC_HOME/server/api/views.py 
+16:04:38   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+16:04:38   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+16:04:38   Name = Test DrinkType id =  S
+16:04:39   Id: 69
+Ingredient: vodka
+Ratio: 0.25Id: 69
+Ingredient: rum
+Ratio: 0.78
+16:06:03   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+16:06:03   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+16:06:03   Name = Test DrinkType id =  S
+16:06:04   Id: 69
+Ingredient: vodka
+Ratio: 0.25Id: 69
+Ingredient: rum
+Ratio: 0.78
+16:06:05   Beginning of $BBC_HOME/server/api/views.py 
+16:06:11   Beginning of $BBC_HOME/server/api/views.py 
+16:06:15   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+16:06:15   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+16:06:15   Name = Test Drink
+Type id =  S
+16:06:38   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+16:06:38   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+16:06:38   Name = Test Drink
+Type id =  S
+16:06:38   Id: 69
+Ingredient: vodka
+Ratio: 0.25Id: 69
+Ingredient: rum
+Ratio: 0.78
+16:07:07   Beginning of $BBC_HOME/server/api/views.py 
+16:14:08   Beginning of $BBC_HOME/server/api/views.py 
+16:14:19   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+16:14:19   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+16:14:19   Name = Test Drink
+Type id =  S
+16:14:59   Beginning of $BBC_HOME/server/api/views.py 
+16:15:04   Beginning of $BBC_HOME/server/api/views.py 
+16:15:07   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+16:15:07   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
+16:15:07   Name = Test Drink
+Type id =  S
+16:15:21   Beginning of $BBC_HOME/server/api/views.py 
+16:15:47   Beginning of $BBC_HOME/server/api/views.py 
+16:15:51   Beginning of $BBC_HOME/server/api/views.py 
