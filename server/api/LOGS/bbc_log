@@ -241,3 +241,6 @@ Type id =  S
 16:15:21   Beginning of $BBC_HOME/server/api/views.py 
 16:15:47   Beginning of $BBC_HOME/server/api/views.py 
 16:15:51   Beginning of $BBC_HOME/server/api/views.py 
+16:25:52   Beginning of $BBC_HOME/server/api/views.py 
+16:25:55   ***CreateDrink*** $BBC_HOME/server/api/views.py function = post
+16:25:55   We are in $BBC_HOME/server/api/models.py Model=Menu Function=create_drink
